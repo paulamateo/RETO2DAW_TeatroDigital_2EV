@@ -1,0 +1,3 @@
+<template>
+    Billboard View
+</template>

@@ -1,0 +1,3 @@
+<template>
+    Programming View
+</template>
