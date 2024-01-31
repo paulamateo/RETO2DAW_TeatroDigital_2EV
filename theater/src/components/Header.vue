@@ -7,7 +7,7 @@
                 </svg>
             </div>
             <div class="header__logo">
-                <a href="index.html"><img class="logo logo--size" id="logoImage" src="../assets/logo_negro.png"/></a>
+                <a href="index.html"><img class="logo logo--size" id="logoImage" src="../assets/images/elements/logo_negro.png"/></a>
             </div>
             <nav class="menu">
                 <ul>

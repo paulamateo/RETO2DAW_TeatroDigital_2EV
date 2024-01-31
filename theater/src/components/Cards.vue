@@ -2,17 +2,22 @@
     defineProps<{
         title?: string
         author?: string
-        director?: string
         genre?: string
-        price?: string
-        age?: string
-        length?: string
-        date?: string
-        overview?: string
+        poster?: string
     }>()
 </script>
 
 <template>
+    <div class="container-item">
+        <div class="showItem">
+            <div class="genre" id="genre">{{ genre }}</div>
+            <img :src="poster"/>
+            <div class="title">
+                <h3 id="title">{{ title }}</h3>
+            </div>
+        </div>
+    </div>
+<!-- 
     <div class="container-show-data">
         <h1 id="title">{{ title }}</h1>
         <h3 id="author">{{ author }}</h3>
@@ -39,91 +44,97 @@
         </div>
         <p id="overview">{{ overview }}</p>
         <div class="container-button"></div>
-    </div>
+    </div> -->
 </template>
 
 <style scoped>
-    /* .banner--billboard {
-    background-image: url(../IMG/banner_entradas4.jpg);
-    } */
+    select {
+  font-family: "Inter", sans-serif;
+  width: 110px;
+  border-radius: 20px;
+  padding: 10px;
+  outline: none;
+  font-weight: 700;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6"><polygon points="0,0 12,0 6,6" fill="black"/></svg>') no-repeat right 12px center;
+  background-size: 12px auto;
+  appearance: none;
+}
 
-    .container-show {
-    margin: 40px;
-    }
-    .container-show-item {
-    background-color: black;
-    border-radius: 20px;
-    }
-    .container-show-data {
-    color: white;
-    margin: 40px;
-    }
-    .container-show-data p {
-    font-size: 13px;
-    text-align: justify;
-    }
-    .container-show-data h1, .container-show-data h3 {
-    margin: 0;
-    }
-    .container-show-img img {
-    width: 100%;
-    height: auto;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    }
+.select-genre__form {
+  margin: 60px 70px 20px 70px;
+  display: flex;
+  justify-content: right;
+}
+.select-genre__form label {
+  margin-right: 10px;
+}
 
-    .container-button {
-    display: flex;
-    justify-content: center;
-    }
+.container {
+  margin: 20px 70px 70px 70px;
+  gap: 30px;
+  font-size: 0;
+}
+.container-item {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  text-align: center;
+  height: auto;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+.container-item img {
+  width: 100%;
+  object-fit: cover;
+}
 
-    .button--billboard {
-    margin-bottom: 30px;
-    }
+form {
+  font-size: 14px;
+}
 
-    .data-1 {
-    display: flex;
-    }
-    .data-1 p {
-    border: 1px solid white;
-    padding: 10px;
-    border-radius: 10px;
-    margin-right: 15px;
-    }
+.title {
+  background-color: #0b0b0b;
+  color: white;
+  padding: 8px;
+  height: 50px;
+  font-size: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+}
 
-    .data-2__item {
-    display: flex;
-    align-items: center;
-    color: white;
-    font-size: 13px;
-    }
-    .data-2__item p {
-    margin-right: 30px;
-    margin-left: 10px;
-    }
+.genre {
+  all: unset;
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  background-color: #b20000;
+  color: white;
+  padding: 15px;
+  border-radius: 30px;
+  font-size: 12px;
+  margin: 15px 0 0 10px;
+  text-transform: uppercase;
+}
 
-    @media screen and (min-width: 700px) {
-    .data-2 {
-        display: flex;
-        right: 0;
-    }
-    }
-    @media screen and (min-width: 1270px) {
-    .container-show {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        margin: 60px 140px;
-        grid-gap: 30px;
-    }
-    .button--billboard {
-        margin-bottom: 0;
-    }
-    }
-    @media screen and (min-width: 1600px) {
-    .data-information {
-        display: flex;
-        justify-content: space-between;
-    }
-    }
+.banner--tickets h1 {
+  padding-top: 60px;
+}
+
+@media (min-width: 760px) {
+  .container {
+    display: grid;
+    grid-template-columns: repeat(2, calc(50% - 10px));
+  }
+  .container-item {
+    margin-bottom: 0;
+  }
+}
+@media (min-width: 990px) {
+  .container {
+    grid-template-columns: repeat(4, calc(24% - 10px));
+  }
+}
 
 </style>

@@ -13,31 +13,21 @@ const router = createRouter({
             component: HomeView
         },
         {
-            path: '/billboard',
-            name: 'billboard',
+            path: '/shows',
+            name: 'shows',
             component: BillboardView
+        },
+        {
+            path: '/shows/:id',
+            name: 'show-details',
+            component: ShowView
         },
         {
             path: '/programming',
             name: 'programming',
             component: ProgrammingView
-        },
-        {
-            path: '/show',
-            name: 'show',
-            component: ShowView
-            // ,
-            // children : [
-            //     { path: '/1', component: HomeView },
-            //     { path: '/2', component: ProgrammingView}
-            // ]
         }
     ]
 })
-
-        // { 
-        //     path: '/product/:id', 
-        //     component: ProductDetail 
-        // },
 
 export default router
