@@ -27,18 +27,21 @@ const obras = [
   <main>
     <RouterView />
 
-    
-  <div class="container-show">
-    <div class="container-show-item">
-    <Card 
-        v-for="obra in obras"
+    <div class="container">
+
+      <router-link
+      v-for="obra in obras"
+      :key="obra.id"
+      :to="{ name: 'shows', params: { id: obra.id } }"></router-link>
+
+      <Card v-for="obra in obras"
         :key="obra.id"
         :title="obra.title"
         :image="obra.poster"
-        :genre="obra.genre"
-        />
-  </div>
-  </div>
+        :genre="obra.genre"/>
+
+    </div>
+
   </main>
 
   <footer>
