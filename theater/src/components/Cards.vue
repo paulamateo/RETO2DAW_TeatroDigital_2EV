@@ -1,23 +1,23 @@
 <script setup lang="ts">
-    defineProps<{
-        title?: string
-        author?: string
-        genre?: string
-        poster?: string
-    }>()
+defineProps<{
+  title?: string
+  author?: string
+  genre?: string
+  poster?: string
+}>()
 </script>
 
 <template>
-    <div class="container-item">
-        <div class="showItem">
-            <div class="genre" id="genre">{{ genre }}</div>
-            <img :src="poster"/>
-            <div class="title">
-                <h3 id="title">{{ title }}</h3>
-            </div>
-        </div>
+  <div class="container-item">
+    <div class="showItem">
+      <div class="genre" id="genre">{{ genre }}</div>
+      <img :src="poster" />
+      <div class="title">
+        <h3 id="title">{{ title }}</h3>
+      </div>
     </div>
-<!-- 
+  </div>
+  <!-- 
     <div class="container-show-data">
         <h1 id="title">{{ title }}</h1>
         <h3 id="author">{{ author }}</h3>
@@ -48,14 +48,15 @@
 </template>
 
 <style scoped>
-    select {
-  font-family: "Inter", sans-serif;
+select {
+  font-family: 'Inter', sans-serif;
   width: 110px;
   border-radius: 20px;
   padding: 10px;
   outline: none;
   font-weight: 700;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6"><polygon points="0,0 12,0 6,6" fill="black"/></svg>') no-repeat right 12px center;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6"><polygon points="0,0 12,0 6,6" fill="black"/></svg>')
+    no-repeat right 12px center;
   background-size: 12px auto;
   appearance: none;
 }
@@ -136,5 +137,4 @@ form {
     grid-template-columns: repeat(4, calc(24% - 10px));
   }
 }
-
 </style>

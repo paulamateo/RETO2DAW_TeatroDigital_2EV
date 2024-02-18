@@ -1,5 +1,5 @@
 #app {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   margin: 0;
 }
 
@@ -8,12 +8,12 @@
 }
 
 @font-face {
-  font-family: "GothamBook";
-  src: url("../assets/fonts/GothamBook.ttf") format("truetype");
+  font-family: 'GothamBook';
+  src: url('../assets/fonts/GothamBook.ttf') format('truetype');
 }
 @font-face {
-  font-family: "GothamLight";
-  src: url("../assets/fonts/GothamLight.ttf") format("truetype");
+  font-family: 'GothamLight';
+  src: url('../assets/fonts/GothamLight.ttf') format('truetype');
 }
 
 body {
@@ -46,7 +46,7 @@ a {
   height: 55vh;
   letter-spacing: 0.15em;
   width: 100%;
-  font-family: "GothamLight", sans-serif;
+  font-family: 'GothamLight', sans-serif;
   font-size: 15px;
 }
 
@@ -136,7 +136,7 @@ a {
   border: none;
   border-radius: 20px;
   outline: none;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   background-color: #353535;
   margin-bottom: 10px;
   text-indent: 40px;
