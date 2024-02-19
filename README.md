@@ -1,7 +1,4 @@
 ## Creación de una aplicación con Vue.js. Comandos
-<br><div align="center">
-  <img src="https://www.fullstackpython.com/img/logos/vuejs-wide.png" height="60px"/>
-</div><br>
 
       npm create vue@latest
           ✔ Project name: … <your-project-name>
