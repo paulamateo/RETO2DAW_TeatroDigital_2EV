@@ -1,3 +1,14 @@
+<script setup lang="ts">
+    window.onload = function() {
+        //Ir a la sección 'Vive la magia musical'
+        var arrowIcon = document.getElementById('chevronleft-icon') as HTMLElement;
+        var showsSection = document.querySelector('.shows') as HTMLElement;
+        arrowIcon.addEventListener('click', function() {
+            showsSection.scrollIntoView({ behavior: 'smooth' });
+        })
+    }
+</script>
+
 <template>
     <main>
         <div class="hero-banner">
