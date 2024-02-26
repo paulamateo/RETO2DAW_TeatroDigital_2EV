@@ -1,11 +1,62 @@
 <script setup lang="ts">
+    import { ref } from 'vue';
 
-</script> 
+    const dialog = ref(false);
+
+const firstName = ref('');
+const lastname = ref('');
+const email = ref('');
+
+const nameRules = [
+  (v: any) => !!v || 'Name is required',
+  (v: string | any[]) => (v && v.length <= 10) || 'Name must be less than 10 characters',
+];
+
+const emailRules = [
+  (v: any) => !!v || 'E-mail is required',
+  (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+];
+
+ 
+</script>
 
 <template>
     <div class="container-button">
+        
+
+       
+            <div class="popup__access-to-admin">
+            <v-btn color="primary">CREAR</v-btn>
+            <v-dialog v-model="dialog" persistent activator="parent" width="auto">
+                <v-btn color="primary" block @click="dialog = false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                    </svg>
+                </v-btn>
+               
+                <v-card title="Crear una obra" class="title popup-title">
+                    <v-card-text>
+                        <h2>Crear una obra</h2>
+                    </v-card-text>
+
+          
+                    <!-- <v-sheet width="300" class="mx-auto">
+    <v-form @submit.prevent>
+      <v-text-field v-model="firstName" :rules="nameRules" label="First name" class="body-2"></v-text-field>
+      <v-btn type="submit" block class="mt-2">Submit</v-btn>
+    </v-form>
+  </v-sheet> -->
+                    
+
+                </v-card>
+    
+            </v-dialog>
+            </div>
+         
+
+
         <button class="button-create-element">
-            <div class="button-create-element__content">
+            <div class="button-create-element__content" @click="">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
                 </svg>
@@ -134,6 +185,27 @@
 </template>
 
 <style scoped>
+/*FORMULARIO*/
+.body-2 input {
+    font-size: 10px;
+}
+
+
+.form-input--styles {
+    color: pink;
+    font-size: 10px;
+}
+.popup-title {
+    padding: 0;
+    font-weight: bold;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0;
+    text-align: center;
+}
+
+
+
     .container-button {
         display: flex;
         justify-content: flex-end;

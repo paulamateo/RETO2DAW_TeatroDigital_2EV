@@ -8,6 +8,6 @@
   <!-- <Header></Header> -->
 
   <RouterView></RouterView>
-<!-- 
-  <Footer></Footer> -->
+
+  <!-- <Footer></Footer> -->
 </template>

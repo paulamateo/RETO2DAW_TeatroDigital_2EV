@@ -1,39 +1,6 @@
-<script setup lang="ts">
 
-    document.addEventListener('DOMContentLoaded', () => {
-        //Icono menú hamburguesa
-        var hamburgerIcon = document.getElementById('list-icon') as HTMLElement;
-        var headerPopup = document.getElementById('header__popup') as HTMLElement;
-        
-        hamburgerIcon.addEventListener('click', function() {
-            headerPopup.classList.toggle('active');
-        })
 
-        //Cambio de logos blanco y negro
-        document.addEventListener('scroll', function() {
-            var header = document.getElementById('header') as HTMLElement;
-            var headerPopup = document.getElementById('header__popup') as HTMLElement;
-            var logoImage = document.getElementById('logoImage') as HTMLImageElement;
-            var searchContainer = document.getElementById('search') as HTMLElement;
-            var scrollPosition = window.scrollY;
-        
-            if (scrollPosition > 50) {
-                header.classList.add('scrolled');
-                logoImage.src = '../src/assets/images/elements/logo_blanco.png';
-                searchContainer.classList.add('scrolled');
-                headerPopup.classList.add('scrolled');
-            }else {
-                header.classList.remove('scrolled');
-                logoImage.src = '../src/assets/images/elements/logo_negro.png';
-                searchContainer.classList.remove('scrolled');
-                headerPopup.classList.remove('scrolled');
-            }
-        });
-    });
-    
-</script>
-
-<template>
+<template>                        
     <header class="header" id="header">
         <div class="header__content header__content--navbar">
             <div class="header__icon">
