@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import BillboardView from '../views/BillboardView.vue'
 import ProgrammingView from '../views/ProgrammingView.vue'
 import ShowView from '../views/ShowView.vue'
+import AdminPanelView from '../views/AdminPanelView.vue'
 
 
 const router = createRouter({
@@ -27,6 +28,11 @@ const router = createRouter({
       path: '/Programming',
       name: 'Programming',
       component: ProgrammingView
+    },
+    {
+      path:'/Admin-Panel',
+      name: 'Admin-Panel',
+      component: AdminPanelView
     }
   ]
 })

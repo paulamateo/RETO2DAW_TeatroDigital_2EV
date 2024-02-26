@@ -40,9 +40,9 @@
         background-color: #0b0b0b;
         color: white;
     }
-    .footer__socialmedia {
+    /* .footer__socialmedia {
         margin: 12px 0 0 0;
-    }
+    } */
     .footer__content {
         margin: 0 20px;
         padding: 25px;
@@ -74,6 +74,7 @@
         .footer__menu--inline-block {
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
         .footer__menu-link {
             margin: 0 30px;

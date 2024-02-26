@@ -121,6 +121,12 @@
     .hero-banner__content {
         text-align: center;
         color: white;
+
+        /*NUEVO*/
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /*NUEVO*/
     }
     .hero-banner__content h1 {
         margin: 0;
@@ -211,7 +217,7 @@
             font-size: 280%;
         }
         .hero-banner__subtitles {
-            line-height: 5px;
+            /* line-height: 5px; */
             font-size: 120%;
         }
     }

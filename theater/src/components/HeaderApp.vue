@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
     document.addEventListener('DOMContentLoaded', () => {
         //Icono menú hamburguesa
         var hamburgerIcon = document.getElementById('list-icon') as HTMLElement;
@@ -29,6 +30,7 @@
             }
         });
     });
+    
 </script>
 
 <template>
@@ -68,6 +70,8 @@
             </div>
 
             <div class="button-actions button-action--visibility">
+                <!-- <v-btn v-bind="props" text="ACCEDER AL PANEL"></v-btn> -->
+                <!-- <v-btn @click="$emit('open-popup')">Abrir Popup</v-btn> -->
                 <button class="button__panel-admin" id="button-actions__login">
                     <div class="button__panel-admin__content">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
@@ -81,7 +85,12 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
                             <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/>
                         </svg>
-                        <p class="button-actions__text">ACCEDER</p>
+                        <!-- <RouterLink to="/Admin-Panel">
+                    <v-btn>ACCEDER AL PANEL</v-btn>
+                </RouterLink> -->
+                        <RouterLink to="/Admin-Panel">
+                            <span class="button-actions__text">ACCEDER</span>
+                        </RouterLink>
                     </div>
                 </button>    
             </div>
@@ -325,6 +334,7 @@
     @media screen and (min-width: 1300px) {
         .button-actions__text { 
             display: block;
+            color: black;
         }
 
         .button__panel-admin svg {
