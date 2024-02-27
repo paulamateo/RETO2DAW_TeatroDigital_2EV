@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import PopUp_CreateUser from '../components/PopUp-CreateUser.vue'
+</script>
+
 <template>
     <div class="container-button">
         <button class="button-create-element">

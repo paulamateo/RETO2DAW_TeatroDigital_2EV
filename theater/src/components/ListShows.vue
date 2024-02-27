@@ -1,122 +1,13 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
-
-    const dialog = ref(false);
-
-const title = ref('');
-const author = ref('');
-const director = ref('');
-const edadRecomendada = ref('');
-const hour = ref('');
-const price = ref('');
-const genre = ref('');
-
-const titleRules = [
-  (v: any) => !!v || 'No puedes dejar este campo vacío',
-  (v: string | any[]) => (v && v.length <= 10) || 'Name must be less than 10 characters',
-];
-
-const authorRules = [
-  (v: any) => !!v || 'No puedes dejar este campo vacío'
-];
-
-const emailRules = [
-  (v: any) => !!v || 'E-mail is required',
-  (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
-];
-
- 
-
+    import PopUp_CreateShow from '../components/PopUp-CreateShow.vue'
 </script>
 
 <template>
     <div class="container-button">
-        
-
-       
-            <div class="popup__access-to-admin">
-            <v-btn class="button-create-show">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
-                </svg>
-               <span>CREAR</span> 
-            </v-btn>
-
-            <v-dialog v-model="dialog" persistent activator="parent" width="800px">
-              
-               
-                <v-card class="title popup-title">
-                    <v-card-text>
-                        <h2>Crear una obra</h2>
-                    </v-card-text>
-
-          
-                    <v-sheet width="700px" class="mx-auto">
-                        <v-form>
-                            <v-text-field v-model="title" :rules="titleRules" label="Título" variant="solo" density="compact"></v-text-field>
-                            <v-row>
-                                <v-col cols="12" md="6">
-                                    <v-text-field v-model="author" :rules="authorRules" label="Autor"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" md="6">
-                                    <v-text-field v-model="director" :rules="titleRules" label="Director"></v-text-field>
-                                </v-col>
-                            </v-row>
-
-
-                            <v-row>
-                                <v-col cols="12" md="3">
-                                    <v-text-field v-model="edadRecomendada" :rules="titleRules" label="Edad recomendada"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" md="3">
-                                    <v-text-field v-model="hour" label="Hora de estreno" type="time"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" md="3">
-                                    <v-text-field v-model="price" label="Precio por entrada" placeholder="00.00" suffix="€"></v-text-field>
-                                </v-col>
-                                <v-col cols="12" md="3">
-                                    <v-text-field v-model="director" :rules="titleRules" label="Duración" placeholder="0h 00min"></v-text-field>
-                                </v-col>
-                            </v-row>
-
-                         
-
-                            <v-textarea variant="filled" auto-grow label="Sinopsis" rows="4" row-height="30" shaped></v-textarea>
-
-                           
-
-                            <v-row>
-                                <v-col cols="12" md="6">
-                                    <v-btn color="#D03A3A" block @click="dialog = false" class="button-form button-form--cancel">CANCELAR</v-btn>
-                                </v-col>
-                                <v-col cols="12" md="6">
-                                    <v-btn color="#0DBF3F" type="submit" block class=" button-form">CREAR</v-btn>
-                                </v-col>
-                            </v-row>
-                         
-                            
-
-                        </v-form>
-                    </v-sheet>
-
-
-
-
-                </v-card>
-
-          
-    
-            </v-dialog>
-            </div>
+        <div class="popup__access-to-admin">
+            <PopUp_CreateShow />
+        </div>
     </div>
-
-
-
-
-
-
-
-
 
     
     <table>
@@ -237,71 +128,10 @@ const emailRules = [
 </template>
 
 <style scoped>
-/*FORMULARIO*/
-
-
-
-
-.button-form {
-    letter-spacing: 0;
-    font-size: 12px;
-    border-radius: 30px;
-    padding: 10px;
-}
-
-.button-form--cancel {
-    background-color: red;
-}
-
-
-
-
-
-
-.form-input--styles {
-    color: pink;
-    font-size: 10px;
-}
-.popup-title {
-    padding: 0;
-    font-weight: bold;
-    font-weight: 700;
-    font-family: 'Inter', sans-serif;
-    letter-spacing: 0;
-    text-align: center;
-}
-
-
 
     .container-button {
         display: flex;
         justify-content: flex-end;
-    }
-
-    .button-create-element {
-        all: unset;
-        background-color: #000AFF;
-        color: white;
-        font-size: 12px;
-        cursor: pointer;
-        display: flex;
-        border-radius: 30px;
-        padding: 10px;
-        justify-content: center;
-        align-items: center;
-        width: 100px;
-    }
-
-    .button-create-show {
-        letter-spacing: 0;
-        font-size: 12px;
-        background-color: #000AFF;
-        color: white;
-        border-radius: 30px;
-    }
-
-    .button-create-show svg {
-        margin-right: 7px;
     }
 
     .button-create-element__content {
