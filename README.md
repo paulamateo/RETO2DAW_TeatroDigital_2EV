@@ -26,6 +26,6 @@ Ver detalles del entorno:
 
       vue info
 
-Instalación de **Pinia** de Vue:
+Instalación de **Pinia**:
 
       npm install pinia
