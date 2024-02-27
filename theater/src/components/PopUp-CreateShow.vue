@@ -89,6 +89,19 @@
 </template>
 
 <style scoped>
+    .button-create-show {
+        letter-spacing: 0;
+        font-size: 12px;
+        background-color: #000AFF;
+        color: white;
+        border-radius: 30px;
+    }
+
+    .button-create-show svg {
+        margin-right: 7px;
+    }
+
+
     .button-form--actions {
     letter-spacing: 0;
     font-family: 'Inter', sans-serif;
@@ -173,36 +186,6 @@ select {
     .input-payment-panel--textarea {
     border-radius: 5px;
 }
-
-
-
-
-
-.button-create-element {
-        all: unset;
-        background-color: #000AFF;
-        color: white;
-        font-size: 12px;
-        cursor: pointer;
-        display: flex;
-        border-radius: 30px;
-        padding: 10px;
-        justify-content: center;
-        align-items: center;
-        width: 100px;
-    }
-
-    .button-create-show {
-        letter-spacing: 0;
-        font-size: 12px;
-        background-color: #000AFF;
-        color: white;
-        border-radius: 30px;
-    }
-
-    .button-create-show svg {
-        margin-right: 7px;
-    }
 
 
 

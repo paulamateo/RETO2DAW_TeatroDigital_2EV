@@ -1,5 +1,22 @@
 <script setup lang="ts">
     import PopUp_CreateShow from '../components/PopUp-CreateShow.vue'
+    // import { computed, reactive } from 'vue';
+
+    // interface Show {
+    //     showId: number,
+    //     title: string,
+    //     author: string
+    // }
+
+    // let shows = reactive(new Array<Show>)
+
+    // function getData() {
+    //     fetch('https://localhost:8001/shows')
+    //         .then(response => response.json())
+
+    // }
+
+
 </script>
 
 <template>
@@ -9,7 +26,6 @@
         </div>
     </div>
 
-    
     <table>
         <thead>
             <tr>
@@ -21,7 +37,6 @@
                         </svg>
                     </div>
                 </th>
-
                 <th>
                     <div class="table__header-content">
                         <p>Obra</p>
@@ -30,7 +45,6 @@
                         </svg>
                     </div>
                 </th>
-
                 <th>
                     <div class="table__header-content">
                         <p>Director</p>
@@ -39,7 +53,6 @@
                         </svg>
                     </div>
                 </th>
-
                 <th>
                     <div class="table__header-content">
                         <p>Género</p>
@@ -48,7 +61,6 @@
                         </svg>
                     </div>
                 </th>
-
                 <th>
                     <div class="table__header-content">
                         <p>Precio</p>
@@ -57,7 +69,6 @@
                         </svg>
                     </div>
                 </th>
-
                 <th>
                     <div class="table__header-content">
                         <p>Fecha</p>
@@ -66,7 +77,6 @@
                         </svg>
                     </div>
                 </th>
-
                 <th>
                     <div class="table__header-content">
                         <p>Duración</p>
@@ -78,6 +88,7 @@
                 <th></th>
             </tr>
         </thead>
+
         <tbody>
             <tr id="row">
                 <th>1</th>
