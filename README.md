@@ -25,4 +25,7 @@ Instalación del **router** de Vue:
 Ver detalles del entorno:
 
       vue info
-      
+
+Instalación de **Pinia** de Vue:
+
+      npm install pinia
