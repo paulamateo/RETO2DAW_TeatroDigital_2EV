@@ -15,7 +15,7 @@
         <div class="column-tabs">
             <div class="column-tabs__user">
                 <img class="column-tabs__user_img" src="../assets/images/elements/user_default.jpg"/>
-                <h3>¡Hola, Paula! 👋</h3>
+                <h3 class="column-tabs__name-user">¡Hola, Paula! 👋</h3>
             </div>
             <RouterLink to="/">
                 <div class="button-return">
@@ -94,8 +94,8 @@
     }
 
     .column-tabs__user_img {
-        width: 100px;
-        height: 100px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
         margin-top: 30px;
     }
@@ -150,6 +150,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        font-size: 10px;
     }
 
     .column-data__header h2 {
@@ -158,5 +159,28 @@
 
     .column-data__content {
         margin: 40px;
+    }
+
+    .column-tabs__name-user {
+        font-size: 15px;
+        text-align: center;
+    }
+
+    @media (min-width: 950px) { 
+        .column-tabs__user_img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-top: 30px;
+        }
+
+        .column-tabs__name-user {
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .column-data__header {
+            font-size: 15px;
+        }
     }
 </style>

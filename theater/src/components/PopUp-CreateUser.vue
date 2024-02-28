@@ -59,14 +59,19 @@
     }
 
     .popup-title {
-        padding: 0;
-        font-weight: bold;
-        font-weight: 700;
-        font-family: 'Inter', sans-serif;
-        letter-spacing: 0;
-        text-align: center;
-        margin: 30px 0px 30px 0px;
-    }
+    padding: 0;
+    font-weight: bold;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0;
+    text-align: center;
+    margin: 30px 0px 20px 0px;
+}
+
+.v-card-actions {
+    margin-right: 15px;
+}
+
 
     .input-payment-panel {
         width: calc(100% - 20px);
