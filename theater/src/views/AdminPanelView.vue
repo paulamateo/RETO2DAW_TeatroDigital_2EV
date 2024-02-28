@@ -44,7 +44,7 @@
         <div class="column-data">
             <div class="column-data__header">
                 <h2>Panel de Administración</h2>
-                <img class="column-data__img" src="../assets/images/elements/logo_blanco.png"/>
+                <img class="column-data__img column-data__img--display" src="../assets/images/elements/logo_blanco.png"/>
             </div>
             <div class="column-data__content">
                 <ListShows v-if="selectedTabMenu === 'shows'" />
@@ -55,6 +55,16 @@
 </template>
 
 <style scoped>
+    @media (max-width: 500px) {
+        .column-data__img--display {
+            display: none;
+        }
+    }
+
+    .column-data__img {
+        width: 120px;
+    }
+
     .button-return {
         display: flex;
         justify-content: center;
@@ -80,10 +90,6 @@
 
     .return span:first-letter {
         text-transform: uppercase;
-    }
-
-    .column-data__img {
-        width: 120px;
     }
 
     .column-tabs__user {

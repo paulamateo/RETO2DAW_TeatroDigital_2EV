@@ -157,7 +157,7 @@
         }
     }
 
-    @media (max-width: 680px) {
+    @media (max-width: 780px) {
         .table-element--visibility-genre {
             display: none;
         }
@@ -169,6 +169,13 @@
     @media (max-width: 400px) {
         .table-element--visibility-show {
             display: none;
+        }
+    }
+
+    @media (min-width: 800px) {
+        .container-button {
+            display: flex;
+            justify-content: flex-end;
         }
     }
 
@@ -185,7 +192,6 @@
 
     .container-button {
         display: flex;
-        justify-content: flex-end;
     }
 
     .button-create-element__content {
@@ -223,12 +229,12 @@
     }
 
     table {
-        width: 100%;
         font-size: 12px;
         margin-top: 20px;
         border-collapse: collapse;
         font-family: 'Inter', sans-serif;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
     }
 
     thead {
@@ -294,6 +300,7 @@
     .table-row__showtitle {
         display: flex;
         align-items: center;
+        justify-content: center;
     }
 
     .table-row__showtitle_img {
