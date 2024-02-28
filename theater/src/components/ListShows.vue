@@ -38,7 +38,7 @@
                         </svg>
                     </div>
                 </th>
-                <th>
+                <th class="table-element--visibility-show">
                     <div class="table__header-content">
                         <p>Obra</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -46,7 +46,7 @@
                         </svg>
                     </div>
                 </th>
-                <th>
+                <th class="table-element--visibility-director">
                     <div class="table__header-content">
                         <p>Director</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -54,7 +54,7 @@
                         </svg>
                     </div>
                 </th>
-                <th>
+                <th class="table-element--visibility-genre">
                     <div class="table__header-content">
                         <p>Género</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -62,7 +62,7 @@
                         </svg>
                     </div>
                 </th>
-                <th>
+                <th class="table-element--visibility-price">
                     <div class="table__header-content">
                         <p>Precio</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -70,7 +70,7 @@
                         </svg>
                     </div>
                 </th>
-                <th>
+                <th class="table-element--visibility-date">
                     <div class="table__header-content">
                         <p>Fecha</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -78,7 +78,7 @@
                         </svg>
                     </div>
                 </th>
-                <th>
+                <th class="table-element--visibility table-element--visibility-duration">
                     <div class="table__header-content">
                         <p>Duración</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -93,7 +93,7 @@
         <tbody>
             <tr id="row">
                 <th>1</th>
-                <th>
+                <th class="table-element--visibility table-element--visibility-show">
                     <div class="table-row__showtitle">
                         <img class="table-row__showtitle_img" src="../assets/images/posters/p_romeoandjuliet.jpeg"/>
                         <div class="table-row__showtitle_text">
@@ -103,8 +103,8 @@
                     </div>
                 </th>
 
-                <th>Alfonso García</th>
-                <th>
+                <th class="table-element--visibility-director">Alfonso García</th>
+                <th class="table-element--visibility-genre">
                     <div class="table-genre">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags" viewBox="0 0 16 16">
                             <path d="M3 2v4.586l7 7L14.586 9l-7-7zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586z"/>
@@ -114,11 +114,11 @@
                     </div>
                 </th>
 
-                <th>19,90€</th>
+                <th class="table-element--visibility-price">19,90€</th>
 
-                <th>14/02/2024</th>
+                <th class="table-element--visibility-date">14/02/2024</th>
 
-                <th>1h 30min</th>  
+                <th class="table-element--visibility-duration">1h 30min</th>  
 
                 <th class="buttons-actions-panel">
                     <div>
@@ -136,6 +136,42 @@
 </template>
 
 <style scoped>
+    @media (max-width: 1100px) {
+        .table-element--visibility-duration {
+            display: none;
+        }
+    }
+
+    @media (max-width: 980px) {
+        .table-element--visibility-date {
+            display: none;
+        }
+    }
+
+    @media (max-width: 780px) {
+        .table-element--visibility-date {
+            display: none;
+        }
+        .table-element--visibility-price {
+            display: none;
+        }
+    }
+
+    @media (max-width: 680px) {
+        .table-element--visibility-genre {
+            display: none;
+        }
+        .table-element--visibility-director {
+            display: none;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .table-element--visibility-show {
+            display: none;
+        }
+    }
+
     .v-btn--size-default {
         min-width: 20px;
     }
@@ -274,4 +310,5 @@
     .table-row__showtitle_text p {
         margin: 0;
     }
+
 </style>
