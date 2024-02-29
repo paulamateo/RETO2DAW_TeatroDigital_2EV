@@ -1,6 +1,16 @@
 <script setup lang="ts">
     import { ref } from 'vue';
-    const dialog = ref(false);
+    const login = ref(false);
+
+    const show1 = ref(false)
+const show2 = ref(true)
+const password = ref('Password')
+
+const required = (value: string) => !!value || 'Required.'
+const min = (v: string) => v.length >= 8 || 'Min 8 characters'
+const emailMatch = () => `The email and password you entered don't match`
+
+    import PopUp_SignUp from '../components/PopUp-SignUp.vue'
 </script>
 
 <template>
@@ -11,21 +21,94 @@
         <span class="button-open-panel__text button-open-panel__text--visibility">INICIAR SESIÓN</span> 
     </v-btn>
 
-    <v-dialog v-model="dialog" persistent activator="parent" width="400px">
+    <v-dialog v-model="login" persistent activator="parent" width="400px" height="500px">
         <v-card>
-            <v-card-text>
-                <h2 class="popup-title">Iniciar sesión</h2>
-                <input type="text" class="input-payment-panel" name="titular_input" placeholder="Introduce tu correo electrónico" required>
-                <p>¿No tienes cuenta? Regístrate</p>
-                <v-card-actions>
-                    <v-btn text="CANCELAR" @click="dialog = false"></v-btn>
-                    <v-btn class="button-access-panel">ACCEDER</v-btn>
-                </v-card-actions>
-            </v-card-text>
+            <v-sheet>
+                <v-form validate-on="submit lazy">
+                    <v-text-field label="User name"></v-text-field>
+                <v-text-field v-model="password" variant="solo" :prepend-inner-icon="show1 ? 'mdi-eye-outline' : 'mdi-eye-off'" :type="show1 ? 'text' : 'password'" @click:append="show1 = !show1" hint="At least 8 characters" label="Normal with hint text" name="input-10-1" counter></v-text-field>
+    </v-form>
+  </v-sheet>
         </v-card>
     </v-dialog>
+
 
 </template>
 
 <style scoped>
+label {
+    font-size: 10px;
+    height: 10px;
+}
+.v-label .v-field-label {
+    font-size: 10px;
+}
+    .v-text-field::placeholder {
+        font-size: 12px;
+    }
+    .v-text-field label {
+        font-size: 10px;
+height: 10px;
+    }
 </style>
+
+<!-- <style scoped>
+    .popup-title {
+        text-align: center;
+    }
+    form label {
+        font-size: 13px;
+    }
+    .form-text {
+        font-size: 13px;
+        text-align: center;
+    }
+
+    .form-text span {
+        color: blue;
+    }
+    .v-card {
+        font-family: 'Inter', sans-serif;
+    }
+
+    .input-payment-panel {
+        width: calc(100% - 20px);
+        border: none;
+        background-color: #EAECF0;
+        padding: 10px;
+        margin: 0 0 15px 0;
+        border-radius: 5px;
+        font-family: "Inter", sans-serif;
+        text-indent: 5px;
+        outline: none;
+        font-size: 12px;
+    }
+
+    .input-payment-panel::placeholder {
+        color: #c3c3c3;
+    }
+
+    .input-payment-panel--textarea {
+        border-radius: 5px;
+        height: 100px;
+    } -->
+
+
+            <!-- <v-card>
+            <v-card-text>
+                <h2 class="popup-title">Iniciar sesión</h2>
+                <form>
+                    <label for="poster">Correo electrónico:</label>
+                    <input type="text" class="input-payment-panel" name="titular_input" required>
+                    <label for="poster">Contraseña:</label>
+                    <input type="password" class="input-payment-panel" name="titular_input" required>
+                </form>
+                <p class="form-text">¿No tienes cuenta? 
+                    <span><u>Regístrate</u></span>
+                </p>
+            </v-card-text>
+            <v-card-actions>
+                    <v-btn text="CANCELAR" @click="login = false"></v-btn>
+                    <v-btn class="button-access-panel">ACCEDER</v-btn>
+                </v-card-actions>
+        </v-card> -->

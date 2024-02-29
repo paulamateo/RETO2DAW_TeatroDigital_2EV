@@ -51,7 +51,10 @@
                         <p class="button-actions__text">INICIAR SESIÓN</p>
                     </div>
                 </button>
-                <PopUp_AccessToPanel/>
+                <!-- <PopUp_AccessToPanel/> -->
+
+
+                
                 <!-- <button class="button__panel-admin" id="button-actions__panel">
 
                     
