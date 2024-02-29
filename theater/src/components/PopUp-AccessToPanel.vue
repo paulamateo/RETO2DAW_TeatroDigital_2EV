@@ -10,11 +10,11 @@
 </script>
 
 <template>
-    <v-btn class="button-create-show">
+    <v-btn class="button-open-panel">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
             <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/>
         </svg>
-        <span>ACCEDER</span> 
+        <span class="button-open-panel__text button-open-panel__text--visibility">ACCEDER</span> 
     </v-btn>
 
     <v-dialog v-model="dialog" persistent activator="parent" width="400px">
@@ -31,17 +31,58 @@
                 </div>
                 <h2 class="popup-title">Acceder al panel de administrador</h2>
                 <input type="text" class="input-payment-panel" name="titular_input" placeholder="Introduce tu correo electrónico" required>
+                <v-card-actions>
+                    <v-btn text="CANCELAR" @click="dialog = false"></v-btn>
+                    <v-btn class="button-access-panel" @click="ExistsUser">ACCEDER</v-btn>
+                </v-card-actions>
             </v-card-text>
-            <v-card-actions>
-                <v-btn class="button" id="button-access-panel" @click="ExistsUser">ACCEDER</v-btn>
-                <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-            </v-card-actions>
         </v-card>
     </v-dialog>
 
 </template>
 
 <style scoped>
+    @media (max-width: 1200px) {
+        .button-open-panel__text--visibility {
+            display: none;
+        }
+    }
+
+    .v-btn--size-default {
+        min-width: 50px;
+        letter-spacing: 0;
+        font-family: 'Inter', sans-serif;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .button-cancel-access-panel {
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        letter-spacing: 0;
+    }
+
+    .button-access-panel {
+        font-family: 'Inter', sans-serif;
+        letter-spacing: 0;
+        font-size: 14px;
+        background-color: #b20000;
+        color: white;
+    }
+
+    .button-open-panel {
+        letter-spacing: 0;
+        font-size: 12px;
+        font-weight: 700;
+        width: 100px;
+    }
+
+    .button-open-panel svg {
+        margin-right: 5px;
+    }
+
     .input-payment-panel {
         width: calc(100% - 20px);
         border: none;
@@ -124,5 +165,6 @@
 
     .padlock {
         text-align: center;
+        margin-top: 20px;
     }
 </style>
