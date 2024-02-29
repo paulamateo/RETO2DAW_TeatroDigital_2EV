@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import PopUp_AccessToPanel from '../components/PopUp-AccessToPanel.vue'
-    import PopUp_Login from '../components/PopUp-Login.vue';
+    import PopUp_Login from '../components/PopUp-Login_SignUp.vue';
 </script>
 
 <template>                        
