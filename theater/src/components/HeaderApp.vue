@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import PopUp_AccessToPanel from '../components/PopUp-AccessToPanel.vue'
+    import PopUp_Login from '../components/PopUp-Login.vue';
 </script>
 
 <template>                        
@@ -41,6 +42,7 @@
             <div class="button-actions button-action--visibility">
                 <!-- <v-btn v-bind="props" text="ACCEDER AL PANEL"></v-btn> -->
                 <!-- <v-btn @click="$emit('open-popup')">Abrir Popup</v-btn> -->
+                <PopUp_Login/>
                 <button class="button__panel-admin" id="button-actions__login">
                     <div class="button__panel-admin__content">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
