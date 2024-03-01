@@ -20,6 +20,11 @@
     <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
             <v-card-text>
+                <div class="icon-close-popup" @click="dialog = false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                    </svg>
+                </div>
                 <div class="padlock">
                     <input id="input-padlock" type="checkbox">
                     <label class="btn-lock" for="input-padlock">
@@ -30,18 +35,46 @@
                     </label>
                 </div>
                 <h2 class="popup-title">Acceder al panel de administrador</h2>
-                <input type="text" class="input-payment-panel" name="titular_input" placeholder="Introduce tu correo electrónico" required>
-                <v-card-actions>
-                    <v-btn text="CANCELAR" @click="dialog = false"></v-btn>
-                    <v-btn class="button-access-panel" @click="ExistsUser">ACCEDER</v-btn>
-                </v-card-actions>
+                <form>
+                    <div class="panel-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/></svg>
+                        <input type="text" class="input-payment-panel" name="titular_input" placeholder="Correo electrónico" require>
+                    </div>
+                </form>
+                <v-btn class="mb-4 button-login" size="large" block @click="ExistsUser">Acceder</v-btn>
             </v-card-text>
         </v-card>
     </v-dialog>
-
 </template>
 
 <style scoped>
+
+.icon-panel {
+        position: absolute;
+        color: #c3c3c3;
+        left: 15px;
+        top: 8px;
+    }
+
+    .panel-box {
+        position: relative;
+        color: #0b0b0b;
+        width: 100%;
+    }
+    .button-login {
+        background-color: #b20000;
+        letter-spacing: 0;
+        color: white;
+        font-size: 12px;
+        border: none;
+        font-family: 'Inter', sans-serif;
+    }
+    .icon-close-popup {
+        display: flex;
+        justify-content: right;
+        cursor: pointer;
+    }
+
     @media (max-width: 1200px) {
         .button-open-panel__text--visibility {
             display: none;
@@ -58,18 +91,13 @@
         justify-content: center;
     }
 
-    .button-cancel-access-panel {
-        font-family: 'Inter', sans-serif;
-        font-size: 14px;
-        letter-spacing: 0;
-    }
-
     .button-access-panel {
         font-family: 'Inter', sans-serif;
         letter-spacing: 0;
         font-size: 14px;
         background-color: #b20000;
         color: white;
+        border: 0;
     }
 
     .button-open-panel {
@@ -84,7 +112,7 @@
     }
 
     .input-payment-panel {
-        width: calc(100% - 20px);
+        width: 100%;
         border: none;
         background-color: #EAECF0;
         padding: 10px;
@@ -94,7 +122,7 @@
         text-indent: 5px;
         outline: none;
         font-size: 12px;
-        margin-left: 10px;
+        text-indent: 40px;
     }
 
     .input-payment-panel::placeholder {
@@ -107,7 +135,7 @@
         font-family: 'Inter', sans-serif;
         letter-spacing: 0;
         text-align: center;
-        margin: 30px 0px 20px 0px;
+        margin: 20px 0px 20px 0px;
     }
 
     
@@ -117,7 +145,7 @@
         width: 64px;
         height: 64px;
         box-sizing: border-box;
-        padding: 12px 5px 10px 14px;
+        padding: 11px 7px 20px 15px;
         border-radius: 50%;
         pointer-events: none;
         -webkit-tap-highlight-color: transparent;
