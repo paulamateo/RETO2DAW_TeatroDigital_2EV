@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import Shows from '../components/ShowsApp.vue';
+</script>
+
 <template>
     <main>
         <div class="banner banner--tickets">
@@ -14,6 +18,7 @@
         </div>
         
         <div class="container" id="container"></div>
+        <Shows />
     </main>
 </template>
 

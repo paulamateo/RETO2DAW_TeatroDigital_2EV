@@ -1,106 +1,127 @@
 <script setup lang="ts">
-    import ShowDetails from '../components/Panel-ShowDetails.vue'
-    import ShowSeats from '../components/Panel-Seats.vue'
+    function animationSVG(event: MouseEvent) {
+        const seatSVG = event.currentTarget as HTMLElement;
+        seatSVG.classList.add('jump');
+        setTimeout(() => {
+            seatSVG.classList.remove('jump');
+        }, 500);
+    }
 </script>
 
 <template>
-    <main>
-        <!-- <div class="banner banner--show" id="container-banner"></div> -->
-
-        <ShowDetails />
-
-        <div class="overlay" id="overlay">
-            <div class="popup-purchase" id="popup-purchase">
-                <div class="popup-overview__content"> 
-                    <div class="tick-element">
-                        <div id="trigger" class="trigger"></div>
-                        <svg version="1.1" id="tick" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 37 37" style="enable-background:new 0 0 37 37;" xml:space="preserve">
-                            <path class="circ path" style="fill:none;stroke:green;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;" d="M30.5,6.5L30.5,6.5c6.6,6.6,6.6,17.4,0,24l0,0c-6.6,6.6-17.4,6.6-24,0l0,0c-6.6-6.6-6.6-17.4,0-24l0,0C13.1-0.2,23.9-0.2,30.5,6.5z"/>
-                            <polyline class="tick path" style="fill:none;stroke:green;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;" points="11.6,20 15.9,24.2 26.4,13.8 "/>
-                        </svg>
-                    </div>
-                    <h3>¡Gracias por la compra!</h3>
-                    <p>En breve recibirás un correo electrónico con las entradas.</p>
-                    <div class="popup-overview__button">
-                        <button class="button" id="button-close" type="submit">CERRAR</button>
-                    </div>
+    <div class="seats-area">
+        <div class="seats-data">
+            <p>Elige tus asientos y sesión:</p>
+            <div class="key">
+                <div class="option-key">
+                    <div class="square square--colour-selected"></div>
+                    <p>Seleccionado</p>
+                </div>
+                <div class="option-key">
+                    <div class="square square--colour-disponible"></div>
+                    <p>Disponible</p>
+                </div>
+                <div class="option-key">
+                    <div class="square square--colour-no-disponible"></div>
+                    <p>No disponible</p>
                 </div>
             </div>
         </div>
 
-        <div class="reserve-seats">
-            <h2>RESERVAR ENTRADAS</h2>
-            <div class="reserve-seats__content">
-                <ShowSeats />
+        <div class="buttons-sessions">
+            <v-btn class="btn-session"><strong>SESIÓN MATINAL ☀️</strong> - 10:00</v-btn>
+            <v-btn class="btn-session"><strong>SESIÓN NOCTURNA 🌑</strong> - 22:30</v-btn>
+        </div>
+
+                   
+        <div class="panel-seats" id="panel-seats">
+            <div class="panel-seats__item" id="area-seats">
+          
                 
-                <div class="payment-area">
-                    <div class="panel-payment">
-                        <h3>TICKETS</h3>
-                        <div class="advertisement-tickets" id="ad"></div>
-                        <div class="selected-tickets" id="selected-tickets"></div>
-                        <hr>
-                        <div class="price" id="total-price-tickets">
-                            <p>Total</p>
-                            <p><strong><span id="details-show__total-price"></span>€</strong></p>
-                        </div>
-                    </div>
-                    <div class="panel-payment">
-                        <h3>DATOS PERSONALES</h3>
-                        <div class="panel-box">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/></svg>
-                            <input type="text" class="input-payment-panel" name="name-lastname_input" placeholder="Nombre y apellidos" required>
-                        </div>
-                        <div>
-                            <div class="error-message" id="error-message"></div>
-                            <div class="panel-box">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/></svg>
-                                <input type="text" class="input-payment-panel" id="input-email" name="email_input" placeholder="Correo electrónico" required onblur="validateEmail()">
-                            </div>
-                        </div>
-                        <div>
-                            <div class="error-message" id="error-message-2"></div>
-                            <div class="panel-box">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg>
-                                <input type="text" class="input-payment-panel" id="input-phone"  name="mobile-phone_input" placeholder="Teléfono" required onblur="validateMobilePhone()">
-                            </div>
-                        </div>
-                        <br>
-                        <h3>PAGO</h3>
-                        <div class="panel-box">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/></svg>
-                            <input type="text" class="input-payment-panel" name="titular_input" placeholder="Titular" required>
-                        </div>
-                        <div>
-                            <div class="error-message" id="error-message-3"></div>
-                            <div class="panel-box">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M11 5.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5z"/><path d="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm13 2v5H1V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1m-1 9H2a1 1 0 0 1-1-1v-1h14v1a1 1 0 0 1-1 1"/></svg>
-                                <input type="text" class="input-payment-panel" id="input-card" name="credit-card_input" placeholder="XXXX XXXX XXXX XXXX" required onblur="validateCreditCard()">
-                            </div>
-                        </div>
-                        <div class="error-message" id="error-message-4"></div>    
-                        <div class="error-message" id="error-message-5"></div>                     
-                        <div class="panel-box-double">
-                            <div class="panel-box">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/></svg>
-                              <input type="text" class="input-payment-panel" id="input-calendar" name="date_input" placeholder="--/--" required onblur="validateDateCreditCard()">
-                            </div>
-                            <div class="panel-box">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/></svg>
-                              <input type="text" class="input-payment-panel" id="input-CVV" name="CVV_input" placeholder="***" required onblur="validatePassword()">
-                            </div> 
-                        </div> 
-                        <div class="button-pay">
-                            <button class="button" id="payment-button" type="submit">PAGAR</button>
-                        </div>
-                    </div>
-                </div>
+   
+        <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
+            <rect x="10" y="10" width="50" height="35" rx="5" ry="5" fill="#37b02c" /> <!-- Ajuste de la posición del asiento hacia la izquierda -->
+            <rect x="5" y="40" width="60" height="20" rx="5" ry="5" fill="#2c8c23" /> <!-- Ajuste de la posición del respaldo -->
+            <rect x="18" y="60" width="5" height="10" fill="#464646" />
+            <rect x="48" y="60" width="5" height="10" fill="#464646" />
+            <rect x="5" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
+            <rect x="50" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
+        </svg>
+      
+      
+              
+<!--               
+                <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+                    <rect x="25" y="10" width="50" height="35" rx="5" ry="5" fill="#0000ff" />
+                    <rect x="20" y="40" width="60" height="20" rx="5" ry="5" fill="#0000cc" />
+                    <rect x="33" y="60" width="5" height="10" fill="#464646" />
+                    <rect x="63" y="60" width="5" height="10" fill="#464646" />
+                    <rect x="20" y="25" width="15" height="35"  rx="5" ry="5" fill="#0000cc" />
+                    <rect x="65" y="25" width="15" height="35" rx="5" ry="5" fill="#0000cc" />
+                </svg>
+                <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+                    <rect x="25" y="10" width="50" height="35" rx="5" ry="5" fill="#e92e19" />
+                    <rect x="20" y="40" width="60" height="20" rx="5" ry="5" fill="#ba2414" />
+                    <rect x="33" y="60" width="5" height="10" fill="#464646" />
+                    <rect x="63" y="60" width="5" height="10" fill="#464646" />
+                    <rect x="20" y="25" width="15" height="35"  rx="5" ry="5" fill="#ba2414" />
+                    <rect x="65" y="25" width="15" height="35" rx="5" ry="5" fill="#ba2414" />
+                </svg> -->
             </div>
         </div>
-    </main>
+                    
+
+
+
+    </div>
 </template>
 
 <style scoped>
-    .error-message {
+/*SESSION BUTTONS*/
+.btn-session {
+    letter-spacing: 0;
+    font-size: 10px;
+   
+    margin-bottom: 10px;
+}
+
+.btn-session:first-child {
+    margin-right: 20px;
+}
+
+.buttons-sessions {
+    display: flex;
+    justify-content: right;
+}
+
+
+
+.svg-seat {
+
+    margin: 10px;
+
+}
+
+@keyframes jump {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0); }
+        }
+        
+        .svg-seat {
+            cursor: pointer;
+        }
+        
+        .jump {
+            animation: jump 0.5s ease;
+        }
+
+       .reserve-seats__content {
+   
+            margin-top: 20px;
+        }
+
+.error-message {
         color: red;
         font-size: 10px;
         text-align: center;

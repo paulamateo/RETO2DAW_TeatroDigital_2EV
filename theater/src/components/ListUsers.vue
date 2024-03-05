@@ -1,6 +1,17 @@
 <script setup lang="ts">
+    import { onMounted, onUnmounted } from 'vue'
     import PopUp_CreateUser from '../components/PopUp-CreateUser.vue'
     import PopUp_UpdateUser from '../components/PopUp-UpdateUser.vue'
+    import { useUsersStore } from '../store/User-Store'
+    const store = useUsersStore();
+
+    onMounted(() => {
+        store.getAllUsers();
+    });
+
+    onUnmounted(() => {
+        store.users.splice(0);
+    });
 </script>
 
 <template>
@@ -72,19 +83,19 @@
         </thead>
 
         <tbody>
-            <tr id="row">
-                <th>1</th>
+            <tr id="row" v-for="user in store.users" :key="user.userId" class="container-item">
+                <th>{{ user.userId }}</th>
                 <th class="table__header-content--visibility-name">
                     <div class="table-row__showtitle">
                         <img class="table-row__showtitle_img" src="../assets/images/elements/user_default.jpg"/>
                         <div class="table-row__showtitle_text">
-                            <p><strong>Paula</strong></p>
+                            <p><strong>{{ user.userName }}</strong></p>
                         </div>
                     </div>
                 </th>
-                <th class="table__header-content--visibility-lastname">Mateo Bordetas</th>
-                <th class="table__header-content--visibility-email">a26619@svalero.com</th>
-                <th class="table__header-content--visibility-phone">123456789</th>
+                <th class="table__header-content--visibility-lastname">{{ user.userLastname }}</th>
+                <th class="table__header-content--visibility-email">{{ user.email }}</th>
+                <th class="table__header-content--visibility-phone">{{ user.phoneNumber }}</th>
                 <th class="table__header-content--visibility-rol">
                     <div class="table-genre">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">

@@ -1,11 +1,27 @@
+<script setup lang="ts">
+    import { onMounted, onUnmounted } from 'vue'
+    import { useShowsStore } from '../store/Show-Store'
+    const store = useShowsStore();
+
+    onMounted(() => {
+        store.getAllShows();
+    });
+
+    // onUnmounted(() => {
+    //     store.shows.splice(0);
+    // });
+</script>
+
 <template>
     <div class="container">
-        <div class="container-item">
-            <div class="genre">${show.genre}</div>
-                <img src="${show.poster}" alt="${show.title}"/>
+        <div v-for="show in store.shows" :key="show.showId" class="container-item">
+            <RouterLink :to="{ path: '/Shows/' + show.showId }">
+                <div class="genre">{{ show.genre }}</div>
+                <img :src="show.poster" alt="{{ show.title }}"/>
                 <div class="title">
-                    <h3>${show.title}</h3>
+                    <h3>{{ show.title }}</h3>
                 </div>
+            </RouterLink>
         </div>
     </div>
 </template>

@@ -5,6 +5,8 @@ import ProgrammingView from '../views/ProgrammingView.vue'
 import ShowView from '../views/ShowView.vue'
 import AdminPanelView from '../views/AdminPanelView.vue'
 
+import Plantilla from '../views/PlantillaShowView.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -19,9 +21,10 @@ const router = createRouter({
       component: BillboardView
     },
     {
-      path: '/Shows/:id',
+      path: '/Shows/:showId',
       name: 'Show-details',
-      component: ShowView
+      component: ShowView,
+      props: true
     },
     {
       path: '/Programming',
@@ -32,8 +35,16 @@ const router = createRouter({
       path:'/Admin-Panel',
       name: 'Admin-Panel',
       component: AdminPanelView
+    },
+    {
+      path:'/Plantilla',
+      name: 'Plantilla',
+      component: Plantilla
     }
-  ]
+  ],
+  scrollBehavior() {
+    return { top: 0 };
+  }
 })
 
 export default router

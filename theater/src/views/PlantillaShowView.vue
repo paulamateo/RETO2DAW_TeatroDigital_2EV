@@ -1,38 +1,37 @@
 <script setup lang="ts">
-    import ShowDetails from '../components/Panel-ShowDetails.vue'
-    import ShowSeats from '../components/Panel-Seats.vue'
+        import Seats from '../components/Panel-Seats.vue'
 </script>
 
 <template>
-    <main>
-        <!-- <div class="banner banner--show" id="container-banner"></div> -->
-
-        <ShowDetails />
-
-        <div class="overlay" id="overlay">
-            <div class="popup-purchase" id="popup-purchase">
-                <div class="popup-overview__content"> 
-                    <div class="tick-element">
-                        <div id="trigger" class="trigger"></div>
-                        <svg version="1.1" id="tick" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 37 37" style="enable-background:new 0 0 37 37;" xml:space="preserve">
-                            <path class="circ path" style="fill:none;stroke:green;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;" d="M30.5,6.5L30.5,6.5c6.6,6.6,6.6,17.4,0,24l0,0c-6.6,6.6-17.4,6.6-24,0l0,0c-6.6-6.6-6.6-17.4,0-24l0,0C13.1-0.2,23.9-0.2,30.5,6.5z"/>
-                            <polyline class="tick path" style="fill:none;stroke:green;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;" points="11.6,20 15.9,24.2 26.4,13.8 "/>
-                        </svg>
-                    </div>
-                    <h3>¡Gracias por la compra!</h3>
-                    <p>En breve recibirás un correo electrónico con las entradas.</p>
-                    <div class="popup-overview__button">
-                        <button class="button" id="button-close" type="submit">CERRAR</button>
-                    </div>
-                </div>
-            </div>
+    <div class="banner banner--show" id="container-banner"></div>
+    <div class="details-show" id="container-details">
+        <div class="details-show__item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-film" viewBox="0 0 16 16"><path d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm4 0v6h8V1zm8 8H4v6h8zM1 1v2h2V1zm2 3H1v2h2zM1 7v2h2V7zm2 3H1v2h2zm-2 3v2h2v-2zM15 1h-2v2h2zm-2 3v2h2V4zm2 3h-2v2h2zm-2 3v2h2v-2zm2 3h-2v2h2z"/></svg>
+            <p><strong>GÉNERO</strong></p>
+            <p id="details-show__genre"></p>
         </div>
+        <div class="details-show__item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16"><path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/></svg>
+            <p><strong>DIRECTOR/A</strong></p>
+            <p id="details-show__director"></p>
+        </div>
+        <div class="details-show__item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16"><path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022ZM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/></svg>
+            <p><strong>EDAD RECOMENDADA</strong></p>
+            <p>A partir de <span id="details-show__age"></span> años</p>
+        </div>
+        <div class="details-show__item details-show__item--link" id="button-overview">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-text" viewBox="0 0 16 16"><path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5M5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1z"/><path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2zm10-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1"/></svg>
+            <p><strong>SINOPSIS</strong></p>
+            <p>Leer más</p>
+        </div>
+    </div>
 
-        <div class="reserve-seats">
+    <div class="reserve-seats">
             <h2>RESERVAR ENTRADAS</h2>
             <div class="reserve-seats__content">
-                <ShowSeats />
-                
+                <Seats />
+
                 <div class="payment-area">
                     <div class="panel-payment">
                         <h3>TICKETS</h3>
@@ -96,11 +95,30 @@
                 </div>
             </div>
         </div>
-    </main>
 </template>
 
 <style scoped>
-    .error-message {
+
+@keyframes jump {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0); }
+        }
+        
+        .svg-seat {
+            cursor: pointer;
+        }
+        
+        .jump {
+            animation: jump 0.5s ease;
+        }
+
+       .reserve-seats__content {
+   
+            margin-top: 20px;
+        }
+
+.error-message {
         color: red;
         font-size: 10px;
         text-align: center;

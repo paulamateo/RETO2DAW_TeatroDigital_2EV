@@ -15,7 +15,7 @@
         <div class="column-tabs">
             <div class="column-tabs__user">
                 <img class="column-tabs__user_img" src="../assets/images/elements/user_default.jpg"/>
-                <h3 class="column-tabs__name-user">¡Hola, Paula! 👋</h3>
+                <h3 class="column-tabs__name-user">¡Hola, Admin! 👋</h3>
             </div>
             <RouterLink to="/">
                 <div class="button-return">
@@ -164,7 +164,7 @@
     }
 
     .column-data__content {
-        margin: 40px;
+        margin: 60px;
     }
 
     .column-tabs__name-user {

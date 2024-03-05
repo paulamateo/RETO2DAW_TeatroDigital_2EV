@@ -129,7 +129,7 @@
         width: 100%;
         box-sizing: border-box;
         transition: background-color 0.3s;
-        z-index: 1;
+        z-index: 9999;
     }
     .header.scrolled {
         background-color: white;
