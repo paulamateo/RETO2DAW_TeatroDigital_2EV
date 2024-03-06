@@ -40,9 +40,9 @@
             </div>
 
             <div class="button-actions button-action--visibility">
-                <div class="button-login">
+                <!-- <div class="button-login">
                     <PopUp_Login/>
-                </div>
+                </div> -->
                 <div>
                     <PopUp_AccessToPanel/>
                 </div>
