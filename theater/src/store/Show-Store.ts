@@ -71,5 +71,3 @@ export const useShowByIdStore = defineStore('showById', () => {
 
     return { ...state, getShowById };
 });
-
-//GET SHOWS BY GENRE

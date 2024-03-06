@@ -6,18 +6,7 @@
     <main>
         <div class="banner banner--tickets">
             <h1>CARTELERA</h1>
-        </div>
-
-        <div class="select-genre__form">
-            <form method="POST">
-                <label for="genre">Filtrar por</label>
-                <select name="genre" id="genre">
-                    <option value="" selected disabled hidden><span>GÉNERO</span></option>
-                </select>
-            </form>
-        </div>
-        
-        <div class="container" id="container"></div>
+        </div>        
         <Shows />
     </main>
 </template>

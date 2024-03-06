@@ -1,4 +1,16 @@
 <script setup lang="ts">
+    import { onMounted } from 'vue'
+    import { useSessionsStore } from '../store/Session-Store'
+    import { useRoute } from 'vue-router';
+    const store = useSessionsStore();
+    const route = useRoute();
+
+    const showId = route.params.showId as string;
+    onMounted(() => {
+        store.getAllSessions(showId);
+    })
+
+ 
     function animationSVG(event: MouseEvent) {
         const seatSVG = event.currentTarget as HTMLElement;
         seatSVG.classList.add('jump');
@@ -6,10 +18,12 @@
             seatSVG.classList.remove('jump');
         }, 500);
     }
+
 </script>
 
 <template>
     <div class="seats-area">
+       
         <div class="seats-data">
             <p>Elige tus asientos y sesión:</p>
             <div class="key">
@@ -29,44 +43,52 @@
         </div>
 
         <div class="buttons-sessions">
-            <v-btn class="btn-session"><strong>SESIÓN MATINAL ☀️</strong> - 10:00</v-btn>
-            <v-btn class="btn-session"><strong>SESIÓN NOCTURNA 🌑</strong> - 22:30</v-btn>
+            <div v-for="session in store.sessions" :key="session.sessionId">    
+                <v-btn class="btn-session"><strong>{{ session.sessionId === 1 ? 'SESIÓN MATINAL ☀️' : 'SESIÓN NOCTURNA 🌙' }}</strong> - {{ session.hour }}h</v-btn>
+            </div>
         </div>
 
-                   
         <div class="panel-seats" id="panel-seats">
             <div class="panel-seats__item" id="area-seats">
-          
-                
-   
-        <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
-            <rect x="10" y="10" width="50" height="35" rx="5" ry="5" fill="#37b02c" /> <!-- Ajuste de la posición del asiento hacia la izquierda -->
-            <rect x="5" y="40" width="60" height="20" rx="5" ry="5" fill="#2c8c23" /> <!-- Ajuste de la posición del respaldo -->
-            <rect x="18" y="60" width="5" height="10" fill="#464646" />
-            <rect x="48" y="60" width="5" height="10" fill="#464646" />
-            <rect x="5" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
-            <rect x="50" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
-        </svg>
-      
-      
-              
-<!--               
-                <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-                    <rect x="25" y="10" width="50" height="35" rx="5" ry="5" fill="#0000ff" />
-                    <rect x="20" y="40" width="60" height="20" rx="5" ry="5" fill="#0000cc" />
-                    <rect x="33" y="60" width="5" height="10" fill="#464646" />
-                    <rect x="63" y="60" width="5" height="10" fill="#464646" />
-                    <rect x="20" y="25" width="15" height="35"  rx="5" ry="5" fill="#0000cc" />
-                    <rect x="65" y="25" width="15" height="35" rx="5" ry="5" fill="#0000cc" />
-                </svg>
-                <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-                    <rect x="25" y="10" width="50" height="35" rx="5" ry="5" fill="#e92e19" />
-                    <rect x="20" y="40" width="60" height="20" rx="5" ry="5" fill="#ba2414" />
-                    <rect x="33" y="60" width="5" height="10" fill="#464646" />
-                    <rect x="63" y="60" width="5" height="10" fill="#464646" />
-                    <rect x="20" y="25" width="15" height="35"  rx="5" ry="5" fill="#ba2414" />
-                    <rect x="65" y="25" width="15" height="35" rx="5" ry="5" fill="#ba2414" />
-                </svg> -->
+                <div class="seat-grid">
+                    <!-- <div v-if="session in store.sessions" :key="session.sessionId">    -->
+                        <svg  v-for="seatId in 60" :key="seatId" class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
+                            <rect x="10" y="10" width="50" height="35" rx="5" ry="5" fill="#37b02c" />
+                            <rect x="5" y="40" width="60" height="20" rx="5" ry="5" fill="#2c8c23" />
+                            <rect x="18" y="60" width="5" height="10" fill="#464646" />
+                            <rect x="48" y="60" width="5" height="10" fill="#464646" />
+                            <rect x="5" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
+                            <rect x="50" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
+                            <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatId }}</text>
+                        </svg> 
+                  
+                    <!-- </div> -->
+                </div>
+
+                    <!-- <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
+                        <rect x="10" y="10" width="50" height="35" rx="5" ry="5" fill="#37b02c" />
+                        <rect x="5" y="40" width="60" height="20" rx="5" ry="5" fill="#2c8c23" />
+                        <rect x="18" y="60" width="5" height="10" fill="#464646" />
+                        <rect x="48" y="60" width="5" height="10" fill="#464646" />
+                        <rect x="5" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
+                        <rect x="50" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
+                    </svg> -->
+                        <!-- <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+                            <rect x="25" y="10" width="50" height="35" rx="5" ry="5" fill="#0000ff" />
+                            <rect x="20" y="40" width="60" height="20" rx="5" ry="5" fill="#0000cc" />
+                            <rect x="33" y="60" width="5" height="10" fill="#464646" />
+                            <rect x="63" y="60" width="5" height="10" fill="#464646" />
+                            <rect x="20" y="25" width="15" height="35"  rx="5" ry="5" fill="#0000cc" />
+                            <rect x="65" y="25" width="15" height="35" rx="5" ry="5" fill="#0000cc" />
+                        </svg> -->
+                        <!-- <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+                            <rect x="25" y="10" width="50" height="35" rx="5" ry="5" fill="#e92e19" />
+                            <rect x="20" y="40" width="60" height="20" rx="5" ry="5" fill="#ba2414" />
+                            <rect x="33" y="60" width="5" height="10" fill="#464646" />
+                            <rect x="63" y="60" width="5" height="10" fill="#464646" />
+                            <rect x="20" y="25" width="15" height="35"  rx="5" ry="5" fill="#ba2414" />
+                            <rect x="65" y="25" width="15" height="35" rx="5" ry="5" fill="#ba2414" />
+                        </svg> -->
             </div>
         </div>
                     
@@ -77,6 +99,60 @@
 </template>
 
 <style scoped>
+
+.panel-seats {
+        background-color: #181818;
+        padding: 30px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: row;
+        /* flex-direction: column; */
+        align-items: center;
+        margin: 0 0 30px 0;
+        justify-content: center;
+    }
+
+    /* .seat-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 10px;
+} */
+    /* .panel-seats__item {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        font-size: 10px;
+        text-align: center;
+    } */
+/* 
+    .panel-seats__item {
+    display: flex;
+    flex-wrap: wrap;
+
+} */
+
+.seat-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr); /* Diez columnas para diez asientos por fila */
+    gap: 15px; /* Espacio entre asientos */
+}
+
+.svg-seat {
+    /* Asegura que el SVG ocupe todo el espacio del contenedor */
+    margin: 10px;
+}
+
+
+@media (max-width: 1750px) {
+    .svg-seat {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+
+
 /*SESSION BUTTONS*/
 .btn-session {
     letter-spacing: 0;
@@ -85,22 +161,14 @@
     margin-bottom: 10px;
 }
 
-.btn-session:first-child {
-    margin-right: 20px;
-}
 
 .buttons-sessions {
     display: flex;
     justify-content: right;
+    gap: 10px;
 }
 
 
-
-.svg-seat {
-
-    margin: 10px;
-
-}
 
 @keyframes jump {
             0% { transform: translateY(0); }
@@ -313,26 +381,20 @@
     }
 
     .seats-data {
-        margin: 0 0 20px 0;
+        margin: 10px 0 20px 0;
         font-size: 9px;
     }
 
-    .panel-seats {
-        background-color: #181818;
-        padding: 20px;
-        border-radius: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0 0 30px 0;
-    }
-    .panel-seats__item {
+
+    /* .panel-seats__item {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         font-size: 10px;
         text-align: center;
-    }
+    } */
+
+ 
 
     .seat {
         color: white;

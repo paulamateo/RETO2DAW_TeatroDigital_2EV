@@ -25,6 +25,10 @@ export const useUsersStore = defineStore('users', () => {
             console.log('Error displaying users: ', error);
         }
     }
+
+    const getAdminUsers = () => {
+        return users.filter(user => user.isAdmin); // Filtrar usuarios con isAdmin === true
+    };
     
-    return { users, getAllUsers };
+    return { users, getAllUsers, getAdminUsers };
 })
