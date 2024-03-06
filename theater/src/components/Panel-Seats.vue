@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { onMounted } from 'vue'
+    import { onMounted, ref } from 'vue'
     import { useSessionsStore } from '../store/Session-Store'
     import { useRoute } from 'vue-router';
     const store = useSessionsStore();
@@ -14,9 +14,16 @@
     function animationSVG(event: MouseEvent) {
         const seatSVG = event.currentTarget as HTMLElement;
         seatSVG.classList.add('jump');
+        // seatSVG.classList.add('seat-base-selected')
         setTimeout(() => {
             seatSVG.classList.remove('jump');
         }, 500);
+    }
+
+    const selectedSession = ref();
+
+    const selectSession = (sessionId: number) => {
+        selectedSession.value = sessionId;
     }
 
 </script>
@@ -43,16 +50,44 @@
         </div>
 
         <div class="buttons-sessions">
+        <div v-for="session in store.sessions" :key="session.sessionId">    
+            <v-btn class="btn-session" @click="selectSession(session.sessionId)">
+                <strong>{{ session.sessionId === 1 ? 'SESIÓN MATINAL ☀️' : 'SESIÓN NOCTURNA 🌙' }}</strong> - {{ session.hour }}h
+            </v-btn>
+        </div>
+    </div>
+
+    <div v-for="session in store.sessions" :key="session.sessionId" v-show="selectedSession === session.sessionId">
+        <div class="panel-seats" id="panel-seats">
+            <div class="panel-seats__item" id="area-seats">
+                <div class="seat-grid">
+                    <svg v-for="seatId in session.seats" :key="seatId" class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
+                        <rect class="seat-background-selected" x="10" y="10" width="50" height="35" rx="5" ry="5" fill="#37b02c" />
+                        <rect class="seat-base-selected" x="5" y="40" width="60" height="20" rx="5" ry="5" fill="#2c8c23" />
+                        <rect class="seat-leg-selected" x="18" y="60" width="5" height="10" fill="#464646" />
+                        <rect class="seat-leg-selected" x="48" y="60" width="5" height="10" fill="#464646" />
+                        <rect class="seat-arm-selected" x="5" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
+                        <rect class="seat-arm-selected" x="50" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
+                        <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatId }}</text>
+                    </svg> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- </div>
+
+        <div class="buttons-sessions">
             <div v-for="session in store.sessions" :key="session.sessionId">    
-                <v-btn class="btn-session"><strong>{{ session.sessionId === 1 ? 'SESIÓN MATINAL ☀️' : 'SESIÓN NOCTURNA 🌙' }}</strong> - {{ session.hour }}h</v-btn>
+                <v-btn class="btn-session" @click="selectSession(session.sessionId)"><strong>{{ session.sessionId === 1 ? 'SESIÓN MATINAL ☀️' : 'SESIÓN NOCTURNA 🌙' }}</strong> - {{ session.hour }}h</v-btn>
             </div>
         </div>
 
         <div class="panel-seats" id="panel-seats">
             <div class="panel-seats__item" id="area-seats">
-                <div class="seat-grid">
+                <div class="seat-grid"> -->
                     <!-- <div v-if="session in store.sessions" :key="session.sessionId">    -->
-                        <svg  v-for="seatId in 60" :key="seatId" class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
+                        <!-- <svg  v-for="seatId in 60" :key="seatId" class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
                             <rect x="10" y="10" width="50" height="35" rx="5" ry="5" fill="#37b02c" />
                             <rect x="5" y="40" width="60" height="20" rx="5" ry="5" fill="#2c8c23" />
                             <rect x="18" y="60" width="5" height="10" fill="#464646" />
@@ -60,10 +95,10 @@
                             <rect x="5" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
                             <rect x="50" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
                             <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatId }}</text>
-                        </svg> 
+                        </svg>  -->
                   
                     <!-- </div> -->
-                </div>
+                <!-- </div> -->
 
                     <!-- <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
                         <rect x="10" y="10" width="50" height="35" rx="5" ry="5" fill="#37b02c" />
@@ -89,17 +124,27 @@
                             <rect x="20" y="25" width="15" height="35"  rx="5" ry="5" fill="#ba2414" />
                             <rect x="65" y="25" width="15" height="35" rx="5" ry="5" fill="#ba2414" />
                         </svg> -->
-            </div>
+            <!-- </div>
         </div>
                     
 
 
 
-    </div>
+    </div> -->
+</div>
 </template>
 
 <style scoped>
 
+/* .seat-background-selected {
+    background-color: #0000ff;
+}
+.seat-base-selected{
+    background-color: #0000cc;
+}
+.seat-arm-selected {
+    background-color: #0000cc;
+} */
 .panel-seats {
         background-color: #181818;
         padding: 30px;
@@ -171,10 +216,10 @@
 
 
 @keyframes jump {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-30px); }
-            100% { transform: translateY(0); }
-        }
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-30px); }
+    100% { transform: translateY(0); }
+}
         
         .svg-seat {
             cursor: pointer;

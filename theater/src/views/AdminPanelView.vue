@@ -97,6 +97,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        background-color: #363740;
     }
 
     .column-tabs__user_img {
@@ -136,6 +137,7 @@
     .container-panel-admin {
         display: grid;
         grid-template-columns: 1fr 7fr;
+        background-color: #363740;
     }
 
     .column-tabs {

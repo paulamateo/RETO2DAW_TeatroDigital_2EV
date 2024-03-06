@@ -1,7 +1,61 @@
 <script setup lang="ts">
     import { ref } from 'vue';
     const dialog = ref(false);
+
+    let titulo = ref('');
+    let autor = ref('');
+    let director = ref('');
+    let edad = ref('');
+    let precio = ref('');
+    let genero = ref('');
+    let posterFile = ref<File | {}>({});
+    let sceneFile = ref<File | {}>({});
+    let bannerFile = ref<File | {}>({});
+    let resena = ref('');
+    let duracion = ref('');
+    let fecha = ref('');
+
+    const addPoster = (event: Event) => {
+        const input = event.target as HTMLInputElement;
+    }
+
+    const addScene = (event: Event) => {
+        const input = event.target as HTMLInputElement;
+    }
+
+    const addBanner = (event: Event) => {
+        const input = event.target as HTMLInputElement;
+    }
+
+    const addShowToDatabase = async () => {
+        try {
+            const show = {
+                showId: 0,
+                title: titulo.value,
+                author: autor.value,
+                director: director.value,
+                genre: genero.value,
+                age: edad.value,
+                date: fecha.value,
+                length: duracion.value,
+                price: precio.value,
+                poster: posterFile.value,
+                banner: bannerFile.value,
+                scene: sceneFile.value,
+                overview: resena.value
+            }
+            const response = await fetch("http://localhost:8001/Show", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(show),
+            });
+        }catch (error) {
+            console.log('Error: ', error);
+        }
+    }
+
 </script>
+
 
 <template>
     <v-btn class="button-create-show">
@@ -14,65 +68,69 @@
     <v-dialog v-model="dialog" persistent activator="parent" width="700px">
         <v-card>
             <h2 class="popup-title">Crear obra</h2>
-            <form>
+            <form @submit.prevent="addShowToDatabase">
                 <div class="panel-box">
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Título" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Autor" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Director" required>
+                    <input type="text" v-model="titulo" class="input-payment-panel" name="titular_input" placeholder="Título" required>
+                    <input type="text" v-model="autor" class="input-payment-panel" name="titular_input" placeholder="Autor" required>
+                    <input type="text" v-model="director" class="input-payment-panel" name="titular_input" placeholder="Director" required>
                     <div class="panel-box">
-                        <input type="number" class="input-payment-panel" name="titular_input" placeholder="Edad recomendada" required>
-                        <input type="text" class="input-payment-panel" name="titular_input" placeholder="Precio" required>
+                        <input type="number" v-model="edad" class="input-payment-panel" name="titular_input" placeholder="Edad recomendada" required>
+                        <input type="text" v-model="precio" class="input-payment-panel" name="titular_input" placeholder="Precio" required>
                     </div> 
                 </div>
+                <div class="panel-box panel-box--3-col">
+                    <div class="panel-box__item">
+                        <input type="date" v-model="fecha" class="input-payment-panel" id="fecha" name="fecha">
+                    </div>
+                    <div class="panel-box__item">
+                        <input type="text" v-model="duracion" class="input-payment-panel" name="titular_input" placeholder="Duración" required>
+                    </div>
+                    <div class="panel-box__item">
+                        <input type="text" v-model="genero" class="input-payment-panel" name="titular_input" placeholder="Género" required>
+                    </div>
+                </div>
                 <div class="panel-box">
-                    <div class="panel-box">
-                        <input type="date" class="input-payment-panel" id="fecha" name="fecha">
-                        <input type="time" class="input-payment-panel" id="hora" name="hora">
+                    <div class="panel-box__item">
+                        <label for="poster">Sesión 1 (Mañana)</label>
+                        <input type="time" class="input-payment-panel" id="hora" name="hora"> 
                     </div>
-                    <div class="panel-box">
-                        <input type="text" class="input-payment-panel" name="titular_input" placeholder="Duración" required>
-                        <div>
-                            <select name="genre">
-                                <option value="" selected disabled hidden><span>GÉNERO</span></option>
-                                <option value="1">Opción 1</option>
-                                <option value="2">Opción 2</option>
-                                <option value="3">Opción 3</option>
-                            </select>
-                        </div>
-                    </div>
+                    <div class="panel-box__item">
+                        <label for="poster">Sesión 2 (Tarde)</label>
+                        <input type="time" class="input-payment-panel" id="hora" name="hora"> 
+                    </div> 
                 </div>
                 <div class="panel-box panel-box--3-col">
                     <div class="panel-box__item">
                         <label for="poster">Poster</label>
-                        <input type="file" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                        <input type="file" @change="addPoster" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                     </div>
                     <div class="panel-box__item">
                         <label for="scene">Escena</label>
-                        <input type="file" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                        <input type="file" @change="addScene" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                     </div>
                     <div class="panel-box__item">
                         <label for="banner">Banner</label>
-                        <input type="file" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                        <input type="file" @change="addBanner" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                     </div>
                 </div>
                 <div class="panel-box panel-box--1-col">
                     <textarea class="input-payment-panel input-payment-panel--textarea" placeholder="Reseña"></textarea>
-                </div>      
-            </form>
-            <v-divider></v-divider>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                <v-btn color="primary" text="CREAR" variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
-            </v-card-actions>
+                </div>    
+                <v-divider></v-divider>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" text="CREAR"  variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
+                </v-card-actions> 
+            </form> 
         </v-card>
     </v-dialog>
 </template>
 
 <style scoped>
-    input[type="date"].input-payment-panel, input[type="time"].input-payment-panel {
+    /* input[type="date"].input-payment-panel, input[type="time"].input-payment-panel {
       color: #c3c3c3;
-    }
+    } */
 
     .panel-box__item label {
         margin: 0;
