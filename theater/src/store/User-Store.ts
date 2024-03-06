@@ -27,7 +27,7 @@ export const useUsersStore = defineStore('users', () => {
     }
 
     const getAdminUsers = () => {
-        return users.filter(user => user.isAdmin); // Filtrar usuarios con isAdmin === true
+        return users.filter(user => user.isAdmin);
     };
     
     return { users, getAllUsers, getAdminUsers };

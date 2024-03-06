@@ -39,7 +39,6 @@
             const inpLock = document.getElementById("input-padlock") as HTMLInputElement;
             inpLock.checked = !inpLock.checked;
             inpLock.dispatchEvent(new Event("change"));
-            isLockActivated.value = true;
         }
     }
 </script>

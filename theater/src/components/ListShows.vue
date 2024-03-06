@@ -1,17 +1,18 @@
 <script setup lang="ts">
-    import { onMounted, onUnmounted } from 'vue'
+    import { onMounted } from 'vue'
     import PopUp_CreateShow from '../components/PopUp-CreateShow.vue'
     import PopUp_UpdateShow from '../components/PopUp-UpdateShow.vue'
     import { useShowsStore } from '../store/Show-Store'
+    import { format } from 'date-fns';
     const store = useShowsStore();
 
     onMounted(() => {
         store.getAllShows();
     });
 
-    onUnmounted(() => {
-        store.shows.splice(0);
-    });
+    const formatDate = (date: Date) => {
+        return format(new Date(date), 'dd/MM/yyyy');
+    };
 </script>
 
 <template>
@@ -96,7 +97,6 @@
                         </div>
                     </div>
                 </th>
-
                 <th class="table-element--visibility-director">{{ show.director }}</th>
                 <th class="table-element--visibility-genre">
                     <div class="table-genre">
@@ -107,13 +107,9 @@
                         <span>{{ show.genre }}</span>
                     </div>
                 </th>
-
                 <th class="table-element--visibility-price">{{ show.price }}€</th>
-
-                <th class="table-element--visibility-date">{{ show.date }}</th>
-
+                <th class="table-element--visibility-date">{{ formatDate(show.date) }}</th>
                 <th class="table-element--visibility-duration">{{ show.length }}</th>  
-
                 <th class="buttons-actions-panel">
                     <div>
                         <PopUp_UpdateShow/>
@@ -311,5 +307,4 @@
     .table-row__showtitle_text p {
         margin: 0;
     }
-
 </style>

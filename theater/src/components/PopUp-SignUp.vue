@@ -87,7 +87,7 @@
                         <span>Inicia sesión</span> 
                         <v-icon icon="mdi-chevron-right"></v-icon>
                     </v-btn>
-                    <CreateUser/>
+                    <!-- <CreateUser/> -->
                 </div>
 
               
