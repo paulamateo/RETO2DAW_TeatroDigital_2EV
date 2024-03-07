@@ -1,24 +1,51 @@
 <script setup lang="ts">
-    import { onMounted, ref } from 'vue'
+    import MakeReservation from '../components/PopUp-MakeReservation.vue'
+    import { onMounted, ref, watchEffect } from 'vue'
     import { useSessionsStore } from '../store/Session-Store'
+    import { useShowByIdStore, type Show } from '../store/Show-Store'
     import { useRoute } from 'vue-router';
     const store = useSessionsStore();
+    const storeShow = useShowByIdStore()
     const route = useRoute();
+    const totalPrice = ref<number>(0);
+
 
     const showId = route.params.showId as string;
     onMounted(() => {
         store.getAllSessions(showId);
     })
 
- 
-    function animationSVG(event: MouseEvent) {
+    let selectedSeatInfo: { seatId: number, session: string }[] = [];
+
+    function animationSVG(event: MouseEvent, seatId: number) {
         const seatSVG = event.currentTarget as HTMLElement;
+        // Verificar si el asiento ya está seleccionado
+        const index = selectedSeatInfo.findIndex(info => info.seatId === seatId);
+        if (index !== -1) {
+            // El asiento ya está seleccionado, no hacer nada
+            return;
+        }
+        // Agregar clase de animación
         seatSVG.classList.add('jump');
-        // seatSVG.classList.add('seat-base-selected')
+        // Quitar clase de animación después de cierto tiempo
         setTimeout(() => {
             seatSVG.classList.remove('jump');
         }, 500);
+        // Cambiar color del asiento
+        seatColors.value[seatId] = {
+            background: '#0000ff',
+            base: '#0000cc',
+            legs: '#464646',
+            arms: '#0000cc'
+        };
+        // Agregar el asiento a la lista de asientos seleccionados
+        selectedSeatInfo.push({
+            seatId,
+            session: store.sessions.find(session => session.sessionId === selectedSession.value)?.hour ?? ''
+        });
+        totalPrice.value += showData.price;
     }
+
 
     const selectedSession = ref();
 
@@ -26,96 +53,292 @@
         selectedSession.value = sessionId;
     }
 
+    const seatColors = ref<{ [key: number]: SeatColors }>({});
+
+    interface SeatColors {
+        background: string;
+        base: string;
+        legs: string;
+        arms: string;
+    }
+
+    
+    const show = ref<Show>();
+
+    onMounted(async () => {
+        await storeShow.getShowById(showId);
+        show.value = storeShow.show;
+    });
+
+    storeShow.getShowById(showId);
+    const showData = storeShow.show;
+
+    function formatHour(hour: string): string {
+        const date = new Date(`2000-01-01T${hour}`);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function calculateRow(seatId: number): number {
+    // Supongamos que el asiento está organizado en filas de 10 asientos cada una
+    return Math.ceil(seatId / 10); // Esto devuelve el número de fila en función del ID del asiento
+}
+
+function calculateColumn(seatId: number): number {
+    // Supongamos que el asiento está organizado en filas de 10 asientos cada una
+    return seatId % 10 === 0 ? 10 : seatId % 10; // Esto devuelve el número de columna en función del ID del asiento
+}
+
+function deleteTicketSeat(seatId: number) {
+        // Eliminar el ticket seleccionado del arreglo
+        selectedSeatInfo = selectedSeatInfo.filter(info => info.seatId !== seatId);
+        
+        // Restaurar el color del asiento a verde
+        seatColors.value[seatId] = {
+            background: '#37b02c',
+            base: '#2c8c23',
+            legs: '#464646',
+            arms: '#2c8c23'
+        };
+
+        totalPrice.value -= showData.price;
+    }
+
+
+    function calculateTotalPrice() {
+        // Sumar el precio de todos los tickets seleccionados
+        totalPrice.value = selectedSeatInfo.length * showData.price;
+    }
+
+    // Función que se ejecuta cada vez que se actualiza la lista de tickets seleccionados
+    watchEffect(calculateTotalPrice);
+
+    const email = ref('');
+    const phone = ref('');
+    const date = ref('');
+    const CVV = ref('');
+    const isValidEmail = ref(true);
+    const creditCard = ref('');
+    const name = ref('');
+    const titular = ref('');
+
+    function validateEmail() {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        isValidEmail.value = emailRegex.test(email.value);
+    }
+
+    function validatePhone() {
+        let phoneValue = phone.value;
+        phoneValue = phoneValue.replace(/\D/g, '');
+        phoneValue = phoneValue.substring(0, 9); 
+        phone.value = phoneValue;
+    }
+
+    function validateDateCreditCard() {
+        let dateValue = date.value;
+        dateValue = dateValue.replace(/\D/g, '');
+        if (dateValue.length > 2) {
+            dateValue = dateValue.substring(0, 2) + '/' + dateValue.substring(2);
+        }
+
+        if (dateValue.length > 5) {
+            dateValue = dateValue.substring(0, 5);
+        }
+
+        date.value = dateValue;
+    }
+
+    function validateCVV() {
+        let cvvValue =  CVV.value;
+        cvvValue = cvvValue.replace(/[^\d*]/g, '');
+        cvvValue = cvvValue.substring(0, 3).replace(/\d/g, '*');
+        CVV.value = cvvValue;
+    }
+
+    function validateCreditCard() {
+        let creditCardValue =  creditCard.value;
+        creditCardValue = creditCardValue.replace(/\D/g, '');
+        creditCardValue = creditCardValue.replace(/(\d{4})/g, match => match + '  ');
+        creditCardValue = creditCardValue.substring(0, 22);
+        creditCard.value = creditCardValue;
+    }
+
+    
+
+
+    
+const dialog = ref(false);
+
+const openDialog = () => {
+  validateEmail();
+  if (isValidEmail.value && email.value !== '' && phone.value !== '' && date.value !== '' && CVV.value !== '' && creditCard.value !== '' && name.value !== '' && titular.value !== '') {
+    dialog.value = true;
+  } else {
+    alert('Revisa todos los campos.');
+  }
+};
+
+const closeDialog = () => {
+  dialog.value = false;
+  email.value = '';
+  phone.value = '';
+  date.value = '';
+  CVV.value = '';
+  creditCard.value = '';
+  name.value = '';
+  titular.value = '';
+};
+
+
 </script>
 
 <template>
-    <div class="seats-area">
+    <div class="reserve-seats">
+        <h2>RESERVAR ENTRADAS</h2>
+        <div class="reserve-seats__content">
+            <div class="seats-area">
+                <div class="seats-data">
+                    <p>Elige tus asientos y sesión:</p>
+                    <div class="key">
+                        <div class="option-key">
+                            <div class="square square--colour-selected"></div>
+                            <p>Seleccionado</p>
+                        </div>
+                        <div class="option-key">
+                            <div class="square square--colour-disponible"></div>
+                            <p>Disponible</p>
+                        </div>
+                        <div class="option-key">
+                            <div class="square square--colour-no-disponible"></div>
+                            <p>No disponible</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="buttons-sessions">
+                <div v-for="session in store.sessions" :key="session.sessionId">    
+                    <v-btn class="btn-session" @click="selectSession(session.sessionId)">
+                        <strong>{{ session.sessionId === 1 ? 'SESIÓN MATINAL ☀️' : 'SESIÓN NOCTURNA 🌙' }}</strong> - {{ formatHour(session.hour) }}h
+                    </v-btn>
+                </div>
+            </div>
+
+          
+            <div v-for="session in store.sessions" :key="session.sessionId" v-show="selectedSession === session.sessionId">
+                <div class="panel-seats" id="panel-seats">
+                    <div class="panel-seats__item" id="area-seats">
+                        <div class="seat-grid">
+                            <svg v-for="seatId in session.totalSeats" :key="seatId" class="svg-seat" @click="animationSVG($event, seatId)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
+                                <rect class="seat-background-selected" x="10" y="10" width="50" height="35" rx="5" ry="5" :fill="seatColors[seatId]?.background || '#37b02c'" />
+                                <rect class="seat-base-selected" x="5" y="40" width="60" height="20" rx="5" ry="5" :fill="seatColors[seatId]?.base || '#2c8c23'" />
+                                <rect class="seat-leg-selected" x="18" y="60" width="5" height="10" :fill="seatColors[seatId]?.legs || '#464646'" />
+                                <rect class="seat-leg-selected" x="48" y="60" width="5" height="10" :fill="seatColors[seatId]?.legs || '#464646'" />
+                                <rect class="seat-arm-selected" x="5" y="25" width="15" height="35" rx="5" ry="5" :fill="seatColors[seatId]?.arms || '#2c8c23'" />
+                                <rect class="seat-arm-selected" x="50" y="25" width="15" height="35" rx="5" ry="5" :fill="seatColors[seatId]?.arms || '#2c8c23'" />
+                                <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatId }}</text>
+                            </svg> 
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+            
+        <div class="payment-area">
+            <div class="panel-payment">
+                <h3>TICKETS</h3>
+                <div class="selected-tickets" id="selected-tickets">
+                    <div v-if="selectedSeatInfo.length > 0" class="selected-seat-info">
+                        <div v-for="info in selectedSeatInfo" :key="info.seatId" class="individual-ticket">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" @click="deleteTicketSeat(info.seatId)" class="trash-icon" id="trash-icon" viewBox="0 0 16 16"><path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/></svg>
+                            <p><strong>Entrada para "{{ showData.title }}"</strong></p>
+                            <p>BUTACA {{ info.seatId }} || Sesión: {{ formatHour(info.session) }}h</p>
+                            <div class="individual-ticket__data">
+                                <p>Fila {{ calculateRow(info.seatId) }} | Columna {{ calculateColumn(info.seatId) }}</p>
+                                <p id="show__price"><strong>{{ showData.price }}€</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="advertisement-tickets" id="ad">
+                       <p>¡No has seleccionado ninguna butaca!</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="price" id="total-price-tickets">
+                    <p>Total</p>
+                    <p><strong><span id="details-show__total-price">{{ totalPrice }}</span>€</strong></p>
+                </div>
+            </div>
+
+            <div class="panel-payment">
+                <h3>DATOS PERSONALES</h3>
+                <div class="panel-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/></svg>
+                    <input v-model="name" type="text" class="input-payment-panel" name="name-lastname_input" placeholder="Nombre y apellidos" required>
+                </div>
+                <div>
+                    <div class="panel-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/></svg>
+                        <input @input="validateEmail()" v-model="email" type="text" class="input-payment-panel" id="input-email" name="email" placeholder="Correo electrónico">
+                        <span class="error-message" v-if="!isValidEmail">Correo electrónico no válido</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="panel-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg>
+                        <input @input="validatePhone()" v-model="phone" type="text" class="input-payment-panel" id="input-phone"  name="phone" placeholder="Teléfono">
+                    </div>
+                    </div>
+                    <br>
+                    <h3>PAGO</h3>
+                    <div class="panel-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/></svg>
+                        <input v-model="titular" type="text" class="input-payment-panel" name="titular_input" placeholder="Titular" required>
+                    </div>
+                    <div>
+                        <div class="panel-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M11 5.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5z"/><path d="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm13 2v5H1V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1m-1 9H2a1 1 0 0 1-1-1v-1h14v1a1 1 0 0 1-1 1"/></svg>
+                            <input @input="validateCreditCard()" v-model="creditCard" type="text" class="input-payment-panel" id="input-card" name="creditCard" placeholder="XXXX XXXX XXXX XXXX">
+                        </div>
+                    </div>                   
+                    <div class="panel-box-double">
+                        <div class="panel-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/><path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/></svg>
+                            <input @input="validateDateCreditCard()" v-model="date" type="text" class="input-payment-panel" id="input-calendar" name="date" placeholder="--/--">
+                        </div>
+                        <div class="panel-box">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/></svg>
+                            <input @input="validateCVV()" v-model="CVV" type="text" class="input-payment-panel" id="input-CVV" name="CVV" placeholder="***">
+                        </div> 
+                    </div> 
+                    <!-- <div class="button-pay" @click="submitForm">
+                        <MakeReservation />
+                    </div> -->
+
+                    <div class="container-button-pay">
+                        <v-btn class="btn-pay" @click="openDialog">PAGAR</v-btn>
+                    </div>
+                    
+
+                    <v-dialog v-model="dialog" persistent width="350px">
+                        <v-card>
+                        <v-card-text>
+                            <div class="icon-close-popup" @click="closeDialog">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                            </svg>
+                            </div>
+                            <h3 class="popup-title">¡Gracias por tu compra!</h3>
+                            <p>En breve recibirás un correo electrónico con tus entradas.</p>
+                        </v-card-text>  
+                        </v-card>
+                    </v-dialog>
+                </div>
+            </div>
        
-        <div class="seats-data">
-            <p>Elige tus asientos y sesión:</p>
-            <div class="key">
-                <div class="option-key">
-                    <div class="square square--colour-selected"></div>
-                    <p>Seleccionado</p>
-                </div>
-                <div class="option-key">
-                    <div class="square square--colour-disponible"></div>
-                    <p>Disponible</p>
-                </div>
-                <div class="option-key">
-                    <div class="square square--colour-no-disponible"></div>
-                    <p>No disponible</p>
-                </div>
-            </div>
-        </div>
 
-        <div class="buttons-sessions">
-        <div v-for="session in store.sessions" :key="session.sessionId">    
-            <v-btn class="btn-session" @click="selectSession(session.sessionId)">
-                <strong>{{ session.sessionId === 1 ? 'SESIÓN MATINAL ☀️' : 'SESIÓN NOCTURNA 🌙' }}</strong> - {{ session.hour }}h
-            </v-btn>
-        </div>
-    </div>
+            
 
-    <div v-for="session in store.sessions" :key="session.sessionId" v-show="selectedSession === session.sessionId">
-        <div class="panel-seats" id="panel-seats">
-            <div class="panel-seats__item" id="area-seats">
-                <div class="seat-grid">
-                    <svg v-for="seatId in session.seats" :key="seatId" class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
-                        <rect class="seat-background-selected" x="10" y="10" width="50" height="35" rx="5" ry="5" fill="#37b02c" />
-                        <rect class="seat-base-selected" x="5" y="40" width="60" height="20" rx="5" ry="5" fill="#2c8c23" />
-                        <rect class="seat-leg-selected" x="18" y="60" width="5" height="10" fill="#464646" />
-                        <rect class="seat-leg-selected" x="48" y="60" width="5" height="10" fill="#464646" />
-                        <rect class="seat-arm-selected" x="5" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
-                        <rect class="seat-arm-selected" x="50" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
-                        <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatId }}</text>
-                    </svg> 
-                </div>
-            </div>
-        </div>
-    </div>
 
-  <!-- </div>
 
-        <div class="buttons-sessions">
-            <div v-for="session in store.sessions" :key="session.sessionId">    
-                <v-btn class="btn-session" @click="selectSession(session.sessionId)"><strong>{{ session.sessionId === 1 ? 'SESIÓN MATINAL ☀️' : 'SESIÓN NOCTURNA 🌙' }}</strong> - {{ session.hour }}h</v-btn>
-            </div>
-        </div>
-
-        <div class="panel-seats" id="panel-seats">
-            <div class="panel-seats__item" id="area-seats">
-                <div class="seat-grid"> -->
-                    <!-- <div v-if="session in store.sessions" :key="session.sessionId">    -->
-                        <!-- <svg  v-for="seatId in 60" :key="seatId" class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
-                            <rect x="10" y="10" width="50" height="35" rx="5" ry="5" fill="#37b02c" />
-                            <rect x="5" y="40" width="60" height="20" rx="5" ry="5" fill="#2c8c23" />
-                            <rect x="18" y="60" width="5" height="10" fill="#464646" />
-                            <rect x="48" y="60" width="5" height="10" fill="#464646" />
-                            <rect x="5" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
-                            <rect x="50" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
-                            <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatId }}</text>
-                        </svg>  -->
-                  
-                    <!-- </div> -->
-                <!-- </div> -->
-
-                    <!-- <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
-                        <rect x="10" y="10" width="50" height="35" rx="5" ry="5" fill="#37b02c" />
-                        <rect x="5" y="40" width="60" height="20" rx="5" ry="5" fill="#2c8c23" />
-                        <rect x="18" y="60" width="5" height="10" fill="#464646" />
-                        <rect x="48" y="60" width="5" height="10" fill="#464646" />
-                        <rect x="5" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
-                        <rect x="50" y="25" width="15" height="35" rx="5" ry="5" fill="#2c8c23" />
-                    </svg> -->
-                        <!-- <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-                            <rect x="25" y="10" width="50" height="35" rx="5" ry="5" fill="#0000ff" />
-                            <rect x="20" y="40" width="60" height="20" rx="5" ry="5" fill="#0000cc" />
-                            <rect x="33" y="60" width="5" height="10" fill="#464646" />
-                            <rect x="63" y="60" width="5" height="10" fill="#464646" />
-                            <rect x="20" y="25" width="15" height="35"  rx="5" ry="5" fill="#0000cc" />
-                            <rect x="65" y="25" width="15" height="35" rx="5" ry="5" fill="#0000cc" />
-                        </svg> -->
                         <!-- <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
                             <rect x="25" y="10" width="50" height="35" rx="5" ry="5" fill="#e92e19" />
                             <rect x="20" y="40" width="60" height="20" rx="5" ry="5" fill="#ba2414" />
@@ -132,9 +355,71 @@
 
     </div> -->
 </div>
+           
+    </div>
+
+
+    
 </template>
 
 <style scoped>
+.container-button-pay {
+    display: flex;
+    justify-content: right;
+}
+    .popup-title {
+        padding: 0;
+        font-weight: bold;
+        font-weight: 700;
+        font-family: 'Inter', sans-serif;
+        letter-spacing: 0;
+        text-align: center;
+        margin: 10px 0px 10px 0px;
+    }
+.btn-pay {
+    letter-spacing: 0;
+    background-color: #b20000;
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+}
+.btn-pay:hover {
+    background-color: #b0802c;
+}
+
+
+    .icon-close-popup {
+        display: flex;
+        justify-content: right;
+        cursor: pointer;
+    }
+.v-card-text p {
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+.advertisement-tickets {
+    border: 2px dashed white;
+    padding: 20px;
+    margin-bottom: 20px;
+    font-size: 10px;
+    text-align: center;
+}
+
+
+.error-message {
+        font-size: 10px;
+        color: red;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+        margin-top: -5px;
+        font-family: 'Inter', sans-serif;
+    }
 
 /* .seat-background-selected {
     background-color: #0000ff;
@@ -229,10 +514,7 @@
             animation: jump 0.5s ease;
         }
 
-       .reserve-seats__content {
-   
-            margin-top: 20px;
-        }
+       
 
 .error-message {
         color: red;
@@ -325,6 +607,7 @@
     }
     .panel-payment h3 {
         margin-top: 0;
+        margin-bottom: 20px;
         text-align: center;
     }
 
@@ -346,7 +629,7 @@
     }
 
     .input-payment-panel {
-        width: calc(100% - 20px);
+        width: 100%;
         border: none;
         background-color: white;
         padding: 10px;
@@ -371,7 +654,7 @@
         display: flex;
         justify-content: space-between;
         font-size: 13px;
-        margin: 0;
+        margin-top: 15px;
     }
 
     .banner--show {

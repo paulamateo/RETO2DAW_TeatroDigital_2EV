@@ -8,24 +8,28 @@
     let edad = ref('');
     let precio = ref('');
     let genero = ref('');
-    let posterFile = ref<File | {}>({});
-    let sceneFile = ref<File | {}>({});
-    let bannerFile = ref<File | {}>({});
+    // let posterFile = ref<File | {}>({});
+    // let sceneFile = ref<File | {}>({});
+    // let bannerFile = ref<File | {}>({});
+        let posterFile = ref('');
+    let sceneFile = ref('');
+    let bannerFile = ref('');
     let resena = ref('');
     let duracion = ref('');
     let fecha = ref('');
 
-    const addPoster = (event: Event) => {
-        const input = event.target as HTMLInputElement;
-    }
+    // const addPoster = (event: Event) => {
+    //     const input = event.target as HTMLInputElement;
+    // }
 
-    const addScene = (event: Event) => {
-        const input = event.target as HTMLInputElement;
-    }
+    // const addScene = (event: Event) => {
+    //     const input = event.target as HTMLInputElement;
+    // }
 
-    const addBanner = (event: Event) => {
-        const input = event.target as HTMLInputElement;
-    }
+    // const addBanner = (event: Event) => {
+    //     const input = event.target as HTMLInputElement;
+    // }
+
 
     const addShowToDatabase = async () => {
         try {
@@ -49,8 +53,11 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(show),
             });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
         }catch (error) {
-            console.log('Error: ', error);
+            console.log('Error to create show: ', error);
         }
     }
 
@@ -69,7 +76,8 @@
         <v-card>
             <h2 class="popup-title">Crear obra</h2>
             <form @submit.prevent="addShowToDatabase">
-                <div class="panel-box">
+                <div class="form-container">
+                    <div class="panel-box">
                     <input type="text" v-model="titulo" class="input-payment-panel" name="titular_input" placeholder="Título" required>
                     <input type="text" v-model="autor" class="input-payment-panel" name="titular_input" placeholder="Autor" required>
                     <input type="text" v-model="director" class="input-payment-panel" name="titular_input" placeholder="Director" required>
@@ -89,7 +97,7 @@
                         <input type="text" v-model="genero" class="input-payment-panel" name="titular_input" placeholder="Género" required>
                     </div>
                 </div>
-                <div class="panel-box">
+                <!-- <div class="panel-box">
                     <div class="panel-box__item">
                         <label for="poster">Sesión 1 (Mañana)</label>
                         <input type="time" class="input-payment-panel" id="hora" name="hora"> 
@@ -98,25 +106,27 @@
                         <label for="poster">Sesión 2 (Tarde)</label>
                         <input type="time" class="input-payment-panel" id="hora" name="hora"> 
                     </div> 
-                </div>
+                </div> -->
                 <div class="panel-box panel-box--3-col">
                     <div class="panel-box__item">
                         <label for="poster">Poster</label>
-                        <input type="file" @change="addPoster" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                        <input type="text" v-model="posterFile"  class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                     </div>
                     <div class="panel-box__item">
                         <label for="scene">Escena</label>
-                        <input type="file" @change="addScene" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                        <input type="text"  v-model="sceneFile" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                     </div>
                     <div class="panel-box__item">
                         <label for="banner">Banner</label>
-                        <input type="file" @change="addBanner" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                        <input type="text" v-model="bannerFile"  class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                     </div>
                 </div>
                 <div class="panel-box panel-box--1-col">
                     <textarea class="input-payment-panel input-payment-panel--textarea" placeholder="Reseña"></textarea>
                 </div>    
+            </div>
                 <v-divider></v-divider>
+
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
@@ -128,6 +138,10 @@
 </template>
 
 <style scoped>
+
+.form-container {
+    margin-left: 20px;
+}
     /* input[type="date"].input-payment-panel, input[type="time"].input-payment-panel {
       color: #c3c3c3;
     } */
@@ -139,9 +153,6 @@
         font-size: 12px;
     }
 
-    form {
-        margin-left: 20px;
-    }
 
     .button-create-show {
         letter-spacing: 0;

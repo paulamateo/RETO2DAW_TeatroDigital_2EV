@@ -4,7 +4,7 @@ import { reactive } from "vue";
 export interface Session {
     sessionId: number,
     hour: string,
-    seats: number
+    totalSeats: number
 }
 
 //GET ALL SESSIONS FOR A SHOW
