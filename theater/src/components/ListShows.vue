@@ -113,7 +113,7 @@
                 <th class="table-element--visibility-duration">{{ show.length }}</th>  
                 <th class="buttons-actions-panel">
                     <div>
-                        <PopUp_UpdateShow/>
+                        <PopUp_UpdateShow :show-id="show.showId.toString()"/>
                     </div>
                     <div>
                         <PopUp_DeleteShow :showId="show.showId.toString()"/>

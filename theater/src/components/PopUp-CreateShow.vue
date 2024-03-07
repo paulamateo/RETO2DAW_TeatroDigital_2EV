@@ -63,11 +63,18 @@
         }
     }
 
-    watch(dialog, (newValue) => {
-        if (!newValue) {
-            location.reload();
-        }
-    });
+    // watch(dialog, (newValue) => {
+    //     if (!newValue) {
+    //         location.reload();
+    //     }
+    // });
+
+
+    // if (isAdminUser) {
+    //         setTimeout(() => {
+    //             window.location.href = '/Admin-Panel';
+    //         }, 1000); 
+    //     }
 
 </script>
 
@@ -86,53 +93,53 @@
             <form @submit.prevent="addShowToDatabase">
                 <div class="form-container">
                     <div class="panel-box">
-                    <input type="text" v-model="titulo" class="input-payment-panel" name="titular_input" placeholder="Título" required>
-                    <input type="text" v-model="autor" class="input-payment-panel" name="titular_input" placeholder="Autor" required>
-                    <input type="text" v-model="director" class="input-payment-panel" name="titular_input" placeholder="Director" required>
-                    <div class="panel-box">
-                        <input type="number" v-model="edad" class="input-payment-panel" name="titular_input" placeholder="Edad recomendada" required>
-                        <input type="text" v-model="precio" class="input-payment-panel" name="titular_input" placeholder="Precio" required>
-                    </div> 
+                        <input type="text" v-model="titulo" class="input-payment-panel" name="titular_input" placeholder="Título" required>
+                        <input type="text" v-model="autor" class="input-payment-panel" name="titular_input" placeholder="Autor" required>
+                        <input type="text" v-model="director" class="input-payment-panel" name="titular_input" placeholder="Director" required>
+                        <div class="panel-box">
+                            <input type="number" v-model="edad" class="input-payment-panel" name="titular_input" placeholder="Edad recomendada" required>
+                            <input type="text" v-model="precio" class="input-payment-panel" name="titular_input" placeholder="Precio" required>
+                        </div> 
+                    </div>
+                    <div class="panel-box panel-box--3-col">
+                        <div class="panel-box__item">
+                            <input type="date" v-model="fecha" class="input-payment-panel" id="fecha" name="fecha">
+                        </div>
+                        <div class="panel-box__item">
+                            <input type="text" v-model="duracion" class="input-payment-panel" name="titular_input" placeholder="Duración" required>
+                        </div>
+                        <div class="panel-box__item">
+                            <input type="text" v-model="genero" class="input-payment-panel" name="titular_input" placeholder="Género" required>
+                        </div>
+                    </div>
+                    <!-- <div class="panel-box">
+                        <div class="panel-box__item">
+                            <label for="poster">Sesión 1 (Mañana)</label>
+                            <input type="time" class="input-payment-panel" id="hora" name="hora"> 
+                        </div>
+                        <div class="panel-box__item">
+                            <label for="poster">Sesión 2 (Tarde)</label>
+                            <input type="time" class="input-payment-panel" id="hora" name="hora"> 
+                        </div> 
+                    </div> -->
+                    <div class="panel-box panel-box--3-col">
+                        <div class="panel-box__item">
+                            <label for="poster">Poster</label>
+                            <input type="text" v-model="posterFile"  class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                        </div>
+                        <div class="panel-box__item">
+                            <label for="scene">Escena</label>
+                            <input type="text"  v-model="sceneFile" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                        </div>
+                        <div class="panel-box__item">
+                            <label for="banner">Banner</label>
+                            <input type="text" v-model="bannerFile"  class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                        </div>
+                    </div>
+                    <div class="panel-box panel-box--1-col">
+                        <textarea class="input-payment-panel input-payment-panel--textarea" placeholder="Reseña"></textarea>
+                    </div>    
                 </div>
-                <div class="panel-box panel-box--3-col">
-                    <div class="panel-box__item">
-                        <input type="date" v-model="fecha" class="input-payment-panel" id="fecha" name="fecha">
-                    </div>
-                    <div class="panel-box__item">
-                        <input type="text" v-model="duracion" class="input-payment-panel" name="titular_input" placeholder="Duración" required>
-                    </div>
-                    <div class="panel-box__item">
-                        <input type="text" v-model="genero" class="input-payment-panel" name="titular_input" placeholder="Género" required>
-                    </div>
-                </div>
-                <!-- <div class="panel-box">
-                    <div class="panel-box__item">
-                        <label for="poster">Sesión 1 (Mañana)</label>
-                        <input type="time" class="input-payment-panel" id="hora" name="hora"> 
-                    </div>
-                    <div class="panel-box__item">
-                        <label for="poster">Sesión 2 (Tarde)</label>
-                        <input type="time" class="input-payment-panel" id="hora" name="hora"> 
-                    </div> 
-                </div> -->
-                <div class="panel-box panel-box--3-col">
-                    <div class="panel-box__item">
-                        <label for="poster">Poster</label>
-                        <input type="text" v-model="posterFile"  class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
-                    </div>
-                    <div class="panel-box__item">
-                        <label for="scene">Escena</label>
-                        <input type="text"  v-model="sceneFile" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
-                    </div>
-                    <div class="panel-box__item">
-                        <label for="banner">Banner</label>
-                        <input type="text" v-model="bannerFile"  class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
-                    </div>
-                </div>
-                <div class="panel-box panel-box--1-col">
-                    <textarea class="input-payment-panel input-payment-panel--textarea" placeholder="Reseña"></textarea>
-                </div>    
-            </div>
                 <v-divider></v-divider>
 
                 <v-card-actions>
