@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     const dialog = ref(false);
 
     let titulo = ref('');
@@ -55,11 +55,19 @@
             });
             if (!response.ok) {
                 throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('Show added');
             }
         }catch (error) {
             console.log('Error to create show: ', error);
         }
     }
+
+    watch(dialog, (newValue) => {
+        if (!newValue) {
+            location.reload();
+        }
+    });
 
 </script>
 
@@ -142,9 +150,6 @@
 .form-container {
     margin-left: 20px;
 }
-    /* input[type="date"].input-payment-panel, input[type="time"].input-payment-panel {
-      color: #c3c3c3;
-    } */
 
     .panel-box__item label {
         margin: 0;

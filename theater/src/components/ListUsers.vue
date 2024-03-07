@@ -2,6 +2,7 @@
     import { onMounted, onUnmounted } from 'vue'
     import PopUp_CreateUser from '../components/PopUp-CreateUser.vue'
     import PopUp_UpdateUser from '../components/PopUp-UpdateUser.vue'
+    import PopUp_DeleteUser from '../components/PopUp-DeleteShow.vue'
     import { useUsersStore } from '../store/User-Store'
     const store = useUsersStore();
 

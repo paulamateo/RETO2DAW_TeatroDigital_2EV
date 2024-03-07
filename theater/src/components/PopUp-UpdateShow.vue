@@ -15,59 +15,63 @@
         <v-card>
             <h2 class="popup-title">Actualizar obra</h2>
             <form>
-                <div class="panel-box  panel-box--3-col">
-                    <input type="number" class="input-payment-panel" name="titular_input" placeholder="ID de la obra" required>
+                <div class="form-container">
+                    <div class="panel-box">
                     <input type="text" class="input-payment-panel" name="titular_input" placeholder="Título" required>
                     <input type="text" class="input-payment-panel" name="titular_input" placeholder="Autor" required>
-                </div>
-                <div class="panel-box">
                     <input type="text" class="input-payment-panel" name="titular_input" placeholder="Director" required>
                     <div class="panel-box">
                         <input type="number" class="input-payment-panel" name="titular_input" placeholder="Edad recomendada" required>
                         <input type="text" class="input-payment-panel" name="titular_input" placeholder="Precio" required>
                     </div> 
                 </div>
-                <div class="panel-box">
-                    <div class="panel-box">
+                <div class="panel-box panel-box--3-col">
+                    <div class="panel-box__item">
                         <input type="date" class="input-payment-panel" id="fecha" name="fecha">
-                        <input type="time" class="input-payment-panel" id="hora" name="hora">
                     </div>
-                    <div class="panel-box">
+                    <div class="panel-box__item">
                         <input type="text" class="input-payment-panel" name="titular_input" placeholder="Duración" required>
-                        <div>
-                            <select name="genre">
-                                <option value="" selected disabled hidden><span>GÉNERO</span></option>
-                                <option value="1">Opción 1</option>
-                                <option value="2">Opción 2</option>
-                                <option value="3">Opción 3</option>
-                            </select>
-                        </div>
+                    </div>
+                    <div class="panel-box__item">
+                        <input type="text" class="input-payment-panel" name="titular_input" placeholder="Género" required>
                     </div>
                 </div>
+                <!-- <div class="panel-box">
+                    <div class="panel-box__item">
+                        <label for="poster">Sesión 1 (Mañana)</label>
+                        <input type="time" class="input-payment-panel" id="hora" name="hora"> 
+                    </div>
+                    <div class="panel-box__item">
+                        <label for="poster">Sesión 2 (Tarde)</label>
+                        <input type="time" class="input-payment-panel" id="hora" name="hora"> 
+                    </div> 
+                </div> -->
                 <div class="panel-box panel-box--3-col">
                     <div class="panel-box__item">
                         <label for="poster">Poster</label>
-                        <input type="file" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                        <input type="text" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                     </div>
                     <div class="panel-box__item">
                         <label for="scene">Escena</label>
-                        <input type="file" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                        <input type="text" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                     </div>
                     <div class="panel-box__item">
                         <label for="banner">Banner</label>
-                        <input type="file" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                        <input type="text"  class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                     </div>
                 </div>
                 <div class="panel-box panel-box--1-col">
                     <textarea class="input-payment-panel input-payment-panel--textarea" placeholder="Reseña"></textarea>
-                </div>      
-            </form>
-            <v-divider></v-divider>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                <v-btn color="primary" text="ACTUALIZAR" variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
-            </v-card-actions>
+                </div>    
+            </div>
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" text="CREAR"  variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
+                </v-card-actions> 
+            </form> 
         </v-card>
     </v-dialog>
 </template>

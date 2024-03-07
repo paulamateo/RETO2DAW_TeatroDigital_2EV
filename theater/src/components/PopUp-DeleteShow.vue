@@ -1,18 +1,32 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     const dialog = ref(false);
+    
+    const props = defineProps({
+        showId: String
+    });
 
     const deleteShowToDatabase = async () => {
         try {
-            const response = await fetch("http://localhost:8001/Show/{showId}", {
+            const response = await fetch(`http://localhost:8001/Show/${props.showId}`, {
                 method: 'DELETE'
             });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('Show deleted');
+                dialog.value = false;
+            }
         }catch (error) {
-            console.log('Error: ', error);
-        }finally {
-            dialog.value = false;
+            console.log('Error to delete show: ', error);
         }
     }
+
+    watch(dialog, (newValue) => {
+        if (!newValue) {
+            location.reload();
+        }
+    });
 </script>
 
 <template>
@@ -24,7 +38,8 @@
 
     <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
-            <h2 class="popup-title">¿Estás seguro/a de eliminar la obra?</h2>
+            <h2 class="popup-title">¿Estás seguro/a de querer eliminar la obra?</h2>
+            <v-divider></v-divider>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn text="CANCELAR" @click="dialog = false" class="button-form--actions"></v-btn>
