@@ -1,6 +1,39 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     const dialog = ref(false);
+
+    let nombre = ref('');
+    let apellidos = ref('');
+    let email = ref('');
+    let contrasena = ref('');
+    let telefono = ref('');
+    let rol = ref(null);
+
+    const addUserToDatabase = async () => {
+        try {
+            const user = {
+                userId: 0,
+                userName: nombre.value,
+                userLastname: apellidos.value,
+                email: email.value,
+                password: contrasena.value,
+                phoneNumber: telefono.value,
+                isAdmin: rol.value === 'true' ? true : false
+            }
+            const response = await fetch("http://localhost:8001/User", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user),
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
+            }
+        }catch (error) {
+            console.log('Error to create user: ', error);
+        }
+    }
 </script>
 
 <template>
@@ -14,28 +47,31 @@
     <v-dialog v-model="dialog" persistent activator="parent" width="700px">
         <v-card>
             <h2 class="popup-title">Crear usuario</h2>
-            <form>
-                <div class="panel-box">
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Nombre" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Apellidos" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Email" required>
-                    <input type="password" class="input-payment-panel" name="titular_input" placeholder="Contraseña" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Teléfono" required>
+            <form @submit.prevent="addUserToDatabase">
+                <div class="form-container">
+                    <div class="panel-box">
+                    <input type="text" v-model="nombre" class="input-payment-panel" name="titular_input" placeholder="Nombre" required>
+                    <input type="text" v-model="apellidos" class="input-payment-panel" name="titular_input" placeholder="Apellidos" required>
+                    <input type="text" v-model="email" class="input-payment-panel" name="titular_input" placeholder="Email" required>
+                    <input type="password" v-model="contrasena" class="input-payment-panel" name="titular_input" placeholder="Contraseña" required>
+                    <input type="text" v-model="telefono" class="input-payment-panel" name="titular_input" placeholder="Teléfono" required>
                     <div>
-                        <select name="genre">
-                            <option value="" selected disabled hidden><span>ROL</span></option>
-                            <option value="1">Administrador</option>
-                            <option value="0">Usuario</option>
+                        <select name="rol" v-model="rol">
+                            <option selected disabled hidden><span>ROL</span></option>
+                            <option value="true">Administrador</option>
+                            <option value="false">Usuario</option>
                         </select>
                     </div>
                 </div>
+                </div>
+                <v-divider></v-divider>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" text="CREAR" variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
+                </v-card-actions>
             </form>
-            <v-divider></v-divider>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                <v-btn color="primary" text="CREAR" variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
-            </v-card-actions>
+           
         </v-card>
     </v-dialog>
 </template>
@@ -52,7 +88,7 @@
         font-size: 12px;
     }
 
-    form {
+    .form-container {
         margin-left: 20px;
     }
 

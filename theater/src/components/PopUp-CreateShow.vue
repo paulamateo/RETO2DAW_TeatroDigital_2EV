@@ -56,26 +56,20 @@
             if (!response.ok) {
                 throw new Error(`Error: ${response.statusText}`);
             }else {
-                console.log('Show added');
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
             }
         }catch (error) {
             console.log('Error to create show: ', error);
         }
     }
 
-    // watch(dialog, (newValue) => {
-    //     if (!newValue) {
-    //         location.reload();
-    //     }
-    // });
-
-
-    // if (isAdminUser) {
-    //         setTimeout(() => {
-    //             window.location.href = '/Admin-Panel';
-    //         }, 1000); 
-    //     }
-
+    setTimeout(() => {
+        watch(dialog, (newValue) => {
+            if (!newValue) {
+                location.reload();
+            }
+        });
+    }, 7000)
 </script>
 
 

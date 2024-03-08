@@ -44,18 +44,20 @@
             if (!response.ok) {
                 throw new Error(`Error: ${response.statusText}`);
             }else {
-                console.log('Show updated');
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
             }
         }catch (error) {
             console.log('Error to update show: ', error);
         }
     }
 
-    // watch(dialog, (newValue) => {
-    //     if (!newValue) {
-    //         location.reload();
-    //     }
-    // });
+    setTimeout(() => {
+        watch(dialog, (newValue) => {
+            if (!newValue) {
+                location.reload();
+            }
+        });
+    }, 7000)
 </script>
 
 <template>
