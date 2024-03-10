@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { onMounted } from 'vue'
-    import PopUp_CreateShow from '../components/PopUp-CreateShow.vue'
-    import PopUp_UpdateShow from '../components/PopUp-UpdateShow.vue'
-    import PopUp_DeleteShow from '../components/PopUp-DeleteShow.vue'
-    import { useShowsStore } from '../store/Show-Store'
+    import PopUp_CreateShow from './PopUp-CreateShow.vue'
+    import PopUp_UpdateShow from './PopUp-UpdateShow.vue'
+    import PopUp_DeleteShow from './PopUp-DeleteShow.vue'
+    import { useShowsStore } from '../../store/Show-Store'
     import { format } from 'date-fns';
     const store = useShowsStore();
 
@@ -306,4 +306,4 @@
     .table-row__showtitle_text p {
         margin: 0;
     }
-</style>
+</style>./AdminPanel/PopUp-CreateShow.vue./AdminPanel/PopUp-UpdateShow.vue./AdminPanel/PopUp-DeleteShow.vue../../store/Show-Store

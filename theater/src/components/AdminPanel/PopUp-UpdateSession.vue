@@ -2,44 +2,26 @@
     import { ref, watch } from 'vue';
     const dialog = ref(false);
 
-    let titulo = ref('');
-    let autor = ref('');
-    let director = ref('');
-    let edad = ref('');
-    let precio = ref('');
-    let genero = ref('');
-    let posterFile = ref('');
-    let escenaFile = ref('');
-    let bannerFile = ref('');
-    let resena = ref('');
-    let duracion = ref('');
-    let fecha = ref('');
+    let hora = ref('');
+    let asientos = ref('');
+    let notas = ref('');
 
     const props = defineProps({
-        showId: String
+        sessionId: String
     });
 
-    const updateShowToDatabase = async () => {
+    const updateSessionToDatabase = async () => {
         try {
-            const show = {
-                showId: props.showId,
-                title: titulo.value,
-                author: autor.value,
-                director: director.value,
-                genre: genero.value,
-                age: edad.value,
-                date: fecha.value,
-                length: duracion.value,
-                price: precio.value,
-                poster: posterFile.value,
-                banner: bannerFile.value,
-                scene: escenaFile.value,
-                overview: resena.value
+            const session = {
+                sessionId: props.sessionId,
+                hour: hora.value,
+                totalSeats: asientos.value,
+                notes: notas.value
             }
-            const response = await fetch(`http://localhost:8001/Show/${props.showId}`, {
+            const response = await fetch(`http://localhost:8001/Session/${props.sessionId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(show),
+                body: JSON.stringify(session),
             });
             if (!response.ok) {
                 throw new Error(`Error: ${response.statusText}`);
@@ -47,17 +29,17 @@
                 console.log('OPERATION SUCCESSFULLY COMPLETED');
             }
         }catch (error) {
-            console.log('Error to update show: ', error);
+            console.log('Error to update session: ', error);
         }
     }
 
-    setTimeout(() => {
-        watch(dialog, (newValue) => {
-            if (!newValue) {
-                location.reload();
-            }
-        });
-    }, 7000)
+    // setTimeout(() => {
+    //     watch(dialog, (newValue) => {
+    //         if (!newValue) {
+    //             location.reload();
+    //         }
+    //     });
+    // }, 7000)
 </script>
 
 <template>
@@ -67,51 +49,20 @@
         </svg>
     </v-btn>
 
-    <v-dialog v-model="dialog" persistent activator="parent" width="700px">
+    <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
-            <h2 class="popup-title">Actualizar obra</h2>
-            <form @submit.prevent="updateShowToDatabase">
+            <h2 class="popup-title">Actualizar sesión</h2>
+            <form @submit.prevent="updateSessionToDatabase">
                 <div class="form-container">
                     <div class="panel-box">
-                        <input type="text" v-model="titulo" class="input-payment-panel" name="titular_input" placeholder="Título" required>
-                        <input type="text" v-model="autor" class="input-payment-panel" name="titular_input" placeholder="Autor" required>
-                        <input type="text" v-model="director" class="input-payment-panel" name="titular_input" placeholder="Director" required>
-                        <div class="panel-box">
-                            <input type="number" v-model="edad" class="input-payment-panel" name="titular_input" placeholder="Edad recomendada" required>
-                            <input type="text" v-model="precio" class="input-payment-panel" name="titular_input" placeholder="Precio" required>
-                        </div> 
-                    </div>
-                    <div class="panel-box panel-box--3-col">
-                        <div class="panel-box__item">
-                            <input type="date" v-model="fecha" class="input-payment-panel" id="fecha" name="fecha">
-                        </div>
-                        <div class="panel-box__item">
-                            <input type="text" v-model="duracion" class="input-payment-panel" name="titular_input" placeholder="Duración" required>
-                        </div>
-                        <div class="panel-box__item">
-                            <input type="text" v-model="genero" class="input-payment-panel" name="titular_input" placeholder="Género" required>
-                        </div>
-                    </div>
-                    <div class="panel-box panel-box--3-col">
-                        <div class="panel-box__item">
-                            <label for="poster">Poster</label>
-                            <input type="text" v-model="posterFile" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
-                        </div>
-                        <div class="panel-box__item">
-                            <label for="scene">Escena</label>
-                            <input type="text" v-model="escenaFile" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
-                        </div>
-                        <div class="panel-box__item">
-                            <label for="banner">Banner</label>
-                            <input type="text" v-model="bannerFile" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
-                        </div>
+                        <input v-model="hora" type="time" class="input-payment-panel" name="titular_input" placeholder="Hora" required>
+                        <input v-model="asientos" type="number" class="input-payment-panel" name="titular_input" placeholder="Asientos" required>
                     </div>
                     <div class="panel-box panel-box--1-col">
-                        <textarea v-model="resena" class="input-payment-panel input-payment-panel--textarea" placeholder="Reseña"></textarea>
+                        <textarea v-model="notas" class="input-payment-panel input-payment-panel--textarea" placeholder="Notas"></textarea>
                     </div>    
                 </div>
                 <v-divider></v-divider>
-
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
@@ -129,7 +80,6 @@
 
     .buttons-actions-panel__item--update {
         background-color: #0DBF3F;
-        margin-right: 10px;
         color: white;
         width: 40px;
     }

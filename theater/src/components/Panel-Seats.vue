@@ -3,66 +3,16 @@
     import { onMounted, ref, watchEffect } from 'vue'
     import { useSessionsStore } from '../store/Session-Store'
     import { useShowByIdStore, type Show } from '../store/Show-Store'
+    import { useSeatsStore } from '../store/Seat-Store'
     import { useRoute } from 'vue-router';
     const store = useSessionsStore();
     const storeShow = useShowByIdStore()
+    const storeSeat = useSeatsStore();
     const route = useRoute();
-    const totalPrice = ref<number>(0);
-
-
+    const dialog = ref(false);
+    let totalPrice = 0;
     const showId = route.params.showId as string;
-    onMounted(() => {
-        store.getAllSessions(showId);
-    })
-
-    let selectedSeatInfo: { seatId: number, session: string }[] = [];
-
-    function animationSVG(event: MouseEvent, seatId: number) {
-        const seatSVG = event.currentTarget as HTMLElement;
-        // Verificar si el asiento ya está seleccionado
-        const index = selectedSeatInfo.findIndex(info => info.seatId === seatId);
-        if (index !== -1) {
-            // El asiento ya está seleccionado, no hacer nada
-            return;
-        }
-        // Agregar clase de animación
-        seatSVG.classList.add('jump');
-        // Quitar clase de animación después de cierto tiempo
-        setTimeout(() => {
-            seatSVG.classList.remove('jump');
-        }, 500);
-        // Cambiar color del asiento
-        seatColors.value[seatId] = {
-            background: '#0000ff',
-            base: '#0000cc',
-            legs: '#464646',
-            arms: '#0000cc'
-        };
-        // Agregar el asiento a la lista de asientos seleccionados
-        selectedSeatInfo.push({
-            seatId,
-            session: store.sessions.find(session => session.sessionId === selectedSession.value)?.hour ?? ''
-        });
-        totalPrice.value += showData.price;
-    }
-
-
-    const selectedSession = ref();
-
-    const selectSession = (sessionId: number) => {
-        selectedSession.value = sessionId;
-    }
-
-    const seatColors = ref<{ [key: number]: SeatColors }>({});
-
-    interface SeatColors {
-        background: string;
-        base: string;
-        legs: string;
-        arms: string;
-    }
-
-    
+    const sessionId = ref('');
     const show = ref<Show>();
 
     onMounted(async () => {
@@ -73,44 +23,109 @@
     storeShow.getShowById(showId);
     const showData = storeShow.show;
 
+    onMounted(() => {
+        store.getAllSessionsbyShow(showId);
+    })
+
+    const selectedSession = ref();
+    let selectedSessionString = ''; 
+
+
+
+    const selectSession = (sessionId: number) => {
+        selectedSession.value = sessionId;
+        selectedSessionString = selectedSession.value.toString(); 
+        console.log("Selected session ID:", sessionId);
+        console.log("Selected session ID string:", selectedSessionString);
+        storeSeat.getAllSeats(selectedSessionString);
+    }
+
+
+    function animationSVG(event: MouseEvent, seatId: number) {
+        const seatSVG = event.currentTarget as HTMLElement;
+        const index = selectedSeats.findIndex(info => info.seatId === seatId);
+        if (index !== -1) {
+            return;
+        }
+        if (isSeatOccupied(seatId)) {
+            // Si el asiento está ocupado, no hagas nada
+            return
+        }
+        seatSVG.classList.add('jump');
+        setTimeout(() => {
+            seatSVG.classList.remove('jump');
+        }, 500);
+        seatColors.value[seatId] = { background: '#0000ff', base: '#0000cc', legs: '#464646', arms: '#0000cc' };
+        selectedSeats.push({
+            seatId,
+            session: store.sessions.find(session => session.sessionId === selectedSession.value)?.hour ?? ''
+        });
+        totalPrice += showData.price;
+        totalPrice = parseFloat(totalPrice.toFixed(2));
+    }
+
+
+    const seatColors = ref<{ [key: number]: SeatColors }>({});
+
+    interface SeatColors {
+        background: string;
+        base: string;
+        legs: string;
+        arms: string;
+    }
+
+    let selectedSeats: { seatId: number, session: string }[] = [];
+    console.log(selectedSeats);
+
+    const addReservedSeatsToDatabase = async () => { 
+        try {
+            for (const seat of selectedSeats) {
+                const { seatId, session } = seat;
+                const seatData = {
+                    seatId: 0,
+                    sessionId: selectedSession.value,
+                    isDisponible: false
+                    
+                };
+                const response = await fetch(`http://localhost:8001/Session/${selectedSession.value}/Seats`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(seatData)
+                });
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                } else {
+                    console.log(`Seat ${seatId} successfully reserved for session ${session}`);
+                    seatColors.value[seatId] = { background: '#e92e19', base: '#ba2414', legs: '#464646', arms: '#ba2414' }
+                    selectedSeats = [];
+                }
+            }
+        } catch (error) {
+            console.log('Error reserving seats: ', error);
+        }
+    }
+
+
+    // Eliminar el ticket seleccionado del arreglo
+    function deleteTicketSeat(seatId: number) {
+        selectedSeats = selectedSeats.filter(info => info.seatId !== seatId);
+        seatColors.value[seatId] = { background: '#37b02c', base: '#2c8c23', legs: '#464646', arms: '#2c8c23' };
+        totalPrice -= showData.price;
+        totalPrice = parseFloat(totalPrice.toFixed(2));
+    }
+
     function formatHour(hour: string): string {
         const date = new Date(`2000-01-01T${hour}`);
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
     function calculateRow(seatId: number): number {
-    // Supongamos que el asiento está organizado en filas de 10 asientos cada una
-    return Math.ceil(seatId / 10); // Esto devuelve el número de fila en función del ID del asiento
-}
-
-function calculateColumn(seatId: number): number {
-    // Supongamos que el asiento está organizado en filas de 10 asientos cada una
-    return seatId % 10 === 0 ? 10 : seatId % 10; // Esto devuelve el número de columna en función del ID del asiento
-}
-
-function deleteTicketSeat(seatId: number) {
-        // Eliminar el ticket seleccionado del arreglo
-        selectedSeatInfo = selectedSeatInfo.filter(info => info.seatId !== seatId);
-        
-        // Restaurar el color del asiento a verde
-        seatColors.value[seatId] = {
-            background: '#37b02c',
-            base: '#2c8c23',
-            legs: '#464646',
-            arms: '#2c8c23'
-        };
-
-        totalPrice.value -= showData.price;
+        return Math.ceil(seatId / 10);
     }
 
-
-    function calculateTotalPrice() {
-        // Sumar el precio de todos los tickets seleccionados
-        totalPrice.value = selectedSeatInfo.length * showData.price;
+    function calculateColumn(seatId: number): number {
+        return seatId % 10 === 0 ? 10 : seatId % 10;
     }
-
-    // Función que se ejecuta cada vez que se actualiza la lista de tickets seleccionados
-    watchEffect(calculateTotalPrice);
 
     const email = ref('');
     const phone = ref('');
@@ -164,17 +179,13 @@ function deleteTicketSeat(seatId: number) {
 
     
 
-
-    
-const dialog = ref(false);
-
 const openDialog = () => {
-  validateEmail();
-  if (isValidEmail.value && email.value !== '' && phone.value !== '' && date.value !== '' && CVV.value !== '' && creditCard.value !== '' && name.value !== '' && titular.value !== '') {
-    dialog.value = true;
-  } else {
-    alert('Revisa todos los campos.');
-  }
+    validateEmail();
+    if (isValidEmail.value && email.value !== '' && phone.value !== '' && date.value !== '' && CVV.value !== '' && creditCard.value !== '' && name.value !== '' && titular.value !== '') {
+        dialog.value = true;
+    } else {
+        alert('Revisa todos los campos.');
+    }
 };
 
 const closeDialog = () => {
@@ -188,6 +199,10 @@ const closeDialog = () => {
   titular.value = '';
 };
 
+const isSeatOccupied = (seatId: number) => {
+  const occupiedSeat = storeSeat.seats.find(seat => seat.seatId === seatId)
+  return occupiedSeat && !occupiedSeat.isDisponible
+}
 
 </script>
 
@@ -217,28 +232,48 @@ const closeDialog = () => {
                 <div class="buttons-sessions">
                 <div v-for="session in store.sessions" :key="session.sessionId">    
                     <v-btn class="btn-session" @click="selectSession(session.sessionId)">
-                        <strong>{{ session.sessionId === 1 ? 'SESIÓN MATINAL ☀️' : 'SESIÓN NOCTURNA 🌙' }}</strong> - {{ formatHour(session.hour) }}h
+                        <span>SESIÓN <strong>{{ formatHour(session.hour) }}h</strong></span>
                     </v-btn>
+<!--       
+                    <div v-for="seat in storeSeat.seats" :key="seat.seatId">
+                        <p>Asiento ID: {{ seat.seatId }}</p>
+                    </div>
+                    -->
                 </div>
             </div>
 
-          
             <div v-for="session in store.sessions" :key="session.sessionId" v-show="selectedSession === session.sessionId">
                 <div class="panel-seats" id="panel-seats">
                     <div class="panel-seats__item" id="area-seats">
                         <div class="seat-grid">
-                            <svg v-for="seatId in session.totalSeats" :key="seatId" class="svg-seat" @click="animationSVG($event, seatId)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
-                                <rect class="seat-background-selected" x="10" y="10" width="50" height="35" rx="5" ry="5" :fill="seatColors[seatId]?.background || '#37b02c'" />
-                                <rect class="seat-base-selected" x="5" y="40" width="60" height="20" rx="5" ry="5" :fill="seatColors[seatId]?.base || '#2c8c23'" />
-                                <rect class="seat-leg-selected" x="18" y="60" width="5" height="10" :fill="seatColors[seatId]?.legs || '#464646'" />
-                                <rect class="seat-leg-selected" x="48" y="60" width="5" height="10" :fill="seatColors[seatId]?.legs || '#464646'" />
-                                <rect class="seat-arm-selected" x="5" y="25" width="15" height="35" rx="5" ry="5" :fill="seatColors[seatId]?.arms || '#2c8c23'" />
-                                <rect class="seat-arm-selected" x="50" y="25" width="15" height="35" rx="5" ry="5" :fill="seatColors[seatId]?.arms || '#2c8c23'" />
-                                <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatId }}</text>
-                            </svg> 
+                            <!-- Itera sobre todos los asientos de la sesión -->
+                            <div v-for="seatId in session.totalSeats" :key="seatId">
+                                <div v-if="isSeatOccupied(seatId)">
+                                    <svg class="svg-seat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
+                                        <rect x="10" y="10" width="50" height="35" rx="5" ry="5" fill="#e92e19"  />
+                                        <rect x="5" y="40" width="60" height="20" rx="5" ry="5" fill="#ba2414" />
+                                        <rect x="18" y="60" width="5" height="10" fill="#464646" />
+                                        <rect x="48" y="60" width="5" height="10" fill="#464646" />
+                                        <rect x="5" y="25" width="15" height="35" rx="5" ry="5" fill="#ba2414" />
+                                        <rect x="50" y="25" width="15" height="35" rx="5" ry="5" fill="#ba2414" />
+                                        <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatId }}</text>
+                                    </svg> 
+                                </div>
+                                <div v-else> <!-- ASIENTO LIBRE -->
+                                    <svg class="svg-seat" @click="animationSVG($event, seatId)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
+                                        <rect class="seat-background-selected" x="10" y="10" width="50" height="35" rx="5" ry="5" :fill="seatColors[seatId]?.background || '#37b02c'" />
+                                        <rect class="seat-base-selected" x="5" y="40" width="60" height="20" rx="5" ry="5" :fill="seatColors[seatId]?.base || '#2c8c23'" />
+                                        <rect class="seat-leg-selected" x="18" y="60" width="5" height="10" :fill="seatColors[seatId]?.legs || '#464646'" />
+                                        <rect class="seat-leg-selected" x="48" y="60" width="5" height="10" :fill="seatColors[seatId]?.legs || '#464646'" />
+                                        <rect class="seat-arm-selected" x="5" y="25" width="15" height="35" rx="5" ry="5" :fill="seatColors[seatId]?.arms || '#2c8c23'" />
+                                        <rect class="seat-arm-selected" x="50" y="25" width="15" height="35" rx="5" ry="5" :fill="seatColors[seatId]?.arms || '#2c8c23'" />
+                                        <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatId }}</text>
+                                    </svg> 
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
             
@@ -246,11 +281,11 @@ const closeDialog = () => {
             <div class="panel-payment">
                 <h3>TICKETS</h3>
                 <div class="selected-tickets" id="selected-tickets">
-                    <div v-if="selectedSeatInfo.length > 0" class="selected-seat-info">
-                        <div v-for="info in selectedSeatInfo" :key="info.seatId" class="individual-ticket">
+                    <div v-if="selectedSeats.length > 0" class="selected-seat-info">
+                        <div v-for="info in selectedSeats" :key="info.seatId" class="individual-ticket">
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" @click="deleteTicketSeat(info.seatId)" class="trash-icon" id="trash-icon" viewBox="0 0 16 16"><path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/></svg>
                             <p><strong>Entrada para "{{ showData.title }}"</strong></p>
-                            <p>BUTACA {{ info.seatId }} || Sesión: {{ formatHour(info.session) }}h</p>
+                            <p>BUTACA {{ info.seatId }} || Sesión {{ formatHour(info.session) }}h</p>
                             <div class="individual-ticket__data">
                                 <p>Fila {{ calculateRow(info.seatId) }} | Columna {{ calculateColumn(info.seatId) }}</p>
                                 <p id="show__price"><strong>{{ showData.price }}€</strong></p>
@@ -309,12 +344,9 @@ const closeDialog = () => {
                             <input @input="validateCVV()" v-model="CVV" type="text" class="input-payment-panel" id="input-CVV" name="CVV" placeholder="***">
                         </div> 
                     </div> 
-                    <!-- <div class="button-pay" @click="submitForm">
-                        <MakeReservation />
-                    </div> -->
-
                     <div class="container-button-pay">
-                        <v-btn class="btn-pay" @click="openDialog">PAGAR</v-btn>
+                        <!-- <v-btn class="btn-pay" @click="openDialog">PAGAR</v-btn> -->
+                        <v-btn class="btn-pay" @click="addReservedSeatsToDatabase()">PAGAR</v-btn>
                     </div>
                     
 
@@ -333,33 +365,8 @@ const closeDialog = () => {
                     </v-dialog>
                 </div>
             </div>
-       
-
-            
-
-
-
-                        <!-- <svg class="svg-seat" @click="animationSVG" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-                            <rect x="25" y="10" width="50" height="35" rx="5" ry="5" fill="#e92e19" />
-                            <rect x="20" y="40" width="60" height="20" rx="5" ry="5" fill="#ba2414" />
-                            <rect x="33" y="60" width="5" height="10" fill="#464646" />
-                            <rect x="63" y="60" width="5" height="10" fill="#464646" />
-                            <rect x="20" y="25" width="15" height="35"  rx="5" ry="5" fill="#ba2414" />
-                            <rect x="65" y="25" width="15" height="35" rx="5" ry="5" fill="#ba2414" />
-                        </svg> -->
-            <!-- </div>
         </div>
-                    
-
-
-
-    </div> -->
-</div>
-           
     </div>
-
-
-    
 </template>
 
 <style scoped>

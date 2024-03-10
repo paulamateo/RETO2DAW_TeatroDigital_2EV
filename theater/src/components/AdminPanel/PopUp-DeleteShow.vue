@@ -38,7 +38,7 @@
 
     <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
-            <h2 class="popup-title">¿Estás seguro/a de querer eliminar la obra?</h2>
+            <h2 class="popup-title">¿Estás seguro/a de querer eliminar esta obra?</h2>
             <v-divider></v-divider>
             <v-card-actions>
                 <v-spacer></v-spacer>

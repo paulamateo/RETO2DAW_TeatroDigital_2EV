@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { onMounted, onUnmounted } from 'vue'
-    import PopUp_CreateUser from '../components/PopUp-CreateUser.vue'
-    import PopUp_UpdateUser from '../components/PopUp-UpdateUser.vue'
-    import PopUp_DeleteUser from '../components/PopUp-DeleteUser.vue'
-    import { useUsersStore } from '../store/User-Store'
+    import PopUp_CreateUser from './PopUp-CreateUser.vue'
+    import PopUp_UpdateUser from './PopUp-UpdateUser.vue'
+    import PopUp_DeleteUser from './PopUp-DeleteUser.vue'
+    import { useUsersStore } from '../../store/User-Store'
     const store = useUsersStore();
 
     onMounted(() => {
@@ -88,7 +88,7 @@
                 <th>{{ user.userId }}</th>
                 <th class="table__header-content--visibility-name">
                     <div class="table-row__showtitle">
-                        <img class="table-row__showtitle_img" src="../assets/images/elements/user_default.jpg"/>
+                        <img class="table-row__showtitle_img" src="../../assets/images/elements/user_default.jpg"/>
                         <div class="table-row__showtitle_text">
                             <p><strong>{{ user.userName }}</strong></p>
                         </div>
@@ -315,4 +315,4 @@
     .table-row__showtitle_text p {
         margin: 0;
     }
-</style>
+</style>./AdminPanel/PopUp-CreateUser.vue./AdminPanel/PopUp-UpdateUser.vue./AdminPanel/PopUp-DeleteUser.vue../../store/User-Store

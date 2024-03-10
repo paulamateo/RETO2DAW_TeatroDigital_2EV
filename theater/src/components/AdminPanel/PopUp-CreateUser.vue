@@ -8,9 +8,22 @@
     let contrasena = ref('');
     let telefono = ref('');
     let rol = ref(null);
+    const showError = ref(false);
+
+    const checkFields = () => {
+        return !!nombre.value && !!apellidos.value && !!email.value && !!contrasena.value && !!telefono.value && !!rol.value;
+    };
 
     const addUserToDatabase = async () => {
         try {
+            if (!checkFields()) {
+                dialog.value = true;
+                showError.value = true;
+                return; 
+            }
+            showError.value = false;
+            dialog.value = false;
+            
             const user = {
                 userId: 0,
                 userName: nombre.value,
@@ -50,11 +63,11 @@
             <form @submit.prevent="addUserToDatabase">
                 <div class="form-container">
                     <div class="panel-box">
-                    <input type="text" v-model="nombre" class="input-payment-panel" name="titular_input" placeholder="Nombre" required>
-                    <input type="text" v-model="apellidos" class="input-payment-panel" name="titular_input" placeholder="Apellidos" required>
-                    <input type="text" v-model="email" class="input-payment-panel" name="titular_input" placeholder="Email" required>
-                    <input type="password" v-model="contrasena" class="input-payment-panel" name="titular_input" placeholder="Contraseña" required>
-                    <input type="text" v-model="telefono" class="input-payment-panel" name="titular_input" placeholder="Teléfono" required>
+                    <input type="text" v-model="nombre" class="input-payment-panel" name="titular_input" placeholder="Nombre">
+                    <input type="text" v-model="apellidos" class="input-payment-panel" name="titular_input" placeholder="Apellidos">
+                    <input type="text" v-model="email" class="input-payment-panel" name="titular_input" placeholder="Email">
+                    <input type="password" v-model="contrasena" class="input-payment-panel" name="titular_input" placeholder="Contraseña">
+                    <input type="text" v-model="telefono" class="input-payment-panel" name="titular_input" placeholder="Teléfono">
                     <div>
                         <select name="rol" v-model="rol">
                             <option selected disabled hidden><span>ROL</span></option>
@@ -65,10 +78,11 @@
                 </div>
                 </div>
                 <v-divider></v-divider>
+                <span class="error-message" v-if="showError">Todos los campos deben estar completados.</span>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                    <v-btn type="submit" color="primary" text="CREAR" variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" text="CREAR" variant="tonal" @click="checkFields()" class="button-form--actions"></v-btn>
                 </v-card-actions>
             </form>
            
@@ -77,6 +91,17 @@
 </template>
 
 <style scoped>
+    .error-message {
+        font-size: 10px;
+        color: red;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+        margin-top: -5px;
+        font-family: 'Inter', sans-serif;
+        padding-top: 15px;
+        margin: 0;
+    }
     input[type="date"].input-payment-panel, input[type="time"].input-payment-panel {
       color: #c3c3c3;
     }

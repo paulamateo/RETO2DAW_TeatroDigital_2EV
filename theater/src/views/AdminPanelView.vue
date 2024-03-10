@@ -1,7 +1,7 @@
 <script setup lang="ts">
-    import ListShows from '../components/ListShows.vue'
-    import ListUsers from '../components/ListUsers.vue'
-    import ListSessions from '@/components/List-Sessions.vue';
+    import ListShows from '../components/AdminPanel/List-Shows.vue'
+    import ListUsers from '../components/AdminPanel/List-Users.vue'
+    import ListSessions from '@/components/AdminPanel/List-Sessions.vue';
     import { ref } from 'vue';
 
     const selectedTabMenu = ref('');
@@ -12,6 +12,9 @@
 </script>
 
 <template>
+    <div class="no-permission">
+        <h1>No dispones de los suficiente permisos para acceder al panel.</h1>
+    </div>
     <div class="container-panel-admin">
         <div class="column-tabs">
             <div class="column-tabs__user">
@@ -199,4 +202,4 @@
             font-size: 15px;
         }
     }
-</style>
+</style>../components/AdminPanel/ListShows.vue../components/AdminPanel/ListUsers.vue../components/AdminPanel/List-Shows.vue../components/AdminPanel/List-Users.vue

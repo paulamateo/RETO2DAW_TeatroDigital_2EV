@@ -106,16 +106,6 @@
                             <input type="text" v-model="genero" class="input-payment-panel" name="titular_input" placeholder="Género" required>
                         </div>
                     </div>
-                    <!-- <div class="panel-box">
-                        <div class="panel-box__item">
-                            <label for="poster">Sesión 1 (Mañana)</label>
-                            <input type="time" class="input-payment-panel" id="hora" name="hora"> 
-                        </div>
-                        <div class="panel-box__item">
-                            <label for="poster">Sesión 2 (Tarde)</label>
-                            <input type="time" class="input-payment-panel" id="hora" name="hora"> 
-                        </div> 
-                    </div> -->
                     <div class="panel-box panel-box--3-col">
                         <div class="panel-box__item">
                             <label for="poster">Poster</label>

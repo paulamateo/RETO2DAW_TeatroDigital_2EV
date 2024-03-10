@@ -1,14 +1,14 @@
 <script setup lang="ts">
-    import { ref, watch } from 'vue';
+    import { ref } from 'vue';
     const dialog = ref(false);
-    
+
     const props = defineProps({
-        userId: String
+        sessionId: String
     });
 
-    const deleteUserToDatabase = async () => {
+    const deleteSessionToDatabase = async () => {
         try {
-            const response = await fetch(`http://localhost:8001/User/${props.userId}`, {
+            const response = await fetch(`http://localhost:8001/Session/${props.sessionId}`, {
                 method: 'DELETE'
             });
             if (!response.ok) {
@@ -18,15 +18,10 @@
                 dialog.value = false;
             }
         }catch (error) {
-            console.log('Error to delete user: ', error);
+            console.log('Error to delete session: ', error);
         }
     }
-
-    // watch(dialog, (newValue) => {
-    //     if (!newValue) {
-    //         location.reload();
-    //     }
-    // });
+    
 </script>
 
 <template>
@@ -38,12 +33,12 @@
 
     <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
-            <h2 class="popup-title">¿Estás seguro/a de querer eliminar el usuario?</h2>
+            <h2 class="popup-title">¿Estás seguro/a de querer eliminar esta sesión?</h2>
             <v-divider></v-divider>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn text="CANCELAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                <v-btn color="primary" text="ELIMINAR" variant="tonal" @click="deleteUserToDatabase" class="button-form--actions"></v-btn>
+                <v-btn @click="deleteSessionToDatabase"  color="primary" text="ELIMINAR" variant="tonal" class="button-form--actions"></v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -56,7 +51,6 @@
 
     .buttons-actions-panel__item--update {
         background-color: #D03A3A;
-        margin-right: 10px;
         color: white;
         width: 40px;
     }

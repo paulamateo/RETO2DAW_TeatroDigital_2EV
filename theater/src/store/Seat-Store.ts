@@ -4,23 +4,37 @@ import { reactive } from "vue";
 export interface Seat {
     seatId: number,
     isDisponible: boolean,
-    showId: number,
     sessionId: number
 }
 
-//GET ALL SESSIONS FOR A SHOW
 export const useSeatsStore = defineStore('seats', () => {
     const seats = reactive<Seat[]>([])
 
-    const getAllSeats = async (showId: string, sessionId: string) => {
+    const getAllSeats = async (sessionId: string) => {
         try {
-            const response = await fetch(`http://localhost:8001/Show/${showId}/Session/${sessionId}`);
+            const response = await fetch(`http://localhost:8001/Session/${sessionId}/Seats`);
             const data = await response.json();
             seats.splice(0, seats.length, ...data);
         }catch (error) {
             console.log('Error displaying seats: ', error);
         }
     }
+
+    const addReservedSeatsToDatabase = async (selectedSeats: Seat[], sessionId: string) => { 
+        try {
+            const idsAsientosParaComprar = selectedSeats.map(seat => seat.seatId);
+            const payload = {
+                seats: idsAsientosParaComprar
+            };
+            const response = await fetch(`http://localhost:8001/Session/${sessionId}/Seats`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }); 
+        }catch (error) {
+            console.log('Error reserving seats: ', error);
+        }
+    }
     
-    return { seats, getAllSeats };
+    return { seats, getAllSeats, addReservedSeatsToDatabase };
 })

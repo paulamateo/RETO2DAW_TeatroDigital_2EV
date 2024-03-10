@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { onMounted } from 'vue'
-    import { useShowsByGenreStore } from '../store/Genre-Store'
+    import { useShowsByGenreStore } from '../../store/Genre-Store'
     const store = useShowsByGenreStore();
 
     onMounted(() => {
@@ -119,4 +119,4 @@
         font-size: 120%;
     }
 }
-</style>
+</style>../../store/Genre-Store

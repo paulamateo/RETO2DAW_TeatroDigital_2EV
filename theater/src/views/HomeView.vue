@@ -1,7 +1,6 @@
 <script setup lang="ts">
-    import Musicals from '../components/Grid-Musicals.vue'
+    import Musicals from '../components/Homepage/Grid-Musicals.vue'
     window.onload = function() {
-        //Ir a la sección 'Vive la magia musical'
         var arrowIcon = document.getElementById('chevronleft-icon') as HTMLElement;
         var showsSection = document.querySelector('.shows') as HTMLElement;
         arrowIcon.addEventListener('click', function() {
@@ -217,4 +216,4 @@
             font-size: 120%;
         }
     }
-</style>
+</style>../components/Homepage/Grid-Musicals.vue
