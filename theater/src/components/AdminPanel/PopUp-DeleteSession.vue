@@ -1,27 +1,20 @@
 <script setup lang="ts">
     import { ref } from 'vue';
     const dialog = ref(false);
+    import { useSessionsStore } from '@/store/Session-Store';
+    const store = useSessionsStore();
 
     const props = defineProps({
-        sessionId: String
+        sessionId: {
+            type: String,
+            default: '0'
+        }
     });
 
-    const deleteSessionToDatabase = async () => {
-        try {
-            const response = await fetch(`http://localhost:8001/Session/${props.sessionId}`, {
-                method: 'DELETE'
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }else {
-                console.log('OPERATION SUCCESSFULLY COMPLETED');
-                dialog.value = false;
-            }
-        }catch (error) {
-            console.log('Error to delete session: ', error);
-        }
-    }
-    
+    const deleteSession = async () => {
+        await store.deleteSessionToDatabase(parseInt(props.sessionId));
+        dialog.value = false;
+    };    
 </script>
 
 <template>
@@ -38,7 +31,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn text="CANCELAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                <v-btn @click="deleteSessionToDatabase"  color="primary" text="ELIMINAR" variant="tonal" class="button-form--actions"></v-btn>
+                <v-btn @click="deleteSession"  color="primary" text="ELIMINAR" variant="tonal" class="button-form--actions"></v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

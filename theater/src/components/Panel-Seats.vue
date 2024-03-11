@@ -83,6 +83,7 @@
                 const { seatId, session } = seat;
                 const seatData = {
                     seatId: 0,
+                    seatIdReserved: seat.seatId,
                     sessionId: selectedSession.value,
                     isDisponible: false
                     
@@ -106,7 +107,7 @@
     }
 
 
-    // Eliminar el ticket seleccionado del arreglo
+    // Eliminar el ticket seleccionado del array
     function deleteTicketSeat(seatId: number) {
         selectedSeats = selectedSeats.filter(info => info.seatId !== seatId);
         seatColors.value[seatId] = { background: '#37b02c', base: '#2c8c23', legs: '#464646', arms: '#2c8c23' };
@@ -200,7 +201,7 @@ const closeDialog = () => {
 };
 
 const isSeatOccupied = (seatId: number) => {
-  const occupiedSeat = storeSeat.seats.find(seat => seat.seatId === seatId)
+  const occupiedSeat = storeSeat.seats.find(seat => seat.seatIdReserved === seatId)
   return occupiedSeat && !occupiedSeat.isDisponible
 }
 
@@ -246,9 +247,8 @@ const isSeatOccupied = (seatId: number) => {
                 <div class="panel-seats" id="panel-seats">
                     <div class="panel-seats__item" id="area-seats">
                         <div class="seat-grid">
-                            <!-- Itera sobre todos los asientos de la sesión -->
-                            <div v-for="seatId in session.totalSeats" :key="seatId">
-                                <div v-if="isSeatOccupied(seatId)">
+                            <div v-for="seatIdReserved in session.totalSeats" :key="seatIdReserved">
+                                <div v-if="isSeatOccupied(seatIdReserved)">
                                     <svg class="svg-seat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
                                         <rect x="10" y="10" width="50" height="35" rx="5" ry="5" fill="#e92e19"  />
                                         <rect x="5" y="40" width="60" height="20" rx="5" ry="5" fill="#ba2414" />
@@ -256,18 +256,18 @@ const isSeatOccupied = (seatId: number) => {
                                         <rect x="48" y="60" width="5" height="10" fill="#464646" />
                                         <rect x="5" y="25" width="15" height="35" rx="5" ry="5" fill="#ba2414" />
                                         <rect x="50" y="25" width="15" height="35" rx="5" ry="5" fill="#ba2414" />
-                                        <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatId }}</text>
+                                        <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatIdReserved }}</text>
                                     </svg> 
                                 </div>
                                 <div v-else> <!-- ASIENTO LIBRE -->
-                                    <svg class="svg-seat" @click="animationSVG($event, seatId)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
-                                        <rect class="seat-background-selected" x="10" y="10" width="50" height="35" rx="5" ry="5" :fill="seatColors[seatId]?.background || '#37b02c'" />
-                                        <rect class="seat-base-selected" x="5" y="40" width="60" height="20" rx="5" ry="5" :fill="seatColors[seatId]?.base || '#2c8c23'" />
-                                        <rect class="seat-leg-selected" x="18" y="60" width="5" height="10" :fill="seatColors[seatId]?.legs || '#464646'" />
-                                        <rect class="seat-leg-selected" x="48" y="60" width="5" height="10" :fill="seatColors[seatId]?.legs || '#464646'" />
-                                        <rect class="seat-arm-selected" x="5" y="25" width="15" height="35" rx="5" ry="5" :fill="seatColors[seatId]?.arms || '#2c8c23'" />
-                                        <rect class="seat-arm-selected" x="50" y="25" width="15" height="35" rx="5" ry="5" :fill="seatColors[seatId]?.arms || '#2c8c23'" />
-                                        <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatId }}</text>
+                                    <svg class="svg-seat" @click="animationSVG($event, seatIdReserved)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
+                                        <rect class="seat-background-selected" x="10" y="10" width="50" height="35" rx="5" ry="5" :fill="seatColors[seatIdReserved]?.background || '#37b02c'" />
+                                        <rect class="seat-base-selected" x="5" y="40" width="60" height="20" rx="5" ry="5" :fill="seatColors[seatIdReserved]?.base || '#2c8c23'" />
+                                        <rect class="seat-leg-selected" x="18" y="60" width="5" height="10" :fill="seatColors[seatIdReserved]?.legs || '#464646'" />
+                                        <rect class="seat-leg-selected" x="48" y="60" width="5" height="10" :fill="seatColors[seatIdReserved]?.legs || '#464646'" />
+                                        <rect class="seat-arm-selected" x="5" y="25" width="15" height="35" rx="5" ry="5" :fill="seatColors[seatIdReserved]?.arms || '#2c8c23'" />
+                                        <rect class="seat-arm-selected" x="50" y="25" width="15" height="35" rx="5" ry="5" :fill="seatColors[seatIdReserved]?.arms || '#2c8c23'" />
+                                        <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatIdReserved }}</text>
                                     </svg> 
                                 </div>
                             </div>

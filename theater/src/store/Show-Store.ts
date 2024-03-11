@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { reactive } from "vue";
+import { reactive, computed, ref } from "vue";
 import { format } from "date-fns";
 
 export interface Show {
@@ -18,21 +18,119 @@ export interface Show {
     overview: string
 }
 
-//GET ALL SHOWS
+
 export const useShowsStore = defineStore('shows', () => {
     const shows = reactive<Show[]>([])
+    const searchTerm = ref('');
 
     const getAllShows = async () => {
         try {
             const response = await fetch('http://localhost:8001/Show')
             const data = await response.json();
             shows.splice(0, shows.length, ...data);
+            return data;
         }catch (error) {
             console.log('Error displaying shows: ', error);
+            return [];
+        }
+    }
+
+    const getShowByTitle = async (title: string) => {
+        try {   
+            const response = await fetch(`http://localhost:8001/Show/ByName/${title}`);
+            const data = await response.json();
+            return data;
+        }catch (error) {
+            console.log('Error displaying show by title: ', error);
+            return [];
+        }
+    }
+
+    const addShowToDatabase = async (titulo: string, autor: string, director: string, genero: string, edad: number, fecha: Date, duracion: string, precio: number, posterFile: string, bannerFile: string, sceneFile: string, resena: string) => {
+        try {
+            const show = {
+                showId: 0,
+                title: titulo,
+                author: autor,
+                director: director,
+                genre: genero,
+                age: edad,
+                date: fecha,
+                length: duracion,
+                price: precio,
+                poster: posterFile,
+                banner: bannerFile,
+                scene: sceneFile,
+                overview: resena
+            }
+            const response = await fetch("http://localhost:8001/Show", {
+                method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(show),
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
+            }
+        }catch (error) {
+            console.log('Error to create show: ', error);
+        }
+    }
+
+    const deleteShowToDatabase = async (showId: number) => {
+        try {
+            const response = await fetch(`http://localhost:8001/Show/${showId}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
+            }
+        }catch (error) {
+            console.log('Error to delete show: ', error);
+        }
+    }
+
+    const updateShowToDatabase = async (showId: number, titulo: string, autor: string, director: string, genero: string, edad: number, fecha: Date, duracion: string, precio: number, posterFile: string, bannerFile: string, sceneFile: string, resena: string) => {
+        try {
+            const show = {
+                showId: showId,
+                title: titulo,
+                author: autor,
+                director: director,
+                genre: genero,
+                age: edad,
+                date: fecha,
+                length: duracion,
+                price: precio,
+                poster: posterFile,
+                banner: bannerFile,
+                scene: sceneFile,
+                overview: resena
+            }
+            const response = await fetch(`http://localhost:8001/Show/${showId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(show),
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
+            }
+        }catch (error) {
+            console.log('Error to update show: ', error);
         }
     }
     
-    return { shows, getAllShows };
+
+    const filteredShows = computed(() => {
+        return shows.filter((show) => show.title.toLowerCase().includes(searchTerm.value.toLowerCase()));
+    });
+
+    return { shows, getAllShows, filteredShows, searchTerm, getShowByTitle, addShowToDatabase, deleteShowToDatabase, updateShowToDatabase };
 })
 
 //GET SHOW BY ID

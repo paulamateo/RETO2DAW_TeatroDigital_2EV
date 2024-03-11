@@ -18,7 +18,8 @@ export interface Show {
 }
 
 export const useShowsByGenreStore = defineStore('musicalShows', () => {
-    const musicalShows = reactive<Show[]>([])
+    const musicalShows = reactive<Show[]>([]);
+    const shows = reactive<Show[]>([]);
 
     const getAllShowsMusical = async () => {
         try {
@@ -39,23 +40,18 @@ export const useShowsByGenreStore = defineStore('musicalShows', () => {
             console.log('Error displaying genres: ', error);
         }
     }
-    
-    return { musicalShows, getAllShowsMusical, getAllGenres };
-})
-
-
-export const useShowsByGenreFormStore = defineStore('shows', () => {
-    const shows = reactive<Show[]>([])
 
     const getAllShowsByGenre = async(genre: string) => {
         try {
             const response = await fetch(`http://localhost:8001/Genre/${genre}`);
             const data = await response.json();
             shows.splice(0, shows.length, ...data);
+            return data;
         }catch (error) {
             console.log('Error displaying shows by genre: ', error);
+            return [];
         }
     }
-
-    return {  shows, getAllShowsByGenre};
+    
+    return { shows, musicalShows, getAllShowsMusical, getAllGenres, getAllShowsByGenre };
 })

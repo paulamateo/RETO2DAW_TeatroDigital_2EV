@@ -1,32 +1,26 @@
 <script setup lang="ts">
     import { ref, watch } from 'vue';
     const dialog = ref(false);
+    import { useShowsStore } from '@/store/Show-Store';
+    const store = useShowsStore();
     
     const props = defineProps({
-        showId: String
-    });
-
-    const deleteShowToDatabase = async () => {
-        try {
-            const response = await fetch(`http://localhost:8001/Show/${props.showId}`, {
-                method: 'DELETE'
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }else {
-                console.log('OPERATION SUCCESSFULLY COMPLETED');
-                dialog.value = false;
-            }
-        }catch (error) {
-            console.log('Error to delete show: ', error);
-        }
-    }
-
-    watch(dialog, (newValue) => {
-        if (!newValue) {
-            location.reload();
+        showId: {
+            type: String,
+            default: '0'
         }
     });
+
+    const deleteShow = async () => {
+        await store.deleteShowToDatabase(parseInt(props.showId));
+        dialog.value = false;
+    };    
+
+    // watch(dialog, (newValue) => {
+    //     if (!newValue) {
+    //         location.reload();
+    //     }
+    // });
 </script>
 
 <template>
@@ -43,7 +37,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn text="CANCELAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                <v-btn color="primary" text="ELIMINAR" variant="tonal" @click="deleteShowToDatabase" class="button-form--actions"></v-btn>
+                <v-btn color="primary" text="ELIMINAR" variant="tonal" @click="deleteShow" class="button-form--actions"></v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

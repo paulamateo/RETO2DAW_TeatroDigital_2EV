@@ -1,6 +1,8 @@
 <script setup lang="ts">
-    import { ref, watch } from 'vue';
+    import { ref } from 'vue';
     const dialog = ref(false);
+    import { useUsersStore } from '@/store/User-Store';
+    const store = useUsersStore();
 
     let nombre = ref('');
     let apellidos = ref('');
@@ -14,38 +16,16 @@
         return !!nombre.value && !!apellidos.value && !!email.value && !!contrasena.value && !!telefono.value && !!rol.value;
     };
 
-    const addUserToDatabase = async () => {
-        try {
-            if (!checkFields()) {
-                dialog.value = true;
-                showError.value = true;
-                return; 
-            }
-            showError.value = false;
-            dialog.value = false;
-            
-            const user = {
-                userId: 0,
-                userName: nombre.value,
-                userLastname: apellidos.value,
-                email: email.value,
-                password: contrasena.value,
-                phoneNumber: telefono.value,
-                isAdmin: rol.value === 'true' ? true : false
-            }
-            const response = await fetch("http://localhost:8001/User", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user),
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }else {
-                console.log('OPERATION SUCCESSFULLY COMPLETED');
-            }
-        }catch (error) {
-            console.log('Error to create user: ', error);
+    const addUser = async () => {
+        console.log(rol.value);
+        if (!checkFields()) {
+            dialog.value = true;
+            showError.value = true;
+            return; 
         }
+        await store.addUserToDatabase(nombre.value, apellidos.value, email.value, contrasena.value, telefono.value, rol.value === 'true' ? true : false);
+        showError.value = false;
+        dialog.value = false;
     }
 </script>
 
@@ -60,7 +40,7 @@
     <v-dialog v-model="dialog" persistent activator="parent" width="700px">
         <v-card>
             <h2 class="popup-title">Crear usuario</h2>
-            <form @submit.prevent="addUserToDatabase">
+            <form @submit.prevent="addUser">
                 <div class="form-container">
                     <div class="panel-box">
                     <input type="text" v-model="nombre" class="input-payment-panel" name="titular_input" placeholder="Nombre">

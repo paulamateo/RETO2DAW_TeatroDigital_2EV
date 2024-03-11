@@ -3,6 +3,7 @@ import { reactive } from "vue";
 
 export interface Seat {
     seatId: number,
+    seatIdReserved: number,
     isDisponible: boolean,
     sessionId: number
 }

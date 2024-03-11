@@ -64,7 +64,7 @@
     text-align: center;
     color: white;
     font-weight: 300;
-    padding: 15px;
+    padding: 20px;
 }
 .shows__rectangle h2 {
     font-family: "GothamLight", sans-serif;

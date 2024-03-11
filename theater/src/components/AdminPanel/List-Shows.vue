@@ -125,49 +125,6 @@
 </template>
 
 <style scoped>
-    @media (max-width: 1100px) {
-        .table-element--visibility-duration {
-            display: none;
-        }
-    }
-
-    @media (max-width: 980px) {
-        .table-element--visibility-date {
-            display: none;
-        }
-    }
-
-    @media (max-width: 780px) {
-        .table-element--visibility-date {
-            display: none;
-        }
-        .table-element--visibility-price {
-            display: none;
-        }
-    }
-
-    @media (max-width: 780px) {
-        .table-element--visibility-genre {
-            display: none;
-        }
-        .table-element--visibility-director {
-            display: none;
-        }
-    }
-
-    @media (max-width: 400px) {
-        .table-element--visibility-show {
-            display: none;
-        }
-    }
-
-    @media (min-width: 800px) {
-        .container-button {
-            display: flex;
-            justify-content: flex-end;
-        }
-    }
-
     .v-btn--size-default {
         min-width: 20px;
     }
@@ -305,5 +262,48 @@
 
     .table-row__showtitle_text p {
         margin: 0;
+    }
+
+    @media (max-width: 1100px) {
+        .table-element--visibility-duration {
+            display: none;
+        }
+    }
+
+    @media (max-width: 980px) {
+        .table-element--visibility-date {
+            display: none;
+        }
+    }
+
+    @media (max-width: 780px) {
+        .table-element--visibility-date {
+            display: none;
+        }
+        .table-element--visibility-price {
+            display: none;
+        }
+    }
+
+    @media (max-width: 780px) {
+        .table-element--visibility-genre {
+            display: none;
+        }
+        .table-element--visibility-director {
+            display: none;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .table-element--visibility-show {
+            display: none;
+        }
+    }
+
+    @media (min-width: 800px) {
+        .container-button {
+            display: flex;
+            justify-content: flex-end;
+        }
     }
 </style>./AdminPanel/PopUp-CreateShow.vue./AdminPanel/PopUp-UpdateShow.vue./AdminPanel/PopUp-DeleteShow.vue../../store/Show-Store

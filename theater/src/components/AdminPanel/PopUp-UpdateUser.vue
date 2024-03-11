@@ -1,6 +1,8 @@
 <script setup lang="ts">
     import { ref } from 'vue';
     const dialog = ref(false);
+    import { useUsersStore } from '@/store/User-Store';
+    const store = useUsersStore();
 
     let nombre = ref('');
     let apellidos = ref('');
@@ -10,33 +12,15 @@
     let rol = ref(null);
 
     const props = defineProps({
-        userId: String
+        userId: {
+            type: String,
+            default: '0'
+        }
     });
 
-    const updateUserToDatabase = async () => {
-        try {
-            const user = {
-                userId: props.userId,
-                userName: nombre.value,
-                userLastname: apellidos.value,
-                email: email.value,
-                password: contrasena.value,
-                phoneNumber: telefono.value,
-                isAdmin: rol.value === 'true' ? true : false
-            }
-            const response = await fetch(`http://localhost:8001/User/${props.userId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user),
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }else {
-                console.log('OPERATION SUCCESSFULLY COMPLETED');
-            }
-        }catch (error) {
-            console.log('Error to update user: ', error);
-        }
+    const updateUser = async () => {
+        await store.updateUserToDatabase(parseInt(props.userId), nombre.value, apellidos.value, email.value, contrasena.value, telefono.value, rol.value === 'true' ? true : false);
+        dialog.value = false;
     }
 </script>
 
@@ -50,7 +34,7 @@
     <v-dialog v-model="dialog" persistent activator="parent" width="700px">
         <v-card>
             <h2 class="popup-title">Actualizar usuario</h2>
-            <form @submit.prevent="updateUserToDatabase">
+            <form @submit.prevent="updateUser">
                 <div class="form-container">
                     <div class="panel-box">
                     <input type="text" v-model="nombre" class="input-payment-panel" name="titular_input" placeholder="Nombre" required>

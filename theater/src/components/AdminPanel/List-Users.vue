@@ -33,7 +33,6 @@
                         </svg>
                     </div>
                 </th>
-
                 <th class="table__header-content--visibility-name">
                     <div class="table__header-content">
                         <p>Nombre</p>
@@ -42,7 +41,6 @@
                         </svg>
                     </div>
                 </th>
-
                 <th class="table__header-content--visibility-lastname">
                     <div class="table__header-content">
                         <p>Apellidos</p>
@@ -50,8 +48,7 @@
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
                         </svg>
                     </div>
-                </th>
-                            
+                </th>  
                 <th class="table__header-content--visibility-email">
                     <div class="table__header-content">
                         <p>Email</p>
@@ -60,7 +57,6 @@
                         </svg>
                     </div>
                 </th>
-
                 <th class="table__header-content--visibility-phone">
                     <div class="table__header-content">
                         <p>Teléfono</p>
@@ -69,7 +65,6 @@
                         </svg>
                     </div>
                 </th>
-
                 <th class="table__header-content--visibility-rol">
                     <div class="table__header-content">
                         <p>Rol</p>
@@ -78,7 +73,6 @@
                         </svg>
                     </div>
                 </th>
-
                 <th></th>
             </tr>
         </thead>
@@ -123,45 +117,9 @@
 </template>
 
 <style scoped>
-.table-genre__icon {
-    display: flex;
-    align-items: center;
-}
-    @media (max-width: 1200px) {
-        .table__header-content--visibility-rol {
-            display: none;
-        }
-    }
-
-    @media (max-width: 900px) {
-        .table__header-content--visibility-phone {
-            display: none;
-        }
-    }
-
-    @media (max-width: 720px) {
-        .table__header-content--visibility-email {
-            display: none;
-        }
-    }
-
-    @media (max-width: 550px) {
-        .table__header-content--visibility-lastname {
-            display: none;
-        }
-    }
-
-    @media (max-width: 450px) {
-        .table__header-content--visibility-name {
-            display: none;
-        }
-    }
-
-    @media (min-width: 800px) {
-        .container-button {
-            display: flex;
-            justify-content: flex-end;
-        }
+    .table-genre__icon {
+        display: flex;
+        align-items: center;
     }
 
     .v-btn--size-default {
@@ -314,5 +272,42 @@
 
     .table-row__showtitle_text p {
         margin: 0;
+    }
+
+    @media (max-width: 1200px) {
+        .table__header-content--visibility-rol {
+            display: none;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .table__header-content--visibility-phone {
+            display: none;
+        }
+    }
+
+    @media (max-width: 720px) {
+        .table__header-content--visibility-email {
+            display: none;
+        }
+    }
+
+    @media (max-width: 550px) {
+        .table__header-content--visibility-lastname {
+            display: none;
+        }
+    }
+
+    @media (max-width: 450px) {
+        .table__header-content--visibility-name {
+            display: none;
+        }
+    }
+
+    @media (min-width: 800px) {
+        .container-button {
+            display: flex;
+            justify-content: flex-end;
+        }
     }
 </style>./AdminPanel/PopUp-CreateUser.vue./AdminPanel/PopUp-UpdateUser.vue./AdminPanel/PopUp-DeleteUser.vue../../store/User-Store

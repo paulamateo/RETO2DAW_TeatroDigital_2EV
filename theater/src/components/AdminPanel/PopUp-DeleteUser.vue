@@ -1,32 +1,20 @@
 <script setup lang="ts">
-    import { ref, watch } from 'vue';
+    import { ref } from 'vue';
     const dialog = ref(false);
-    
+    import { useUsersStore } from '@/store/User-Store';
+    const store = useUsersStore();
+
     const props = defineProps({
-        userId: String
+        userId: {
+            type: String,
+            default: '0'
+        }
     });
 
-    const deleteUserToDatabase = async () => {
-        try {
-            const response = await fetch(`http://localhost:8001/User/${props.userId}`, {
-                method: 'DELETE'
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }else {
-                console.log('OPERATION SUCCESSFULLY COMPLETED');
-                dialog.value = false;
-            }
-        }catch (error) {
-            console.log('Error to delete user: ', error);
-        }
-    }
-
-    // watch(dialog, (newValue) => {
-    //     if (!newValue) {
-    //         location.reload();
-    //     }
-    // });
+    const deleteUser = async () => {
+        await store.deleteUserToDatabase(parseInt(props.userId));
+        dialog.value = false;
+    };    
 </script>
 
 <template>
@@ -43,7 +31,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn text="CANCELAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                <v-btn color="primary" text="ELIMINAR" variant="tonal" @click="deleteUserToDatabase" class="button-form--actions"></v-btn>
+                <v-btn color="primary" text="ELIMINAR" variant="tonal" @click="deleteUser" class="button-form--actions"></v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

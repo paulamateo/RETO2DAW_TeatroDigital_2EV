@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import Shows from '../components/ShowsApp.vue';
+    import Shows from '../components/Billboard/ShowsApp.vue';
 </script>
 
 <template>
@@ -104,4 +104,4 @@
             grid-template-columns: repeat(4, calc(24% - 10px));
         }
     }
-</style>
+</style>../components/Billboard/ShowsApp.vue

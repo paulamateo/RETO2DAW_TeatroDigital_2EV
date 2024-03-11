@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import PopUp_AccessToPanel from '../components/PopUp-AccessToPanel.vue'
-    import PopUp_Login from '../components/PopUp-Login.vue';
+    import { RouterLink } from 'vue-router';
+import PopUp_AccessToPanel from '../PopUp-AccessToPanel.vue'
 </script>
 
 <template>                        
@@ -12,8 +12,9 @@
                 </svg>
             </div>
             <div class="header__logo">
-              <RouterLink to="/"><img class="logo logo--size" id="logoImage" src="../assets/images/elements/logo_negro.png"/></RouterLink>
+              <RouterLink to="/"><img class="logo logo--size" id="logoImage" src="../../assets/images/elements/logo_negro.png"/></RouterLink>
             </div>
+          
             <nav class="menu">
                 <ul>
                     <li>
@@ -38,6 +39,8 @@
                 </svg>
                 <input type="text" class="search__input " id="search" name="search" placeholder="Buscar">
             </div>
+
+            <!-- <Browser /> -->
 
             <div class="button-actions button-action--visibility">
                 <!-- <div class="button-login">
@@ -123,7 +126,7 @@
     .header {
         background-color: #0b0b0b;
         color: white;
-        padding: 5px;
+        padding: 10px;
         font-size: 14px;
         position: fixed;
         width: 100%;

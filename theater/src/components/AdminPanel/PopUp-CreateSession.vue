@@ -1,37 +1,18 @@
 <script setup lang="ts">
     import { ref } from 'vue';
-    const dialog = ref(false);
     import { useSessionsStore } from '@/store/Session-Store';
+    const dialog = ref(false);
     const store = useSessionsStore();
 
     let obraId = ref('');
     let hora = ref('');
     let asientos = ref('');
-    let notas = ref('');
+    let notas = ref('')
 
-    const addSessionToDatabase = async () => { 
-        try {
-            const session = {
-                sessionId: 0,
-                showId: obraId.value,
-                hour: hora.value,
-                totalSeats: asientos.value,
-                notes: notas.value
-            }
-            const response = await fetch("http://localhost:8001/Session", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(session),
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }else {
-                console.log('OPERATION SUCCESSFULLY COMPLETED');
-            }
-        }catch (error) {
-            console.log('Error to create session: ', error);
-        }
-    }
+    const addSession = async () => {
+        await store.addSessionToDatabase(parseInt(obraId.value), hora.value, parseInt(asientos.value), notas.value);
+        dialog.value = false;
+    };
 </script>
 
 <template>
@@ -45,7 +26,7 @@
     <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
             <h2 class="popup-title">Crear sesión</h2>
-            <form @submit.prevent="addSessionToDatabase">
+            <form @submit.prevent="addSession">
                 <div class="form-container">
                     <div class="panel-box panel-box--3-col">
                         <div class="panel-box__item">
@@ -88,7 +69,6 @@
         font-size: 12px;
     }
 
-
     .button-create-show {
         letter-spacing: 0;
         font-size: 12px;
@@ -128,7 +108,6 @@
         display: grid;
         grid-template-columns: 1fr;
     }
-
 
     .popup-title {
         padding: 0;
