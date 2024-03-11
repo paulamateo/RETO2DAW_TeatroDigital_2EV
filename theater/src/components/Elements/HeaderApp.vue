@@ -1,8 +1,6 @@
 <script setup lang="ts">
     import { RouterLink } from 'vue-router';
-import PopUp_AccessToPanel from '../components/PopUp-AccessToPanel.vue'
-    import Logotipe from './Elements/LogoCanvas.vue'
-    // import Browser from '../components/Elements/BrowserApp.vue'
+import PopUp_AccessToPanel from '../PopUp-AccessToPanel.vue'
 </script>
 
 <template>                        
@@ -13,15 +11,10 @@ import PopUp_AccessToPanel from '../components/PopUp-AccessToPanel.vue'
                     <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
                 </svg>
             </div>
-            <!-- <div class="header__logo">
-              <RouterLink to="/"><img class="logo logo--size" id="logoImage" src="../assets/images/elements/logo_negro.png"/></RouterLink>
-            </div> -->
+            <div class="header__logo">
+              <RouterLink to="/"><img class="logo logo--size" id="logoImage" src="../../assets/images/elements/logo_negro.png"/></RouterLink>
+            </div>
           
-            <RouterLink to="/">
-                <Logotipe />
-            </RouterLink>
-           
-            
             <nav class="menu">
                 <ul>
                     <li>
@@ -133,7 +126,7 @@ import PopUp_AccessToPanel from '../components/PopUp-AccessToPanel.vue'
     .header {
         background-color: #0b0b0b;
         color: white;
-        padding: 15px;
+        padding: 10px;
         font-size: 14px;
         position: fixed;
         width: 100%;
