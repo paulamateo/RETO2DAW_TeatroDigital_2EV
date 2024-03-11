@@ -30,6 +30,74 @@ export const useUsersStore = defineStore('users', () => {
     const getAdminUsers = () => {
         return users.filter(user => user.isAdmin);
     };
-    
-    return { users, getAllUsers, getAdminUsers };
+
+    const addUserToDatabase = async (nombre: string, apellidos: string, email: string, contrasena: string, telefono: string, rol: boolean) => {
+        try {
+            const user = {
+                userId: 0,
+                userName: nombre,
+                userLastname: apellidos,
+                email: email,
+                password: contrasena,
+                phoneNumber: telefono,
+                isAdmin: rol 
+            }
+            const response = await fetch("http://localhost:8001/User", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user),
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
+            }
+        }catch (error) {
+            console.log('Error to create user: ', error);
+        }
+    }
+
+    const deleteUserToDatabase = async (userId: number) => {
+        try {
+            const response = await fetch(`http://localhost:8001/User/${userId}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
+            }
+        }catch (error) {
+            console.log('Error to delete user: ', error);
+        }
+    }
+
+    const updateUserToDatabase = async (userId: number, nombre: string, apellidos: string, email: string, contrasena: string, telefono: string, rol: boolean) => {
+        try {
+            const user = {
+                userId: userId,
+                userName: nombre,
+                userLastname: apellidos,
+                email: email,
+                password: contrasena,
+                phoneNumber: telefono,
+                isAdmin: rol 
+            }
+            const response = await fetch(`http://localhost:8001/User/${userId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user),
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
+            }
+        }catch (error) {
+            console.log('Error to update user: ', error);
+        }
+    }
+
+
+    return { users, getAllUsers, getAdminUsers, addUserToDatabase, deleteUserToDatabase, updateUserToDatabase };
 })
