@@ -12,9 +12,6 @@
 </script>
 
 <template>
-    <div class="no-permission">
-        <h1>No dispones de los suficiente permisos para acceder al panel.</h1>
-    </div>
     <div class="container-panel-admin">
         <div class="column-tabs">
             <div class="column-tabs__user">

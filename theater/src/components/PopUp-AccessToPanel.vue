@@ -4,6 +4,10 @@
     const email = ref('');
     const isValidEmail = ref(true);
     const fieldsEmpty = ref(false);
+    import { useAuthStore } from '../store/Auth-Store'
+    import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
     function validateEmail() {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -14,6 +18,7 @@
     const usersStore = useUsersStore();
 
     async function submitForm() {
+        const authStore = useAuthStore();
         if (email.value === '') {
             fieldsEmpty.value = true;
             return;
@@ -25,7 +30,9 @@
 
         if (isAdminUser) {
             setTimeout(() => {
-                window.location.href = '/Admin-Panel';
+                const userData = { email: email.value };
+                authStore.login(userData);
+                router.push('/Admin-Panel');
             }, 1000); 
         }
     }

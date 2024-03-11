@@ -1,6 +1,8 @@
 <script setup lang="ts">
-    import PopUp_AccessToPanel from '../components/PopUp-AccessToPanel.vue'
-    import PopUp_Login from '../components/PopUp-Login.vue';
+    import { RouterLink } from 'vue-router';
+import PopUp_AccessToPanel from '../components/PopUp-AccessToPanel.vue'
+    import Logotipe from './Elements/LogoCanvas.vue'
+    // import Browser from '../components/Elements/BrowserApp.vue'
 </script>
 
 <template>                        
@@ -11,9 +13,15 @@
                     <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
                 </svg>
             </div>
-            <div class="header__logo">
+            <!-- <div class="header__logo">
               <RouterLink to="/"><img class="logo logo--size" id="logoImage" src="../assets/images/elements/logo_negro.png"/></RouterLink>
-            </div>
+            </div> -->
+          
+            <RouterLink to="/">
+                <Logotipe />
+            </RouterLink>
+           
+            
             <nav class="menu">
                 <ul>
                     <li>
@@ -38,6 +46,8 @@
                 </svg>
                 <input type="text" class="search__input " id="search" name="search" placeholder="Buscar">
             </div>
+
+            <!-- <Browser /> -->
 
             <div class="button-actions button-action--visibility">
                 <!-- <div class="button-login">
@@ -123,7 +133,7 @@
     .header {
         background-color: #0b0b0b;
         color: white;
-        padding: 5px;
+        padding: 15px;
         font-size: 14px;
         position: fixed;
         width: 100%;

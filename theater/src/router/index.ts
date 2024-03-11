@@ -4,6 +4,7 @@ import BillboardView from '../views/BillboardView.vue'
 import ProgrammingView from '../views/ProgrammingView.vue'
 import ShowView from '../views/ShowView.vue'
 import AdminPanelView from '../views/AdminPanelView.vue'
+import { useAuthStore } from '../store/Auth-Store';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,7 +33,15 @@ const router = createRouter({
     {
       path:'/Admin-Panel',
       name: 'Admin-Panel',
-      component: AdminPanelView
+      component: AdminPanelView,
+      beforeEnter: (to, from, next) => {
+        const authStore = useAuthStore();
+        if (!authStore.isAuthenticated) { // Accede a isAuthenticated como propiedad
+          next('/');
+        }else {
+          next();
+        }
+      }
     }
   ],
   scrollBehavior() {

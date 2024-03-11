@@ -1,35 +1,33 @@
 <script setup lang="ts">
-    import { onMounted, ref } from 'vue'
-    import { useShowsStore } from '../store/Show-Store'
-    import { useShowsByGenreStore, type Show } from '../store/Genre-Store'
-    const store = useShowsStore();
-    const storeGenre = useShowsByGenreStore();
+import { onMounted, ref, watch } from 'vue';
+import { useShowsStore } from '../../store/Show-Store';
+import { useShowsByGenreStore, type Show } from '../../store/Genre-Store';
+const store = useShowsStore();
+const storeGenre = useShowsByGenreStore();
 
-    let genres: string[] = [];
-    const shows = ref<Show[]>([]);
-    const filteredShows = ref<Show[]>([]);
-    const selectedGenre = ref('');
+const genres = ref<string[]>([]);
+const filteredShows = ref<Show[]>([]);
+const selectedGenre = ref<string>('');
 
-    onMounted(async () => {
-        store.getAllShows();
-        genres = await storeGenre.getAllGenres();
-    });
+onMounted(async () => {
+    genres.value = await storeGenre.getAllGenres();
+    filteredShows.value = await store.getAllShows();
+});
 
-    const filterByGenre = () => {
-        if (selectedGenre.value === '') {
-            filteredShows.value = shows.value;
-        }else {
-            filteredShows.value = shows.value.filter(show => show.genre === selectedGenre.value);
-        }
-    };
-
+watch(selectedGenre, async (genre) => {
+    if (genre === '') {
+        filteredShows.value = await store.getAllShows();
+    } else {
+        filteredShows.value = await storeGenre.getAllShowsByGenre(genre);
+    }
+});
 </script>
 
 <template>
     <div class="select-genre__form">
         <form method="POST">
             <label for="genre">Filtrar por</label>
-            <select v-model="selectedGenre" name="genre" id="genre" @change="filterByGenre">
+            <select v-model="selectedGenre" name="genre" id="genre">
                 <option value="" selected disabled hidden><span>GÉNERO</span></option>
                 <option v-for="genre in genres" :key="genre" :value="genre">{{ genre }}</option>
             </select>
@@ -37,6 +35,19 @@
     </div>
 
     <div class="container">
+        <div v-for="show in filteredShows" :key="show.showId" class="container-item">
+            <RouterLink :to="{ path: '/Shows/' + show.showId }">
+                <div class="genre">{{ show.genre }}</div>
+                <img :src="show.poster" alt="show.title"/>
+                <div class="title">
+                    <h3>{{ show.title }}</h3>
+                </div>
+            </RouterLink>
+        </div>
+    </div>
+
+
+    <!-- <div class="container">
         <div v-for="show in store.shows" :key="show.showId" class="container-item">
             <RouterLink :to="{ path: '/Shows/' + show.showId }">
                 <div class="genre">{{ show.genre }}</div>
@@ -46,7 +57,7 @@
                 </div>
             </RouterLink>
         </div>
-    </div>
+    </div> -->
 </template>
 
 <style scoped>

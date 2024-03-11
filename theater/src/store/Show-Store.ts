@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { reactive } from "vue";
+import { reactive, computed, ref } from "vue";
 import { format } from "date-fns";
 
 export interface Show {
@@ -21,18 +21,36 @@ export interface Show {
 //GET ALL SHOWS
 export const useShowsStore = defineStore('shows', () => {
     const shows = reactive<Show[]>([])
+    const searchTerm = ref('');
 
     const getAllShows = async () => {
         try {
             const response = await fetch('http://localhost:8001/Show')
             const data = await response.json();
             shows.splice(0, shows.length, ...data);
+            return data;
         }catch (error) {
             console.log('Error displaying shows: ', error);
+            return [];
         }
     }
-    
-    return { shows, getAllShows };
+
+    const getShowByTitle = async (title: string) => {
+        try {   
+            const response = await fetch(`http://localhost:8001/Show/ByName/${title}`);
+            const data = await response.json();
+            return data;
+        }catch (error) {
+            console.log('Error displaying show by title: ', error);
+            return [];
+        }
+    }
+
+    const filteredShows = computed(() => {
+        return shows.filter((show) => show.title.toLowerCase().includes(searchTerm.value.toLowerCase()));
+    });
+
+    return { shows, getAllShows, filteredShows, searchTerm, getShowByTitle };
 })
 
 //GET SHOW BY ID

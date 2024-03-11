@@ -8,11 +8,7 @@
             <h1>PROGRAMACIÓN</h1>
         </div>
 
-        <div class="container-calendar-events">
-            <Calendar />
-            <div class="calendar-container" id="calendar-container"></div>
-            <div class="date-panel" id="date-panel"></div>
-        </div>
+        <Calendar />
     </main>
 </template>
 
