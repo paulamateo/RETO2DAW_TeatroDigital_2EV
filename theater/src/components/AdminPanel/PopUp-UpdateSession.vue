@@ -1,38 +1,24 @@
 <script setup lang="ts">
     import { ref, watch } from 'vue';
     const dialog = ref(false);
-
+    import { useSessionsStore } from '@/store/Session-Store';
+    const store = useSessionsStore();
     let hora = ref('');
     let asientos = ref('');
     let notas = ref('');
 
     const props = defineProps({
-        sessionId: String
+        sessionId: {
+            type: String,
+            default: '0'
+        }
     });
 
-    const updateSessionToDatabase = async () => {
-        try {
-            const session = {
-                sessionId: props.sessionId,
-                hour: hora.value,
-                totalSeats: asientos.value,
-                notes: notas.value
-            }
-            const response = await fetch(`http://localhost:8001/Session/${props.sessionId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(session),
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }else {
-                console.log('OPERATION SUCCESSFULLY COMPLETED');
-            }
-        }catch (error) {
-            console.log('Error to update session: ', error);
-        }
-    }
-
+    const updateSession = async () => {
+        await store.updateSessionToDatabase(parseInt(props.sessionId), hora.value, parseInt(asientos.value), notas.value);
+        dialog.value = false;
+    };
+    
     // setTimeout(() => {
     //     watch(dialog, (newValue) => {
     //         if (!newValue) {
@@ -52,7 +38,7 @@
     <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
             <h2 class="popup-title">Actualizar sesión</h2>
-            <form @submit.prevent="updateSessionToDatabase">
+            <form @submit.prevent="updateSession">
                 <div class="form-container">
                     <div class="panel-box">
                         <input v-model="hora" type="time" class="input-payment-panel" name="titular_input" placeholder="Hora" required>

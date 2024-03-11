@@ -33,15 +33,7 @@ const router = createRouter({
     {
       path:'/Admin-Panel',
       name: 'Admin-Panel',
-      component: AdminPanelView,
-      beforeEnter: (to, from, next) => {
-        const authStore = useAuthStore();
-        if (!authStore.isAuthenticated) { // Accede a isAuthenticated como propiedad
-          next('/');
-        }else {
-          next();
-        }
-      }
+      component: AdminPanelView
     }
   ],
   scrollBehavior() {

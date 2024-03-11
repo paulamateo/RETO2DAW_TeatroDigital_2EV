@@ -18,7 +18,7 @@ export interface Show {
     overview: string
 }
 
-//GET ALL SHOWS
+
 export const useShowsStore = defineStore('shows', () => {
     const shows = reactive<Show[]>([])
     const searchTerm = ref('');

@@ -11,7 +11,6 @@
     });
 </script>
 
-
 <template>
     <div class="container-button">
         <div>
@@ -70,7 +69,6 @@
         </div>
     </div>
 </template>
-
 
 <style scoped>
     .container-button {

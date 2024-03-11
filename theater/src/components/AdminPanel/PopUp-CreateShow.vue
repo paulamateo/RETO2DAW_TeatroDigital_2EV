@@ -63,13 +63,13 @@
         }
     }
 
-    setTimeout(() => {
-        watch(dialog, (newValue) => {
-            if (!newValue) {
-                location.reload();
-            }
-        });
-    }, 7000)
+    // setTimeout(() => {
+    //     watch(dialog, (newValue) => {
+    //         if (!newValue) {
+    //             location.reload();
+    //         }
+    //     });
+    // }, 7000)
 </script>
 
 
