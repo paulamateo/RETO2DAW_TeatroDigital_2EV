@@ -4,8 +4,6 @@ import { format } from 'date-fns';
 import { useShowsStore } from '../../store/Show-Store'; // Ajusta esta ruta según corresponda
 import { es } from 'date-fns/locale';
 
-
-
 const currentDate = ref(new Date());
 const currentMonth = computed(() => currentDate.value.getMonth());
 const currentYear = computed(() => currentDate.value.getFullYear());
@@ -129,192 +127,186 @@ const showsForDay = (date: string) => {
 </template>
 
 <style scoped>
-.img-table {
-  width: 100%;
-  height: auto;
-}
-
-.title-table {
-  background-color: #b0802c;
-  font-size: 10px;
-  color: white;
-  margin: 0;
-  padding: 5px;
-  cursor: pointer;
-  margin-top: 5px;
-}
-
-.current-day {
-  background-color: #b20000;
-  color: white;
-}
-
-.other-month {
-  color: #d3d3d3;
-} 
-
-.weekday-panel::first-letter {
-  text-transform: uppercase;
-}
-
-.weekday-panel {
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-.info-panel {
-  display: flex;
-  font-size: 13px;
-}
-.info-panel p {
-  margin: 0;
-  margin-top: 15px;
-}
-
-.show-item {
-  position: relative;
-  padding: 20px;
-  border: 1px solid #cfcfcf;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  box-sizing: border-box;
-}
-
-
-.image-container {
-  position: relative;
-  overflow: hidden;
-  box-sizing: border-box;
-}
-
-.img-events-panel {
-  max-width: 100%;
-  height: auto;
-}
-
-.no-events {
-  font-size: 12px;
-  text-align: center;
-  border: 1px solid #cfcfcf;
-  border-radius: 8px;
-  padding: 10px;
-}
-
-.arrow {
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.shows-list {
-  display: flex;
-  align-items: center;
-}
-
-.show-line {
-  height: 3px;
-  background-color: #b0802c;
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin-top: 5px;
-  width: 70%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.next-month-day, .prev-month-day {
-  color: #ccc;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  position: relative;
-  padding: 15px;
-  text-align: center;
-  border: 1px solid #cfcfcf;
-  width: 14.28%; /* Aproximadamente 100% dividido por 7 para distribuir equitativamente el ancho entre los días de la semana */
-  min-width: 100px;
-}
-
-th {
-  background-color: black;
-  color: white;
-  border: 1px solid black;
-  font-size: 12px;
-}
-
-
-
-.day-cell-content {
-  display: flex;
-  flex-direction: column;
-}
-
-span {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.month-header {
-  font-family: "GothamBook", sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  text-align: center;
-  padding: 20px;
-  background-color: #b20000;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.month-header h3 {
-  margin: 0;
-}
-
-.month-navigation {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-
-.container-calendar-events {
-  margin: 40px 20px;
-}
-
-.calendar-container {
-  width: 100%;
-  overflow: hidden;
-  font-size: 10px;
-}
-
-.date-panel {
-  width: 100%;
-  margin-top: 40px;
-}
-
-.info-panel__name {
-  font-weight: 600;
-  padding-left: 20px;
-  text-transform: uppercase;
-}
-
-
-@media (min-width: 990px) {
-  #calendar-container {
-    font-size: 14px;
+  .img-table {
+    width: 100%;
+    height: auto;
   }
-}
-@media (min-width: 1090px) {
+
+  .title-table {
+    background-color: #b0802c;
+    font-size: 10px;
+    color: white;
+    margin: 0;
+    padding: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+  }
+
+  .current-day {
+    background-color: #b20000;
+    color: white;
+  }
+
+  .other-month {
+    color: #d3d3d3;
+  } 
+
+  .weekday-panel::first-letter {
+    text-transform: uppercase;
+  }
+
+  .weekday-panel {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
   .info-panel {
     display: flex;
+    font-size: 13px;
   }
-}
+  .info-panel p {
+    margin: 0;
+    margin-top: 15px;
+  }
+
+  .show-item {
+    position: relative;
+    padding: 20px;
+    border: 1px solid #cfcfcf;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
 
 
+  .image-container {
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
 
+  .img-events-panel {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .no-events {
+    font-size: 12px;
+    text-align: center;
+    border: 1px solid #cfcfcf;
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .arrow {
+    cursor: pointer;
+    margin-right: 5px;
+  }
+
+  .shows-list {
+    display: flex;
+    align-items: center;
+  }
+
+  .show-line {
+    height: 3px;
+    background-color: #b0802c;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-top: 5px;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .next-month-day, .prev-month-day {
+    color: #ccc;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    position: relative;
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #cfcfcf;
+    width: 14.28%;
+    min-width: 100px;
+  }
+
+  th {
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+    font-size: 12px;
+  }
+
+  .day-cell-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  span {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .month-header {
+    font-family: "GothamBook", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    text-align: center;
+    padding: 20px;
+    background-color: #b20000;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .month-header h3 {
+    margin: 0;
+  }
+
+  .month-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container-calendar-events {
+    margin: 40px 20px;
+  }
+
+  .calendar-container {
+    width: 100%;
+    overflow: hidden;
+    font-size: 10px;
+  }
+
+  .date-panel {
+    width: 100%;
+    margin-top: 40px;
+  }
+
+  .info-panel__name {
+    font-weight: 600;
+    padding-left: 20px;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 990px) {
+    #calendar-container {
+      font-size: 14px;
+    }
+  }
+  @media (min-width: 1090px) {
+    .info-panel {
+      display: flex;
+    }
+  }
 </style>

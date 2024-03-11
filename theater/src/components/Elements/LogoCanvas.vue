@@ -2,7 +2,6 @@
     import { onMounted, ref } from 'vue';
 
     const canvas = ref<HTMLCanvasElement | null>(null);
-    const titleTheater = '../../assets/images/elements/logo_negro - copia.png'
 
     let x = 0;
     let dx = 1;
