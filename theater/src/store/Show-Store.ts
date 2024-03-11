@@ -77,13 +77,60 @@ export const useShowsStore = defineStore('shows', () => {
             console.log('Error to create show: ', error);
         }
     }
+
+    const deleteShowToDatabase = async (showId: number) => {
+        try {
+            const response = await fetch(`http://localhost:8001/Show/${showId}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
+            }
+        }catch (error) {
+            console.log('Error to delete show: ', error);
+        }
+    }
+
+    const updateShowToDatabase = async (showId: number, titulo: string, autor: string, director: string, genero: string, edad: number, fecha: Date, duracion: string, precio: number, posterFile: string, bannerFile: string, sceneFile: string, resena: string) => {
+        try {
+            const show = {
+                showId: showId,
+                title: titulo,
+                author: autor,
+                director: director,
+                genre: genero,
+                age: edad,
+                date: fecha,
+                length: duracion,
+                price: precio,
+                poster: posterFile,
+                banner: bannerFile,
+                scene: sceneFile,
+                overview: resena
+            }
+            const response = await fetch(`http://localhost:8001/Show/${showId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(show),
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
+            }
+        }catch (error) {
+            console.log('Error to update show: ', error);
+        }
+    }
     
 
     const filteredShows = computed(() => {
         return shows.filter((show) => show.title.toLowerCase().includes(searchTerm.value.toLowerCase()));
     });
 
-    return { shows, getAllShows, filteredShows, searchTerm, getShowByTitle, addShowToDatabase };
+    return { shows, getAllShows, filteredShows, searchTerm, getShowByTitle, addShowToDatabase, deleteShowToDatabase, updateShowToDatabase };
 })
 
 //GET SHOW BY ID

@@ -1,6 +1,8 @@
 <script setup lang="ts">
     import { ref, watch } from 'vue';
     const dialog = ref(false);
+    import { useShowsStore } from '@/store/Show-Store';
+    const store = useShowsStore();
 
     let titulo = ref('');
     let autor = ref('');
@@ -9,47 +11,23 @@
     let precio = ref('');
     let genero = ref('');
     let posterFile = ref('');
-    let escenaFile = ref('');
+    let sceneFile = ref('');
     let bannerFile = ref('');
     let resena = ref('');
     let duracion = ref('');
     let fecha = ref('');
 
     const props = defineProps({
-        showId: String
+        showId: {
+            type: String,
+            default: '0'
+        }
     });
 
-    const updateShowToDatabase = async () => {
-        try {
-            const show = {
-                showId: props.showId,
-                title: titulo.value,
-                author: autor.value,
-                director: director.value,
-                genre: genero.value,
-                age: edad.value,
-                date: fecha.value,
-                length: duracion.value,
-                price: precio.value,
-                poster: posterFile.value,
-                banner: bannerFile.value,
-                scene: escenaFile.value,
-                overview: resena.value
-            }
-            const response = await fetch(`http://localhost:8001/Show/${props.showId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(show),
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }else {
-                console.log('OPERATION SUCCESSFULLY COMPLETED');
-            }
-        }catch (error) {
-            console.log('Error to update show: ', error);
-        }
-    }
+    const updateShow = async () => {
+        await store.updateShowToDatabase(parseInt(props.showId), titulo.value, autor.value, director.value, genero.value, parseInt(edad.value), new Date(fecha.value), duracion.value, parseFloat(precio.value), posterFile.value, bannerFile.value, sceneFile.value, resena.value);
+        dialog.value = false;
+    };
 
     // setTimeout(() => {
     //     watch(dialog, (newValue) => {
@@ -70,7 +48,7 @@
     <v-dialog v-model="dialog" persistent activator="parent" width="700px">
         <v-card>
             <h2 class="popup-title">Actualizar obra</h2>
-            <form @submit.prevent="updateShowToDatabase">
+            <form @submit.prevent="updateShow">
                 <div class="form-container">
                     <div class="panel-box">
                         <input type="text" v-model="titulo" class="input-payment-panel" name="titular_input" placeholder="Título" required>
@@ -99,7 +77,7 @@
                         </div>
                         <div class="panel-box__item">
                             <label for="scene">Escena</label>
-                            <input type="text" v-model="escenaFile" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
+                            <input type="text" v-model="sceneFile" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                         </div>
                         <div class="panel-box__item">
                             <label for="banner">Banner</label>
