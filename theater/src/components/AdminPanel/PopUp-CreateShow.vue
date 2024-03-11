@@ -1,6 +1,8 @@
 <script setup lang="ts">
     import { ref, watch } from 'vue';
     const dialog = ref(false);
+    import { useShowsStore } from '@/store/Show-Store';
+    const store = useShowsStore();
 
     let titulo = ref('');
     let autor = ref('');
@@ -8,10 +10,7 @@
     let edad = ref('');
     let precio = ref('');
     let genero = ref('');
-    // let posterFile = ref<File | {}>({});
-    // let sceneFile = ref<File | {}>({});
-    // let bannerFile = ref<File | {}>({});
-        let posterFile = ref('');
+    let posterFile = ref('');
     let sceneFile = ref('');
     let bannerFile = ref('');
     let resena = ref('');
@@ -30,38 +29,35 @@
     //     const input = event.target as HTMLInputElement;
     // }
 
-
-    const addShowToDatabase = async () => {
-        try {
-            const show = {
-                showId: 0,
-                title: titulo.value,
-                author: autor.value,
-                director: director.value,
-                genre: genero.value,
-                age: edad.value,
-                date: fecha.value,
-                length: duracion.value,
-                price: precio.value,
-                poster: posterFile.value,
-                banner: bannerFile.value,
-                scene: sceneFile.value,
-                overview: resena.value
-            }
-            const response = await fetch("http://localhost:8001/Show", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(show),
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }else {
-                console.log('OPERATION SUCCESSFULLY COMPLETED');
-            }
-        }catch (error) {
-            console.log('Error to create show: ', error);
-        }
+    const addShow = async () => {
+        await store.addShowToDatabase(titulo.value, autor.value, director.value, genero.value, parseInt(edad.value), new Date(fecha.value), duracion.value, parseFloat(precio.value), posterFile.value, bannerFile.value, sceneFile.value, resena.value);
+        dialog.value = false;
     }
+
+
+    // const addShowToDatabase = async () => {
+    //     try {
+    //         const show = {
+    //          
+    //             poster: posterFile.value,
+    //             banner: bannerFile.value,
+    //             scene: sceneFile.value,
+    //             overview: resena.value
+    //         }
+    //         const response = await fetch("http://localhost:8001/Show", {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify(show),
+    //         });
+    //         if (!response.ok) {
+    //             throw new Error(`Error: ${response.statusText}`);
+    //         }else {
+    //             console.log('OPERATION SUCCESSFULLY COMPLETED');
+    //         }
+    //     }catch (error) {
+    //         console.log('Error to create show: ', error);
+    //     }
+    // }
 
     // setTimeout(() => {
     //     watch(dialog, (newValue) => {
@@ -84,7 +80,7 @@
     <v-dialog v-model="dialog" persistent activator="parent" width="700px">
         <v-card>
             <h2 class="popup-title">Crear obra</h2>
-            <form @submit.prevent="addShowToDatabase">
+            <form @submit.prevent="addShow">
                 <div class="form-container">
                     <div class="panel-box">
                         <input type="text" v-model="titulo" class="input-payment-panel" name="titular_input" placeholder="Título" required>
@@ -121,7 +117,7 @@
                         </div>
                     </div>
                     <div class="panel-box panel-box--1-col">
-                        <textarea class="input-payment-panel input-payment-panel--textarea" placeholder="Reseña"></textarea>
+                        <textarea v-model="resena" class="input-payment-panel input-payment-panel--textarea" placeholder="Reseña"></textarea>
                     </div>    
                 </div>
                 <v-divider></v-divider>
