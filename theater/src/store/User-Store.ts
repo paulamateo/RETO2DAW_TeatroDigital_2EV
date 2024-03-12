@@ -98,28 +98,36 @@ export const useUsersStore = defineStore('users', () => {
         }
     }
 
-    // const validateAdmin = async (email: string, password: string) => {
-    //     try {
-    //         const user = {
-    //             userId: 0,
-    //             email: email,
-    //             password: password,
-    //             isAdmin: true,
-    //         }
-    //         const response = await fetch("http://localhost:8001/User/AuthenticateAdmin", {
-    //             method: 'POST',
-    //             headers: { 'Content-Type': 'application/json' },
-    //             body: JSON.stringify(user),
-    //         });
-    //         if (!response.ok) {
-    //             throw new Error(`Error: ${response.statusText}`);
-    //         }
-    //         const data = await response.json();
-    //         return data;
-    //     }catch (error) {
-    //         console.log('Error to authenticate admin: ', error);
-    //     }
+    const LoginToPanelAdmin = async (email: string, password: string) => {
+        try {
+            const response = await fetch('http://localhost:8001/User/Login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email, password: password }),
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log
+            }
+        }catch (error) {
+            console.log('Error to validate user admin: ', error);
+        }
+    }
+
+
+
+
+    // if (response.ok) {
+    //     const data = await response.json();
+    //     console.log('Inicio de sesión exitoso:', data);
+    //     loginError.value = false;
+    // } else {
+    //     loginError.value = true;
     // }
+    // };
+
 
 
     return { users, getAllUsers, getAdminUsers, addUserToDatabase, deleteUserToDatabase, updateUserToDatabase };

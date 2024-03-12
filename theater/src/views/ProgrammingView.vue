@@ -1,11 +1,51 @@
 <script setup lang="ts">
     import Calendar from '../components/Programming/CalendarApp.vue'
+
+    import { ref } from 'vue';
+
+    const email = ref('');
+    const password = ref('');
+    const loginError = ref(false);
+
+    // const login = async () => {
+    // const response = await fetch('http://localhost:8001/User/Login', {
+    //     method: 'POST',
+    //     headers: {
+    //     'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ email: email.value, password: password.value }),
+    // });
+
+    // if (response.ok) {
+    //     const data = await response.json();
+    //     console.log('Inicio de sesión exitoso:', data);
+    //     loginError.value = false;
+    // } else {
+    //     loginError.value = true;
+    // }
+    // };
 </script>
 
 <template>
     <main>
         <div class="banner banner--programming">
             <h1>PROGRAMACIÓN</h1>
+        </div>
+
+        <div>
+                <h2>Login</h2>
+                <form @submit.prevent="login">
+                <div>
+                    <label for="email">Email:</label>
+                    <input v-model="email" type="email" id="email" required>
+                </div>
+                <div>
+                    <label for="password">Contraseña:</label>
+                    <input v-model="password" type="password" id="password" required>
+                </div>
+                <button type="submit">Iniciar Sesión</button>
+                </form>
+                <p v-if="loginError" style="color: red;">Error en el inicio de sesión. Por favor, intenta de nuevo.</p>
         </div>
 
         <Calendar />
