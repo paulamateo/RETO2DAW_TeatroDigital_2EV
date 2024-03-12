@@ -45,19 +45,6 @@ watch(selectedGenre, async (genre) => {
             </RouterLink>
         </div>
     </div>
-
-
-    <!-- <div class="container">
-        <div v-for="show in store.shows" :key="show.showId" class="container-item">
-            <RouterLink :to="{ path: '/Shows/' + show.showId }">
-                <div class="genre">{{ show.genre }}</div>
-                <img :src="show.poster" alt="{{ show.title }}"/>
-                <div class="title">
-                    <h3>{{ show.title }}</h3>
-                </div>
-            </RouterLink>
-        </div>
-    </div> -->
 </template>
 
 <style scoped>

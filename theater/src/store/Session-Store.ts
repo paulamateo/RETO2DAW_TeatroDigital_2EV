@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
-import { format } from 'date-fns';
 
 
 export interface Session {
@@ -18,10 +17,6 @@ export interface Session {
 
 export const useSessionsStore = defineStore('sessions', () => {
     const sessions = reactive<Session[]>([])
-
-    const formatDate = (date: Date) => {
-        return format(new Date(date), 'dd/MM/yyyy');
-    };
 
     const getAllSessions = async () => {
         try {
@@ -105,5 +100,5 @@ export const useSessionsStore = defineStore('sessions', () => {
         }
     }
    
-    return { sessions, getAllSessions, getAllSessionsbyShow, formatDate, addSessionToDatabase, deleteSessionToDatabase, updateSessionToDatabase };
+    return { sessions, getAllSessions, getAllSessionsbyShow, addSessionToDatabase, deleteSessionToDatabase, updateSessionToDatabase };
 })

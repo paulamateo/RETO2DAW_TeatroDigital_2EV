@@ -32,6 +32,11 @@ export const useSeatsStore = defineStore('seats', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             }); 
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
+            }
         }catch (error) {
             console.log('Error reserving seats: ', error);
         }

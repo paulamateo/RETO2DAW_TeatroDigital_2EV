@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { reactive, computed, ref } from "vue";
 import { format } from "date-fns";
+import router from "@/router";
 
 export interface Show {
     showId: number,
@@ -125,12 +126,24 @@ export const useShowsStore = defineStore('shows', () => {
         }
     }
     
-
     const filteredShows = computed(() => {
         return shows.filter((show) => show.title.toLowerCase().includes(searchTerm.value.toLowerCase()));
     });
 
-    return { shows, getAllShows, filteredShows, searchTerm, getShowByTitle, addShowToDatabase, deleteShowToDatabase, updateShowToDatabase };
+    const searchShow = async (title: string) => {
+        try {
+            const response = await fetch(`http://localhost:8001/Show/ByName/${title}`);
+            if (!response.ok) {
+                throw new Error('Show not found');
+            }
+            const show = await response.json();
+            window.location.href = `/Shows/${show.showId}`;
+        }catch (error) {
+            alert('No se ha encontrado la obra.');
+        }
+    }
+
+    return { shows, getAllShows, filteredShows, searchTerm, getShowByTitle, addShowToDatabase, deleteShowToDatabase, updateShowToDatabase, searchShow };
 })
 
 //GET SHOW BY ID

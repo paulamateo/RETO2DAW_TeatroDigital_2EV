@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref, watch } from 'vue';
+    import { ref } from 'vue';
     const dialog = ref(false);
     import { useSessionsStore } from '@/store/Session-Store';
     const store = useSessionsStore();

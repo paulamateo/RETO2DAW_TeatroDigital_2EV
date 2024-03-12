@@ -1,82 +1,82 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { format } from 'date-fns';
-import { useShowsStore } from '../../store/Show-Store'; // Ajusta esta ruta según corresponda
-import { es } from 'date-fns/locale';
+    import { ref, computed, onMounted } from 'vue';
+    import { format } from 'date-fns';
+    import { useShowsStore } from '../../store/Show-Store';
+    import { es } from 'date-fns/locale';
 
-const currentDate = ref(new Date());
-const currentMonth = computed(() => currentDate.value.getMonth());
-const currentYear = computed(() => currentDate.value.getFullYear());
+    const currentDate = ref(new Date());
+    const currentMonth = computed(() => currentDate.value.getMonth());
+    const currentYear = computed(() => currentDate.value.getFullYear());
 
-const getDaysInMonth = (year: number, month: number) => {
-  return new Date(year, month + 1, 0).getDate();
-};
+    const getDaysInMonth = (year: number, month: number) => {
+      return new Date(year, month + 1, 0).getDate();
+    };
 
-const getFirstDayOfMonth = (year: number, month: number) => {
-  const firstDay = new Date(year, month, 1).getDay();
-  return firstDay === 0 ? 6 : firstDay - 1;
-};
+    const getFirstDayOfMonth = (year: number, month: number) => {
+      const firstDay = new Date(year, month, 1).getDay();
+      return firstDay === 0 ? 6 : firstDay - 1;
+    };
 
-const weeks = computed(() => {
-  const days: Array<{ day: number; isCurrentMonth: boolean; date: string }> = [];
-  const daysInMonth = getDaysInMonth(currentYear.value, currentMonth.value);
-  const firstDayOfMonth = getFirstDayOfMonth(currentYear.value, currentMonth.value);
+    const weeks = computed(() => {
+      const days: Array<{ day: number; isCurrentMonth: boolean; date: string }> = [];
+      const daysInMonth = getDaysInMonth(currentYear.value, currentMonth.value);
+      const firstDayOfMonth = getFirstDayOfMonth(currentYear.value, currentMonth.value);
 
-  for (let i = firstDayOfMonth; i > 0; i--) {
-    const day = new Date(currentYear.value, currentMonth.value, -i + 1);
-    days.push({
-      day: day.getDate(),
-      isCurrentMonth: false,
-      date: format(day, 'yyyy-MM-dd')
+      for (let i = firstDayOfMonth; i > 0; i--) {
+        const day = new Date(currentYear.value, currentMonth.value, -i + 1);
+        days.push({
+          day: day.getDate(),
+          isCurrentMonth: false,
+          date: format(day, 'yyyy-MM-dd')
+        });
+      }
+
+      for (let i = 1; i <= daysInMonth; i++) {
+        const day = new Date(currentYear.value, currentMonth.value, i);
+        days.push({
+          day: i,
+          isCurrentMonth: true,
+          date: format(day, 'yyyy-MM-dd')
+        });
+      }
+
+      const extraDaysToAdd = (7 - days.length % 7) % 7;
+      for (let i = 1; i <= extraDaysToAdd; i++) {
+        const day = new Date(currentYear.value, currentMonth.value + 1, i);
+        days.push({
+          day: day.getDate(),
+          isCurrentMonth: false,
+          date: format(day, 'yyyy-MM-dd')
+        });
+      }
+
+      return Array.from({ length: days.length / 7 }, (_, i) => days.slice(i * 7, i * 7 + 7));
     });
-  }
 
-  for (let i = 1; i <= daysInMonth; i++) {
-    const day = new Date(currentYear.value, currentMonth.value, i);
-    days.push({
-      day: i,
-      isCurrentMonth: true,
-      date: format(day, 'yyyy-MM-dd')
+    const formattedMonth = computed(() => {
+      return format(currentDate.value, 'MMMM yyyy', { locale: es });
     });
-  }
 
-  const extraDaysToAdd = (7 - days.length % 7) % 7;
-  for (let i = 1; i <= extraDaysToAdd; i++) {
-    const day = new Date(currentYear.value, currentMonth.value + 1, i);
-    days.push({
-      day: day.getDate(),
-      isCurrentMonth: false,
-      date: format(day, 'yyyy-MM-dd')
+
+    const goToPreviousMonth = () => {
+      currentDate.value = new Date(currentYear.value, currentMonth.value - 1, 1);
+    };
+
+    const goToNextMonth = () => {
+      currentDate.value = new Date(currentYear.value, currentMonth.value + 1, 1);
+    };
+
+    const store = useShowsStore();
+
+    onMounted(async () => {
+      await store.getAllShows();
     });
-  }
 
-  return Array.from({ length: days.length / 7 }, (_, i) => days.slice(i * 7, i * 7 + 7));
-});
-
-const formattedMonth = computed(() => {
-  return format(currentDate.value, 'MMMM yyyy', { locale: es });
-});
-
-
-const goToPreviousMonth = () => {
-  currentDate.value = new Date(currentYear.value, currentMonth.value - 1, 1);
-};
-
-const goToNextMonth = () => {
-  currentDate.value = new Date(currentYear.value, currentMonth.value + 1, 1);
-};
-
-const store = useShowsStore();
-
-onMounted(async () => {
-  await store.getAllShows();
-});
-
-const showsForDay = (date: string) => {
-  return store.shows.filter(show => {
-    return format(new Date(show.date), 'yyyy-MM-dd') === date;
-  });
-};
+    const showsForDay = (date: string) => {
+      return store.shows.filter(show => {
+        return format(new Date(show.date), 'yyyy-MM-dd') === date;
+      });
+    };
 </script>
 
 <template>
@@ -115,7 +115,7 @@ const showsForDay = (date: string) => {
               {{ day.day }}
               <div v-for="show in showsForDay(day.date)" :key="show.showId" class="show-info">
                 <RouterLink :to="{ path: '/Shows/' + show.showId }">
-                <div class="title-table">{{ show.title }}</div>
+                <div class="show-line"></div>
                 </RouterLink>
               </div>
             </td>
@@ -127,11 +127,6 @@ const showsForDay = (date: string) => {
 </template>
 
 <style scoped>
-  .img-table {
-    width: 100%;
-    height: auto;
-  }
-
   .title-table {
     background-color: #b0802c;
     font-size: 10px;
@@ -177,7 +172,6 @@ const showsForDay = (date: string) => {
     margin-bottom: 10px;
     box-sizing: border-box;
   }
-
 
   .image-container {
     position: relative;
@@ -234,8 +228,8 @@ const showsForDay = (date: string) => {
     padding: 15px;
     text-align: center;
     border: 1px solid #cfcfcf;
-    width: 14.28%;
-    min-width: 100px;
+    /* width: 14.28%; */
+    /* min-width: 100px; */
   }
 
   th {
