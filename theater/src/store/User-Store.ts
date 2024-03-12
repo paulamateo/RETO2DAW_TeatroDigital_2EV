@@ -107,12 +107,15 @@ export const useUsersStore = defineStore('users', () => {
                 },
                 body: JSON.stringify({ email: email, password: password }),
             });
-            if (response.ok) {
-                const data = await response.json();
-                console.log
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
+                return true; 
             }
         }catch (error) {
             console.log('Error to validate user admin: ', error);
+            return false;
         }
     }
 
@@ -130,5 +133,5 @@ export const useUsersStore = defineStore('users', () => {
 
 
 
-    return { users, getAllUsers, getAdminUsers, addUserToDatabase, deleteUserToDatabase, updateUserToDatabase };
+    return { users, getAllUsers, getAdminUsers, addUserToDatabase, deleteUserToDatabase, updateUserToDatabase, LoginToPanelAdmin };
 })

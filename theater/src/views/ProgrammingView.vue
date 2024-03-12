@@ -2,10 +2,16 @@
     import Calendar from '../components/Programming/CalendarApp.vue'
 
     import { ref } from 'vue';
+    import { useUsersStore } from '@/store/User-Store';
+    const store = useUsersStore();
 
     const email = ref('');
     const password = ref('');
     const loginError = ref(false);
+
+    const login = async () => {
+        await store.LoginToPanelAdmin(email.value, password.value);
+    };
 
     // const login = async () => {
     // const response = await fetch('http://localhost:8001/User/Login', {

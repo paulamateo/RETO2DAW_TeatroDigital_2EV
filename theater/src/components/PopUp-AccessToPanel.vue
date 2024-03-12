@@ -4,12 +4,10 @@
     const email = ref('');
     const password = ref('');
     const isValidEmail = ref(true);
-    const fieldsEmpty = ref(false);
     import { useAuthStore } from '../store/Auth-Store'
     import { useRouter } from 'vue-router';
     import { useUsersStore } from '../store/User-Store'
-    const usersStore = useUsersStore();
-
+    const store = useUsersStore();
     const router = useRouter();
 
     function validateEmail() {
@@ -19,17 +17,10 @@
 
     async function submitForm() {
         const authStore = useAuthStore();
-        if (email.value === '') {
-            fieldsEmpty.value = true;
-            return;
-        }
 
-        await usersStore.getAllUsers();
-        const adminUsers = usersStore.getAdminUsers();
-        const isAdminUser = adminUsers.some(user => user.email === email.value);
-        // const result = await usersStore.validateAdmin(email.value, password.value);
-
-        if (isAdminUser) {
+        const loginSuccess = await store.LoginToPanelAdmin(email.value, password.value);
+        
+        if (loginSuccess) {
             const inpLock = document.getElementById("input-padlock") as HTMLInputElement;
             inpLock.checked = !inpLock.checked;
             inpLock.dispatchEvent(new Event("change"));
@@ -50,7 +41,6 @@
         </svg>
         <span class="button-open-panel__text button-open-panel__text--visibility">ACCEDER</span> 
     </v-btn>
-
     <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
             <v-card-text>
@@ -67,20 +57,15 @@
                 </div>
                 <h2 class="popup-title">Acceder al panel de administrador</h2>
                 <form @submit.prevent="submitForm" novalidate>
-
                     <div class="panel-box">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/></svg>
                         <input @input="validateEmail" v-model="email" type="text" class="input-payment-panel" name="titular_input" placeholder="Correo electrónico">
                         <span class="error-message" v-if="!isValidEmail">Correo electrónico no válido</span>
                     </div>
-
                     <div class="panel-box">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel"  viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/></svg>
                         <input type="password" v-model="password" class="input-payment-panel" name="titular_input" placeholder="Contraseña">
                     </div>
-
-                    <span v-if="fieldsEmpty && email.length === 0" class="error-message">Por favor, completa todos los campos</span>
-
                     <v-btn type="submit" class="mb-4 button-login" size="large" block>Acceder</v-btn>
                 </form>
             </v-card-text>
