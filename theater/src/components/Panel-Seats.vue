@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import MakeReservation from '../components/PopUp-MakeReservation.vue'
-    import { onMounted, ref, watchEffect } from 'vue'
+    import { onMounted, ref, watchEffect, computed } from 'vue'
     import { useSessionsStore } from '../store/Session-Store'
     import { useShowByIdStore, type Show } from '../store/Show-Store'
     import { useSeatsStore } from '../store/Seat-Store'
@@ -105,6 +105,10 @@
             console.log('Error reserving seats: ', error);
         }
     }
+
+    const reservedSeatsCount = computed(() => {
+  return storeSeat.seats.filter(seat => !seat.isDisponible).length;
+});
 
 
     // Eliminar el ticket seleccionado del array
@@ -244,6 +248,14 @@ const isSeatOccupied = (seatId: number) => {
             </div>
 
             <div v-for="session in store.sessions" :key="session.sessionId" v-show="selectedSession === session.sessionId">
+
+
+            <div class="chips-seats">
+                <v-chip :ripple="false"  class="hola" color="black">Total asientos: <strong>  {{ session.totalSeats }}</strong></v-chip>
+                <v-chip :ripple="false"  class="ma-2 ma-2__size" color="green">Disponibles: <strong>  {{ session.totalSeats - reservedSeatsCount }}</strong></v-chip>
+                <v-chip :ripple="false"  class="ma-2" color="red">Reservados: <strong>  {{ reservedSeatsCount }}</strong></v-chip>
+            </div>
+            
                 <div class="panel-seats" id="panel-seats">
                     <div class="panel-seats__item" id="area-seats">
                         <div class="seat-grid">
@@ -256,10 +268,10 @@ const isSeatOccupied = (seatId: number) => {
                                         <rect x="48" y="60" width="5" height="10" fill="#464646" />
                                         <rect x="5" y="25" width="15" height="35" rx="5" ry="5" fill="#ba2414" />
                                         <rect x="50" y="25" width="15" height="35" rx="5" ry="5" fill="#ba2414" />
-                                        <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatIdReserved }}</text>
+                                        <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatIdReserved }}-F{{ Math.ceil(seatIdReserved / 10) }}</text>
                                     </svg> 
                                 </div>
-                                <div v-else> <!-- ASIENTO LIBRE -->
+                                <div v-else>
                                     <svg class="svg-seat" @click="animationSVG($event, seatIdReserved)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" width="70" height="70">
                                         <rect class="seat-background-selected" x="10" y="10" width="50" height="35" rx="5" ry="5" :fill="seatColors[seatIdReserved]?.background || '#37b02c'" />
                                         <rect class="seat-base-selected" x="5" y="40" width="60" height="20" rx="5" ry="5" :fill="seatColors[seatIdReserved]?.base || '#2c8c23'" />
@@ -267,13 +279,17 @@ const isSeatOccupied = (seatId: number) => {
                                         <rect class="seat-leg-selected" x="48" y="60" width="5" height="10" :fill="seatColors[seatIdReserved]?.legs || '#464646'" />
                                         <rect class="seat-arm-selected" x="5" y="25" width="15" height="35" rx="5" ry="5" :fill="seatColors[seatIdReserved]?.arms || '#2c8c23'" />
                                         <rect class="seat-arm-selected" x="50" y="25" width="15" height="35" rx="5" ry="5" :fill="seatColors[seatIdReserved]?.arms || '#2c8c23'" />
-                                        <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatIdReserved }}</text>
+                                        <text x="35" y="30" fill="#FCE992" font-size="8" text-anchor="middle">{{ seatIdReserved }}-F{{ Math.ceil(seatIdReserved / 10) }}</text>
                                     </svg> 
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="screen">
+                PANTALLA
             </div>
         </div>
             
@@ -370,10 +386,38 @@ const isSeatOccupied = (seatId: number) => {
 </template>
 
 <style scoped>
-.container-button-pay {
-    display: flex;
-    justify-content: right;
-}
+    .row-number {
+        color: white;
+        font-size: 9px;
+        position: absolute;
+        margin-top: 20px;
+    }
+
+    .row-number p {
+        margin-top: 20px;
+        background-color: #b0802c;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        margin-left: -30px;
+    }
+
+    .screen {
+        background-color: #181818;
+        padding: 30px;
+        border-radius: 10px;
+        color: #FCE992;
+        text-align: center;
+        font-size: 12px;
+    }
+    .container-button-pay {
+        display: flex;
+        justify-content: right;
+    }
     .popup-title {
         padding: 0;
         font-weight: bold;

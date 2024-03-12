@@ -22,18 +22,17 @@
 </template>
 
 <style scoped>
-.btn-pay {
-    letter-spacing: 0;
-    background-color: #b20000;
-    color: white;
-    padding: 15px;
-    display: flex;
-    align-items: center;
-}
-.btn-pay:hover {
-    background-color: #b0802c;
-}
-
+    .btn-pay {
+        letter-spacing: 0;
+        background-color: #b20000;
+        color: white;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+    }
+    .btn-pay:hover {
+        background-color: #b0802c;
+    }
 
     .icon-close-popup {
         display: flex;

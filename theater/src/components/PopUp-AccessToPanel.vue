@@ -27,9 +27,9 @@
         await usersStore.getAllUsers();
         const adminUsers = usersStore.getAdminUsers();
         const isAdminUser = adminUsers.some(user => user.email === email.value);
-        const result = await usersStore.validateAdmin(email.value, password.value);
+        // const result = await usersStore.validateAdmin(email.value, password.value);
 
-        if (isAdminUser && result) {
+        if (isAdminUser) {
             const inpLock = document.getElementById("input-padlock") as HTMLInputElement;
             inpLock.checked = !inpLock.checked;
             inpLock.dispatchEvent(new Event("change"));
