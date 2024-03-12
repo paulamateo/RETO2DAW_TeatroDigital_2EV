@@ -67,38 +67,6 @@
 </template>
 
 <style scoped>
-    .initial-resources__item {
-        background-color: #f9fafb;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        cursor: pointer;
-        transition: transform 0.3s ease; 
-        height: 100%;
-    }
-
-    .initial-resources__item:hover {
-        transform: scale(1.05);
-    }
-
-    .initial-resources__details {
-        padding: 20px;
-    }
-
-    .initial-resources__details span {
-        font-size: 15px;
-    }
-
-    .initial-resources__img {
-        width: 100%;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
-
-    a {
-        color: #8a92a6;
-    }
-
     .column-data__img {
         width: 120px;
     }
@@ -233,44 +201,6 @@
 
         .column-data__header {
             font-size: 15px;
-        }
-
-        .initial-resources__grid {
-        margin-top: 20px;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 15px;
-        font-size: 12px;
-        }
-    }
-
-    @media (max-width: 950px) {
-        .initial-resources__grid {
-            margin-top: 20px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            font-size: 12px;
-        }
-    }
-
-    @media (max-width: 750px) {
-        .initial-resources__grid {
-            margin-top: 20px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            font-size: 12px;
-        }
-    }
-
-    @media (max-width: 630px) {
-        .initial-resources__grid {
-            margin-top: 20px;
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            gap: 15px;
-            font-size: 12px;
         }
     }
 </style>../components/AdminPanel/ListShows.vue../components/AdminPanel/ListUsers.vue../components/AdminPanel/List-Shows.vue../components/AdminPanel/List-Users.vue
