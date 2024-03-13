@@ -1,12 +1,12 @@
 <script setup lang="ts">
     import { ref } from 'vue';
+    import { useAuthStore } from '../../store/Auth-Store'
+    import { useRouter } from 'vue-router';
+    import { useUsersStore } from '../../store/User-Store'
     const dialog = ref(false);
     const email = ref('');
     const password = ref('');
     const isValidEmail = ref(true);
-    import { useAuthStore } from '../store/Auth-Store'
-    import { useRouter } from 'vue-router';
-    import { useUsersStore } from '../store/User-Store'
     const store = useUsersStore();
     const router = useRouter();
 
@@ -84,7 +84,7 @@
         font-family: 'Inter', sans-serif;
     }
 
-.icon-panel {
+    .icon-panel {
         position: absolute;
         color: #c3c3c3;
         left: 15px;
@@ -163,6 +163,7 @@
     .input-payment-panel::placeholder {
         color: #c3c3c3;
     }
+
     .popup-title {
         padding: 0;
         font-weight: bold;
@@ -173,7 +174,6 @@
         margin: 20px 0px 20px 0px;
     }
 
-    
     .btn-lock {
         display: inline-block;
         background: red; 
@@ -230,4 +230,4 @@
         text-align: center;
         margin-top: 20px;
     }
-</style>
+</style>../../store/Auth-Store../../store/User-Store

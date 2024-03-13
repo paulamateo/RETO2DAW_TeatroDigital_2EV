@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     const dialog = ref(false);
     import { useSessionsStore } from '@/store/Session-Store';
     const store = useSessionsStore();
@@ -14,7 +14,15 @@
     const deleteSession = async () => {
         await store.deleteSessionToDatabase(parseInt(props.sessionId));
         dialog.value = false;
-    };    
+    }; 
+    
+    setTimeout(() => {
+        watch(dialog, (newValue) => {
+            if (!newValue) {
+                location.reload();
+            }
+        });
+    }, 8000)
 </script>
 
 <template>

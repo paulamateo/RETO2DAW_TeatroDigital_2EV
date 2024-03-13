@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     const dialog = ref(false);
     import { useUsersStore } from '@/store/User-Store';
     const store = useUsersStore();
@@ -12,21 +12,40 @@
     let rol = ref(null);
     const showError = ref(false);
 
-    const checkFields = () => {
-        return !!nombre.value && !!apellidos.value && !!email.value && !!contrasena.value && !!telefono.value && !!rol.value;
-    };
+    function validateEmail(email: string) {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        return emailRegex.test(email);
+    }
+
+    function validatePhone() {
+        let phoneValue = telefono.value.replace(/\D/g, '');
+        phoneValue = phoneValue.substring(0, 9);
+        telefono.value = phoneValue;
+    }
 
     const addUser = async () => {
-        console.log(rol.value);
-        if (!checkFields()) {
-            dialog.value = true;
+        validatePhone();
+        if (nombre.value && apellidos.value && email.value && contrasena.value && telefono.value && rol.value && validateEmail(email.value)) {
+            await store.addUserToDatabase(nombre.value, apellidos.value, email.value, contrasena.value, telefono.value, rol.value === 'true' ? true : false);            
+            dialog.value = false;
+        }else {
             showError.value = true;
-            return; 
         }
-        await store.addUserToDatabase(nombre.value, apellidos.value, email.value, contrasena.value, telefono.value, rol.value === 'true' ? true : false);
-        showError.value = false;
-        dialog.value = false;
     }
+
+    watch([nombre, apellidos, email, contrasena, telefono, rol], () => {
+        if (nombre.value && apellidos.value && email.value && contrasena.value && telefono.value && rol.value) {
+            showError.value = false;
+        }
+    }, { immediate: true }); 
+
+    setTimeout(() => {
+        watch(dialog, (newValue) => {
+            if (!newValue) {
+                location.reload();
+            }
+        });
+    }, 8000)
 </script>
 
 <template>
@@ -45,9 +64,9 @@
                     <div class="panel-box">
                     <input type="text" v-model="nombre" class="input-payment-panel" name="titular_input" placeholder="Nombre">
                     <input type="text" v-model="apellidos" class="input-payment-panel" name="titular_input" placeholder="Apellidos">
-                    <input type="text" v-model="email" class="input-payment-panel" name="titular_input" placeholder="Email">
+                    <input @input="validateEmail(email)" type="text" v-model="email" class="input-payment-panel" name="titular_input" placeholder="Email">
                     <input type="password" v-model="contrasena" class="input-payment-panel" name="titular_input" placeholder="Contraseña">
-                    <input type="text" v-model="telefono" class="input-payment-panel" name="titular_input" placeholder="Teléfono">
+                    <input @input="validatePhone()" type="text" v-model="telefono" class="input-payment-panel" name="titular_input" placeholder="Teléfono">
                     <div>
                         <select name="rol" v-model="rol">
                             <option selected disabled hidden><span>ROL</span></option>
@@ -58,11 +77,11 @@
                 </div>
                 </div>
                 <v-divider></v-divider>
-                <span class="error-message" v-if="showError">Todos los campos deben estar completados.</span>
+                <span class="error-message" v-if="showError">Por favor, completa todos los campos y/o revísalos.</span>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                    <v-btn type="submit" color="primary" text="CREAR" variant="tonal" @click="checkFields()" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" text="CREAR" variant="tonal" class="button-form--actions"></v-btn>
                 </v-card-actions>
             </form>
            

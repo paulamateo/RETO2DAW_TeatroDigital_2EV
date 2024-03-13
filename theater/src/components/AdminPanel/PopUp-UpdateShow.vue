@@ -3,6 +3,7 @@
     const dialog = ref(false);
     import { useShowsStore } from '@/store/Show-Store';
     const store = useShowsStore();
+    const showError = ref(false);
 
     let titulo = ref('');
     let autor = ref('');
@@ -25,17 +26,27 @@
     });
 
     const updateShow = async () => {
-        await store.updateShowToDatabase(parseInt(props.showId), titulo.value, autor.value, director.value, genero.value, parseInt(edad.value), new Date(fecha.value), duracion.value, parseFloat(precio.value), posterFile.value, bannerFile.value, sceneFile.value, resena.value);
-        dialog.value = false;
-    };
+        if (titulo.value && autor.value && director.value && edad.value && precio.value && genero.value && posterFile.value && sceneFile.value && bannerFile.value && resena.value && duracion.value && fecha.value) {
+            await store.updateShowToDatabase(parseInt(props.showId), titulo.value, autor.value, director.value, genero.value, parseInt(edad.value), new Date(fecha.value), duracion.value, parseFloat(precio.value), posterFile.value, bannerFile.value, sceneFile.value, resena.value);
+            dialog.value = false;
+        }else {
+            showError.value = true;
+        }
+    }
 
-    // setTimeout(() => {
-    //     watch(dialog, (newValue) => {
-    //         if (!newValue) {
-    //             location.reload();
-    //         }
-    //     });
-    // }, 7000)
+    watch([titulo, autor, director, edad, precio, genero, posterFile, sceneFile, bannerFile, resena, duracion, fecha], () => {
+        if (titulo.value && autor.value && director.value && edad.value && precio.value && genero.value && posterFile.value && sceneFile.value && bannerFile.value && resena.value && duracion.value && fecha.value) {
+            showError.value = false;
+        }
+    }, { immediate: true }); 
+
+    setTimeout(() => {
+        watch(dialog, (newValue) => {
+            if (!newValue) {
+                location.reload();
+            }
+        });
+    }, 8000)
 </script>
 
 <template>
@@ -51,12 +62,12 @@
             <form @submit.prevent="updateShow">
                 <div class="form-container">
                     <div class="panel-box">
-                        <input type="text" v-model="titulo" class="input-payment-panel" name="titular_input" placeholder="Título" required>
-                        <input type="text" v-model="autor" class="input-payment-panel" name="titular_input" placeholder="Autor" required>
-                        <input type="text" v-model="director" class="input-payment-panel" name="titular_input" placeholder="Director" required>
+                        <input type="text" v-model="titulo" class="input-payment-panel" name="titular_input" placeholder="Título">
+                        <input type="text" v-model="autor" class="input-payment-panel" name="titular_input" placeholder="Autor">
+                        <input type="text" v-model="director" class="input-payment-panel" name="titular_input" placeholder="Director">
                         <div class="panel-box">
-                            <input type="number" v-model="edad" class="input-payment-panel" name="titular_input" placeholder="Edad recomendada" required>
-                            <input type="text" v-model="precio" class="input-payment-panel" name="titular_input" placeholder="Precio" required>
+                            <input type="number" v-model="edad" class="input-payment-panel" name="titular_input" placeholder="Edad recomendada">
+                            <input type="text" v-model="precio" class="input-payment-panel" name="titular_input" placeholder="Precio">
                         </div> 
                     </div>
                     <div class="panel-box panel-box--3-col">
@@ -64,10 +75,10 @@
                             <input type="date" v-model="fecha" class="input-payment-panel" id="fecha" name="fecha">
                         </div>
                         <div class="panel-box__item">
-                            <input type="text" v-model="duracion" class="input-payment-panel" name="titular_input" placeholder="Duración" required>
+                            <input type="text" v-model="duracion" class="input-payment-panel" name="titular_input" placeholder="Duración">
                         </div>
                         <div class="panel-box__item">
-                            <input type="text" v-model="genero" class="input-payment-panel" name="titular_input" placeholder="Género" required>
+                            <input type="text" v-model="genero" class="input-payment-panel" name="titular_input" placeholder="Género">
                         </div>
                     </div>
                     <div class="panel-box panel-box--3-col">
@@ -89,11 +100,11 @@
                     </div>    
                 </div>
                 <v-divider></v-divider>
-
+                <span class="error-message" v-if="showError">Por favor, completa todos los campos.</span>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                    <v-btn type="submit" color="primary" text="ACTUALIZAR"  variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" text="ACTUALIZAR"  variant="tonal" class="button-form--actions"></v-btn>
                 </v-card-actions> 
             </form> 
         </v-card>
@@ -101,6 +112,15 @@
 </template>
 
 <style scoped>
+    .error-message {
+        font-size: 10px;
+        color: red;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        font-family: 'Inter', sans-serif;
+    }
+
     .v-btn--size-default {
         min-width: 20px;
     }

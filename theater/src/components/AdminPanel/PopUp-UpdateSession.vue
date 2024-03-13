@@ -1,11 +1,12 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     const dialog = ref(false);
     import { useSessionsStore } from '@/store/Session-Store';
     const store = useSessionsStore();
     let hora = ref('');
     let asientos = ref('');
     let notas = ref('');
+    const showError = ref(false);
 
     const props = defineProps({
         sessionId: {
@@ -15,17 +16,28 @@
     });
 
     const updateSession = async () => {
-        await store.updateSessionToDatabase(parseInt(props.sessionId), hora.value, parseInt(asientos.value), notas.value);
-        dialog.value = false;
+        if (hora.value && asientos.value && notas.value) {
+            await store.updateSessionToDatabase(parseInt(props.sessionId), hora.value, parseInt(asientos.value), notas.value);
+            dialog.value = false;
+        }else {
+            showError.value = true;
+        }
+
     };
-    
-    // setTimeout(() => {
-    //     watch(dialog, (newValue) => {
-    //         if (!newValue) {
-    //             location.reload();
-    //         }
-    //     });
-    // }, 7000)
+
+    watch([hora, asientos, notas], () => {
+        if (hora.value && asientos.value && notas.value) {
+            showError.value = false;
+        }
+    }, { immediate: true }); 
+
+    setTimeout(() => {
+        watch(dialog, (newValue) => {
+            if (!newValue) {
+                location.reload();
+            }
+        });
+    }, 8000)
 </script>
 
 <template>
@@ -41,18 +53,19 @@
             <form @submit.prevent="updateSession">
                 <div class="form-container">
                     <div class="panel-box">
-                        <input v-model="hora" type="time" class="input-payment-panel" name="titular_input" placeholder="Hora" required>
-                        <input v-model="asientos" type="number" class="input-payment-panel" name="titular_input" placeholder="Asientos" required>
+                        <input v-model="hora" type="time" class="input-payment-panel" name="titular_input" placeholder="Hora">
+                        <input v-model="asientos" type="number" class="input-payment-panel" name="titular_input" placeholder="Asientos">
                     </div>
                     <div class="panel-box panel-box--1-col">
                         <textarea v-model="notas" class="input-payment-panel input-payment-panel--textarea" placeholder="Notas"></textarea>
                     </div>    
                 </div>
                 <v-divider></v-divider>
+                <span class="error-message" v-if="showError">Por favor, completa todos los campos.</span>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                    <v-btn type="submit" color="primary" text="ACTUALIZAR"  variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" text="ACTUALIZAR"  variant="tonal" class="button-form--actions"></v-btn>
                 </v-card-actions> 
             </form> 
         </v-card>
@@ -60,6 +73,15 @@
 </template>
 
 <style scoped>
+    .error-message {
+        font-size: 10px;
+        color: red;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        font-family: 'Inter', sans-serif;
+    }
+
     .v-btn--size-default {
         min-width: 20px;
     }
@@ -69,8 +91,6 @@
         color: white;
         width: 40px;
     }
-
-
 
     .panel-box__item label {
         margin: 0;

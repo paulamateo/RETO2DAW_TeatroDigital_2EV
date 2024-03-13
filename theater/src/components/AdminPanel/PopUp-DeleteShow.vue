@@ -16,11 +16,13 @@
         dialog.value = false;
     };    
 
-    // watch(dialog, (newValue) => {
-    //     if (!newValue) {
-    //         location.reload();
-    //     }
-    // });
+    setTimeout(() => {
+        watch(dialog, (newValue) => {
+            if (!newValue) {
+                location.reload();
+            }
+        });
+    }, 8000)
 </script>
 
 <template>

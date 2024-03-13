@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     import { useSessionsStore } from '@/store/Session-Store';
     const dialog = ref(false);
     const store = useSessionsStore();
@@ -8,11 +8,30 @@
     let hora = ref('');
     let asientos = ref('');
     let notas = ref('')
+    const showError = ref(false);
 
     const addSession = async () => {
-        await store.addSessionToDatabase(parseInt(obraId.value), hora.value, parseInt(asientos.value), notas.value);
-        dialog.value = false;
-    };
+        if (obraId.value && hora.value && asientos.value && notas.value) {
+            await store.addSessionToDatabase(parseInt(obraId.value), hora.value, parseInt(asientos.value), notas.value);
+            dialog.value = false;
+        }else {
+            showError.value = true;
+        }
+    }
+
+    watch([obraId, hora, asientos, notas], () => {
+        if (obraId.value && hora.value && asientos.value && notas.value) {
+            showError.value = false;
+        }
+    }, { immediate: true }); 
+
+    setTimeout(() => {
+        watch(dialog, (newValue) => {
+            if (!newValue) {
+                location.reload();
+            }
+        });
+    }, 8000)
 </script>
 
 <template>
@@ -47,10 +66,11 @@
                     </div>    
                 </div>
                 <v-divider></v-divider>
+                <span class="error-message" v-if="showError">Por favor, completa todos los campos.</span>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                    <v-btn type="submit" color="primary" text="CREAR"  variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" text="CREAR"  variant="tonal" class="button-form--actions"></v-btn>
                 </v-card-actions> 
             </form> 
         </v-card>
@@ -58,6 +78,15 @@
 </template>
 
 <style scoped>
+    .error-message {
+        font-size: 10px;
+        color: red;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        font-family: 'Inter', sans-serif;
+    }
+
     .form-container {
         margin-left: 20px;
     }

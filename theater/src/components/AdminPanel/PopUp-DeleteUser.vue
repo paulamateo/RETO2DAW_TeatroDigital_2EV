@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     const dialog = ref(false);
     import { useUsersStore } from '@/store/User-Store';
     const store = useUsersStore();
@@ -14,7 +14,15 @@
     const deleteUser = async () => {
         await store.deleteUserToDatabase(parseInt(props.userId));
         dialog.value = false;
-    };    
+    };   
+    
+    setTimeout(() => {
+        watch(dialog, (newValue) => {
+            if (!newValue) {
+                location.reload();
+            }
+        });
+    }, 8000)
 </script>
 
 <template>
