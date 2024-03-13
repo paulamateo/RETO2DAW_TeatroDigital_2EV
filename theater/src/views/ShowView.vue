@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import ShowDetails from '../components/Panel-ShowDetails.vue'
-    import ShowSeats from '../components/Panel-Seats.vue'
+    import ShowDetails from '../components/ShowPage/Panel-ShowDetails.vue'
+    import ShowSeats from '../components/ShowPage/Panel-Seats.vue'
 </script>
 
 <template>
@@ -8,4 +8,4 @@
         <ShowDetails />
         <ShowSeats />
     </main>
-</template>
+</template>../components/ShowPage/Panel-ShowDetails.vue../components/ShowPage/Panel-Seats.vue

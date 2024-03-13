@@ -1,6 +1,6 @@
 <script setup lang="ts">
     const sheet = ref(false);
-    import { useShowByIdStore, type Show } from '../store/Show-Store'
+    import { useShowByIdStore, type Show } from '../../store/Show-Store'
     import { onMounted, ref } from 'vue'
     import { useRoute } from 'vue-router';
     const store = useShowByIdStore();
@@ -78,30 +78,30 @@
 </template>
 
 <style scoped>
-.popup__overview {
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    text-align: justify;
-}
+    .popup__overview {
+        font-family: 'Inter', sans-serif;
+        font-size: 13px;
+        text-align: justify;
+    }
 
-.popup__overview p {
-    margin: 15px;
-}
+    .popup__overview p {
+        margin: 15px;
+    }
 
-.popup__overview-icon {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
+    .popup__overview-icon {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
 
-.popup__overview-content {
-    margin: 15px;
-}
+    .popup__overview-content {
+        margin: 15px;
+    }
 
-
-.colorqwe {
-    color: black;
-}
+    .colorqwe {
+        color: black;
+    }
+    
     .error-message {
         color: red;
         font-size: 10px;
@@ -494,4 +494,4 @@
             height: 2.5vw;
         }
     }
-</style>
+</style>../../store/Show-Store

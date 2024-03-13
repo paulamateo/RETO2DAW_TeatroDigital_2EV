@@ -1,9 +1,8 @@
 <script setup lang="ts">
-    import MakeReservation from '../components/PopUp-MakeReservation.vue'
-    import { onMounted, ref, watchEffect, computed } from 'vue'
-    import { useSessionsStore } from '../store/Session-Store'
-    import { useShowByIdStore, type Show } from '../store/Show-Store'
-    import { useSeatsStore } from '../store/Seat-Store'
+    import { onMounted, ref, watch, computed } from 'vue'
+    import { useSessionsStore } from '../../store/Session-Store'
+    import { useShowByIdStore, type Show } from '../../store/Show-Store'
+    import { useSeatsStore } from '../../store/Seat-Store'
     import { useRoute } from 'vue-router';
     const store = useSessionsStore();
     const storeShow = useShowByIdStore()
@@ -12,34 +11,45 @@
     const dialog = ref(false);
     let totalPrice = 0;
     const showId = route.params.showId as string;
-    const sessionId = ref('');
+    const email = ref('');
+    const phone = ref('');
+    const date = ref('');
+    const CVV = ref('');
+    const isValidEmail = ref(true);
+    const creditCard = ref('');
+    const name = ref('');
+    const titular = ref('');
     const show = ref<Show>();
+    const selectedSession = ref();
+    let selectedSessionString = ''; 
+    const seatColors = ref<{ [key: number]: SeatColors }>({});
+    let selectedSeats: { seatId: number, session: string }[] = [];
+
+    interface SeatColors {
+        background: string;
+        base: string;
+        legs: string;
+        arms: string;
+    }
 
     onMounted(async () => {
         await storeShow.getShowById(showId);
         show.value = storeShow.show;
+        await store.getAllSessionsbyShow(showId);
+        if (store.sessions.length > 0) {
+            const firstSessionId = store.sessions[0].sessionId;
+            selectSession(firstSessionId);
+        }
     });
 
     storeShow.getShowById(showId);
     const showData = storeShow.show;
 
-    onMounted(() => {
-        store.getAllSessionsbyShow(showId);
-    })
-
-    const selectedSession = ref();
-    let selectedSessionString = ''; 
-
-
-
     const selectSession = (sessionId: number) => {
         selectedSession.value = sessionId;
         selectedSessionString = selectedSession.value.toString(); 
-        console.log("Selected session ID:", sessionId);
-        console.log("Selected session ID string:", selectedSessionString);
         storeSeat.getAllSeats(selectedSessionString);
     }
-
 
     function animationSVG(event: MouseEvent, seatId: number) {
         const seatSVG = event.currentTarget as HTMLElement;
@@ -48,8 +58,7 @@
             return;
         }
         if (isSeatOccupied(seatId)) {
-            // Si el asiento está ocupado, no hagas nada
-            return
+            return;
         }
         seatSVG.classList.add('jump');
         setTimeout(() => {
@@ -64,18 +73,6 @@
         totalPrice = parseFloat(totalPrice.toFixed(2));
     }
 
-
-    const seatColors = ref<{ [key: number]: SeatColors }>({});
-
-    interface SeatColors {
-        background: string;
-        base: string;
-        legs: string;
-        arms: string;
-    }
-
-    let selectedSeats: { seatId: number, session: string }[] = [];
-    console.log(selectedSeats);
 
     const addReservedSeatsToDatabase = async () => { 
         try {
@@ -101,17 +98,15 @@
                     selectedSeats = [];
                 }
             }
-        } catch (error) {
+        }catch (error) {
             console.log('Error reserving seats: ', error);
         }
     }
 
     const reservedSeatsCount = computed(() => {
-  return storeSeat.seats.filter(seat => !seat.isDisponible).length;
-});
+        return storeSeat.seats.filter(seat => !seat.isDisponible).length;
+    });
 
-
-    // Eliminar el ticket seleccionado del array
     function deleteTicketSeat(seatId: number) {
         selectedSeats = selectedSeats.filter(info => info.seatId !== seatId);
         seatColors.value[seatId] = { background: '#37b02c', base: '#2c8c23', legs: '#464646', arms: '#2c8c23' };
@@ -131,15 +126,6 @@
     function calculateColumn(seatId: number): number {
         return seatId % 10 === 0 ? 10 : seatId % 10;
     }
-
-    const email = ref('');
-    const phone = ref('');
-    const date = ref('');
-    const CVV = ref('');
-    const isValidEmail = ref(true);
-    const creditCard = ref('');
-    const name = ref('');
-    const titular = ref('');
 
     function validateEmail() {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -182,33 +168,44 @@
         creditCard.value = creditCardValue;
     }
 
-    
+    const openDialog = async () => {
+        validateEmail();
+        if (isValidEmail.value && email.value && phone.value && date.value && CVV.value && creditCard.value && name.value && titular.value) {
+            try {
+                await addReservedSeatsToDatabase();
+                dialog.value = true;
 
-const openDialog = () => {
-    validateEmail();
-    if (isValidEmail.value && email.value !== '' && phone.value !== '' && date.value !== '' && CVV.value !== '' && creditCard.value !== '' && name.value !== '' && titular.value !== '') {
-        dialog.value = true;
-    } else {
-        alert('Revisa todos los campos.');
+                setTimeout(() => {
+                    watch(dialog, (newValue) => {
+                        if (!newValue) {
+                            location.reload();
+                        }
+                    });
+                }, 2000)
+
+            }catch (error) {
+                console.error('Error al reservar los asientos: ', error);
+            }
+        } else {
+            alert('Revisa todos los campos.');
+        }
+    };
+
+    const closeDialog = () => {
+        dialog.value = false;
+        email.value = '';
+        phone.value = '';
+        date.value = '';
+        CVV.value = '';
+        creditCard.value = '';
+        name.value = '';
+        titular.value = '';
+    };
+
+    const isSeatOccupied = (seatId: number) => {
+        const occupiedSeat = storeSeat.seats.find(seat => seat.seatIdReserved === seatId)
+        return occupiedSeat && !occupiedSeat.isDisponible;
     }
-};
-
-const closeDialog = () => {
-  dialog.value = false;
-  email.value = '';
-  phone.value = '';
-  date.value = '';
-  CVV.value = '';
-  creditCard.value = '';
-  name.value = '';
-  titular.value = '';
-};
-
-const isSeatOccupied = (seatId: number) => {
-  const occupiedSeat = storeSeat.seats.find(seat => seat.seatIdReserved === seatId)
-  return occupiedSeat && !occupiedSeat.isDisponible
-}
-
 </script>
 
 <template>
@@ -233,29 +230,19 @@ const isSeatOccupied = (seatId: number) => {
                         </div>
                     </div>
                 </div>
-
                 <div class="buttons-sessions">
                 <div v-for="session in store.sessions" :key="session.sessionId">    
-                    <v-btn class="btn-session" @click="selectSession(session.sessionId)">
+                    <v-btn :class="{'btn-session-active': selectedSession === session.sessionId, 'btn-session': true}" @click="selectSession(session.sessionId)">
                         <span>SESIÓN <strong>{{ formatHour(session.hour) }}h</strong></span>
-                    </v-btn>
-<!--       
-                    <div v-for="seat in storeSeat.seats" :key="seat.seatId">
-                        <p>Asiento ID: {{ seat.seatId }}</p>
-                    </div>
-                    -->
+                    </v-btn>                    
                 </div>
             </div>
-
             <div v-for="session in store.sessions" :key="session.sessionId" v-show="selectedSession === session.sessionId">
-
-
-            <div class="chips-seats">
-                <v-chip :ripple="false"  class="hola" color="black">Total asientos: <strong>  {{ session.totalSeats }}</strong></v-chip>
-                <v-chip :ripple="false"  class="ma-2 ma-2__size" color="green">Disponibles: <strong>  {{ session.totalSeats - reservedSeatsCount }}</strong></v-chip>
-                <v-chip :ripple="false"  class="ma-2" color="red">Reservados: <strong>  {{ reservedSeatsCount }}</strong></v-chip>
-            </div>
-            
+                <div class="chips-seats">
+                    <v-chip :ripple="false"  class="hola" color="black">Total asientos: <strong>  {{ session.totalSeats }}</strong></v-chip>
+                    <v-chip :ripple="false"  class="ma-2 ma-2__size" color="green">Disponibles: <strong>  {{ session.totalSeats - reservedSeatsCount }}</strong></v-chip>
+                    <v-chip :ripple="false"  class="ma-2" color="red">Reservados: <strong>  {{ reservedSeatsCount }}</strong></v-chip>
+                </div>
                 <div class="panel-seats" id="panel-seats">
                     <div class="panel-seats__item" id="area-seats">
                         <div class="seat-grid">
@@ -287,7 +274,6 @@ const isSeatOccupied = (seatId: number) => {
                     </div>
                 </div>
             </div>
-
             <div class="screen">
                 PANTALLA
             </div>
@@ -361,22 +347,23 @@ const isSeatOccupied = (seatId: number) => {
                         </div> 
                     </div> 
                     <div class="container-button-pay">
-                        <!-- <v-btn class="btn-pay" @click="openDialog">PAGAR</v-btn> -->
-                        <v-btn class="btn-pay" @click="addReservedSeatsToDatabase()">PAGAR</v-btn>
+                        <v-btn class="btn-pay" @click="openDialog()">PAGAR</v-btn>
                     </div>
-                    
 
                     <v-dialog v-model="dialog" persistent width="350px">
                         <v-card>
-                        <v-card-text>
-                            <div class="icon-close-popup" @click="closeDialog">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                            </svg>
-                            </div>
-                            <h3 class="popup-title">¡Gracias por tu compra!</h3>
-                            <p>En breve recibirás un correo electrónico con tus entradas.</p>
-                        </v-card-text>  
+                            <v-card-text>
+                                <div class="icon-close-popup" @click="closeDialog">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                                    </svg>
+                                </div>
+                                <div class="tick-icon">
+                                    <img src="../../assets/images/elements/tick.png"/>
+                                </div>
+                                <h3 class="popup-title">¡Gracias por tu compra!</h3>
+                                <p>En breve recibirás un correo electrónico con tus entradas.</p>
+                            </v-card-text>  
                         </v-card>
                     </v-dialog>
                 </div>
@@ -386,6 +373,19 @@ const isSeatOccupied = (seatId: number) => {
 </template>
 
 <style scoped>
+    .btn-session-active {
+        background-color: rgb(216, 216, 216);
+    }
+
+    .tick-icon {
+        display: flex;
+        justify-content: center;
+    }
+
+    .tick-icon img {
+        width: 100px;
+    }
+
     .row-number {
         color: white;
         font-size: 9px;
@@ -413,7 +413,9 @@ const isSeatOccupied = (seatId: number) => {
         color: #FCE992;
         text-align: center;
         font-size: 12px;
+        margin-bottom: 20px;
     }
+
     .container-button-pay {
         display: flex;
         justify-content: right;
@@ -987,4 +989,4 @@ const isSeatOccupied = (seatId: number) => {
             height: 2.5vw;
         }
     }
-</style>
+</style>../../store/Session-Store../../store/Show-Store../../store/Seat-Store
