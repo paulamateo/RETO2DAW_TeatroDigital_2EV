@@ -97,7 +97,7 @@ export const useUsersStore = defineStore('users', () => {
 
     const LoginToPanelAdmin = async (email: string, password: string) => {
         try {
-            const response = await fetch('http://localhost:8001/User/Login', {
+            const response = await fetch('http://localhost:8001/Auth/Login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

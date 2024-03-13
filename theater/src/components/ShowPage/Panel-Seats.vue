@@ -3,10 +3,13 @@
     import { useSessionsStore } from '../../store/Session-Store'
     import { useShowByIdStore, type Show } from '../../store/Show-Store'
     import { useSeatsStore } from '../../store/Seat-Store'
+    import { usePurchasesStore } from '../../store/Purchase-Store'
     import { useRoute } from 'vue-router';
+import type { Ref } from 'vue/dist/vue.js'
     const store = useSessionsStore();
     const storeShow = useShowByIdStore()
     const storeSeat = useSeatsStore();
+    const storePurchase = usePurchasesStore();
     const route = useRoute();
     const dialog = ref(false);
     let totalPrice = 0;
@@ -22,6 +25,7 @@
     const show = ref<Show>();
     const selectedSession = ref();
     let selectedSessionString = ''; 
+    let CurrentDay = new Date();
     const seatColors = ref<{ [key: number]: SeatColors }>({});
     let selectedSeats: { seatId: number, session: string }[] = [];
 
@@ -74,6 +78,71 @@
     }
 
 
+    //COMPRA
+
+        // Suponiendo que esto se haga al final de la función `openDialog` si la compra es exitosa
+    // const addPurchase = ()=> {
+    //     const purchaseDetails = {
+    //         name: name.value,
+    //         email: email.value,
+    //         phone: phone.value,
+    //         date: new Date().toLocaleString(),
+    //         totalPrice: totalPrice,
+    //         selectedSeats: selectedSeats.map(seat => seat.seatId),
+    //         session: selectedSessionString,
+    //         showTitle: show.value?.title
+    //     };
+    //     console.log(purchaseDetails);
+    //     purchases.value.push(purchaseDetails);
+    // }
+
+
+    interface PurchaseDetail {
+            name: string;
+            email: string;
+            phone: string;
+            date: string;
+            totalPrice: number;
+            selectedSeats: SeatDetail[];
+            session: string;
+            showTitle: string | undefined;
+            }
+            interface SeatDetail {
+        seatId: number;
+        session: string;
+        }
+
+    const purchases: Ref<PurchaseDetail[]> = ref([]);
+
+    let allSelectedSeats: { seatId: number; session: string }[] = [];
+
+    const addPurchase = () => {
+        allSelectedSeats.push(...selectedSeats.map(seat => ({ ...seat })));
+
+        const detailedSelectedSeats = selectedSeats.map(seat => {
+            return {
+            seatId: seat.seatId,
+            session: seat.session
+            };
+        });
+
+        const purchaseDetails = {
+            name: name.value,
+            email: email.value,
+            phone: phone.value,
+            date: new Date().toLocaleString(),
+            totalPrice: totalPrice,
+            selectedSeats: detailedSelectedSeats,
+            session: selectedSessionString,
+            showTitle: show.value?.title
+        };
+
+        purchases.value.push(purchaseDetails);
+    };
+
+
+
+
     const addReservedSeatsToDatabase = async () => { 
         try {
             for (const seat of selectedSeats) {
@@ -82,8 +151,7 @@
                     seatId: 0,
                     seatIdReserved: seat.seatId,
                     sessionId: selectedSession.value,
-                    isDisponible: false
-                    
+                    isDisponible: false  
                 };
                 const response = await fetch(`http://localhost:8001/Session/${selectedSession.value}/Seats`, {
                     method: 'POST',
@@ -95,13 +163,33 @@
                 } else {
                     console.log(`Seat ${seatId} successfully reserved for session ${session}`);
                     seatColors.value[seatId] = { background: '#e92e19', base: '#ba2414', legs: '#464646', arms: '#ba2414' }
-                    selectedSeats = [];
+                    
                 }
             }
         }catch (error) {
             console.log('Error reserving seats: ', error);
         }
     }
+
+
+
+    // const addPurchaseToDatabase = async () => {
+    //     try {
+    //         const purchase = {
+    //             purchaseId: 0,
+    //             datePurchase: date.value,
+    //             buyerName: name.value,
+    //             buyerPhone: phone.value,
+    //             buyerEmail: email.value,
+    //             totalPrice: totalPrice.valueOf,
+    //             title: show.value?.title,
+    //             sessionId: selectedSessionString,
+    //             reservedSeats: 
+    //         }   
+    //     }catch (error) {
+    //         console.log('Error to create purchases: ', error);
+    //     }
+    // }
 
     const reservedSeatsCount = computed(() => {
         return storeSeat.seats.filter(seat => !seat.isDisponible).length;
@@ -173,20 +261,24 @@
         if (isValidEmail.value && email.value && phone.value && date.value && CVV.value && creditCard.value && name.value && titular.value) {
             try {
                 await addReservedSeatsToDatabase();
-                dialog.value = true;
+                addPurchase();
 
-                setTimeout(() => {
-                    watch(dialog, (newValue) => {
-                        if (!newValue) {
-                            location.reload();
-                        }
-                    });
-                }, 2000)
+                
+                dialog.value = true;
+                
+                // setTimeout(() => {
+                //     watch(dialog, (newValue) => {
+                //         if (!newValue) {
+                //             location.reload();
+                //         }
+                //     });
+                // }, 2000)
+
 
             }catch (error) {
                 console.error('Error al reservar los asientos: ', error);
             }
-        } else {
+        }else {
             alert('Revisa todos los campos.');
         }
     };
@@ -211,6 +303,27 @@
 <template>
     <div class="reserve-seats">
         <h2>RESERVAR ENTRADAS</h2>
+    
+        <div class="purchases-display">
+        <h3>Detalles de las Compras Realizadas</h3>
+        <div v-for="purchase in purchases" :key="purchase.date" class="purchase-details">
+            <p><strong>Nombre:</strong> {{ purchase.name }}</p>
+            <p><strong>Email:</strong> {{ purchase.email }}</p>
+            <p><strong>Teléfono:</strong> {{ purchase.phone }}</p>
+            <p><strong>Fecha:</strong> {{ purchase.date }}</p>
+            <p><strong>Total:</strong> {{ purchase.totalPrice }}€</p>
+            <p><strong>Sesión:</strong> {{ purchase.session }}</p>
+            <p><strong>Obra:</strong> {{ purchase.showTitle }}</p>
+        </div>
+        </div>
+        
+
+        <p>Asientos:</p>
+        <li v-for="(seat, index) in allSelectedSeats" :key="index">
+            Butaca ID: {{ seat.seatId }} | Sesión: {{ seat.session }}
+        </li>
+
+
         <div class="reserve-seats__content">
             <div class="seats-area">
                 <div class="seats-data">
@@ -278,6 +391,10 @@
                 PANTALLA
             </div>
         </div>
+
+        <!-- Este div podría ir después del diálogo de confirmación o donde prefieras mostrar los detalles -->
+
+
             
         <div class="payment-area">
             <div class="panel-payment">
@@ -429,42 +546,41 @@
         text-align: center;
         margin: 10px 0px 10px 0px;
     }
-.btn-pay {
-    letter-spacing: 0;
-    background-color: #b20000;
-    color: white;
-    padding: 15px;
-    display: flex;
-    align-items: center;
-}
-.btn-pay:hover {
-    background-color: #b0802c;
-}
 
+    .btn-pay {
+        letter-spacing: 0;
+        background-color: #b20000;
+        color: white;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+    }
+    .btn-pay:hover {
+        background-color: #b0802c;
+    }
 
     .icon-close-popup {
         display: flex;
         justify-content: right;
         cursor: pointer;
     }
-.v-card-text p {
-    font-size: 13px;
-    font-family: 'Inter', sans-serif;
-    text-align: center;
-    margin-bottom: 20px;
-}
+    .v-card-text p {
+        font-size: 13px;
+        font-family: 'Inter', sans-serif;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .advertisement-tickets {
+        border: 2px dashed white;
+        padding: 20px;
+        margin-bottom: 20px;
+        font-size: 10px;
+        text-align: center;
+    }
 
 
-.advertisement-tickets {
-    border: 2px dashed white;
-    padding: 20px;
-    margin-bottom: 20px;
-    font-size: 10px;
-    text-align: center;
-}
-
-
-.error-message {
+    .error-message {
         font-size: 10px;
         color: red;
         display: flex;
@@ -474,16 +590,7 @@
         font-family: 'Inter', sans-serif;
     }
 
-/* .seat-background-selected {
-    background-color: #0000ff;
-}
-.seat-base-selected{
-    background-color: #0000cc;
-}
-.seat-arm-selected {
-    background-color: #0000cc;
-} */
-.panel-seats {
+    .panel-seats {
         background-color: #181818;
         padding: 30px;
         border-radius: 10px;
@@ -495,81 +602,51 @@
         justify-content: center;
     }
 
-    /* .seat-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: 10px;
-} */
-    /* .panel-seats__item {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        font-size: 10px;
-        text-align: center;
-    } */
-/* 
-    .panel-seats__item {
-    display: flex;
-    flex-wrap: wrap;
-
-} */
-
-.seat-grid {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr); /* Diez columnas para diez asientos por fila */
-    gap: 15px; /* Espacio entre asientos */
-}
-
-.svg-seat {
-    /* Asegura que el SVG ocupe todo el espacio del contenedor */
-    margin: 10px;
-}
-
-
-@media (max-width: 1750px) {
-    .svg-seat {
-        width: 100%;
-        margin: 0;
+    .seat-grid {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 15px;
     }
-}
 
+    .svg-seat {
+        margin: 10px;
+    }
 
-
-/*SESSION BUTTONS*/
-.btn-session {
-    letter-spacing: 0;
-    font-size: 10px;
-   
-    margin-bottom: 10px;
-}
-
-
-.buttons-sessions {
-    display: flex;
-    justify-content: right;
-    gap: 10px;
-}
-
-
-
-@keyframes jump {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-30px); }
-    100% { transform: translateY(0); }
-}
-        
+    @media (max-width: 1750px) {
         .svg-seat {
-            cursor: pointer;
+            width: 100%;
+            margin: 0;
         }
+    }
+
+    .btn-session {
+        letter-spacing: 0;
+        font-size: 10px;
+    
+        margin-bottom: 10px;
+    }
+
+    .buttons-sessions {
+        display: flex;
+        justify-content: right;
+        gap: 10px;
+    }
+
+    @keyframes jump {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-30px); }
+        100% { transform: translateY(0); }
+    }
+            
+    .svg-seat {
+        cursor: pointer;
+    }
         
-        .jump {
-            animation: jump 0.5s ease;
-        }
+    .jump {
+        animation: jump 0.5s ease;
+    }
 
-       
-
-.error-message {
+    .error-message {
         color: red;
         font-size: 10px;
         text-align: center;
@@ -590,18 +667,23 @@
         text-align: justify;
         display: none;
     }
+
     .popup-overview.active {
         display: block;
     }
+
     .popup-overview__content {
         margin: 30px;
     }
+
     .popup-overview__content h3 {
         text-align: center;
     }
+
     .popup-overview__content p {
         font-size: 13px;
     }
+
     .popup-overview__button {
         margin-top: 20px;
         display: flex;
@@ -630,6 +712,7 @@
         margin: 0 0 10px 0;
         position: relative;
     }
+
     .individual-ticket p {
         margin: 0;
     }
@@ -765,17 +848,6 @@
         margin: 10px 0 20px 0;
         font-size: 9px;
     }
-
-
-    /* .panel-seats__item {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        font-size: 10px;
-        text-align: center;
-    } */
-
- 
 
     .seat {
         color: white;
