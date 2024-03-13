@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive, computed, ref } from "vue";
 import { format } from "date-fns";
-import router from "@/router";
 
 export interface Show {
     showId: number,
@@ -18,7 +17,6 @@ export interface Show {
     scene: string,
     overview: string
 }
-
 
 export const useShowsStore = defineStore('shows', () => {
     const shows = reactive<Show[]>([])
@@ -146,7 +144,6 @@ export const useShowsStore = defineStore('shows', () => {
     return { shows, getAllShows, filteredShows, searchTerm, getShowByTitle, addShowToDatabase, deleteShowToDatabase, updateShowToDatabase, searchShow };
 })
 
-//GET SHOW BY ID
 export const useShowByIdStore = defineStore('showById', () => {
     const state = reactive<{ show: Show }>({
         show: {

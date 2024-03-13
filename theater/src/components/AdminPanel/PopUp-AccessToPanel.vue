@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { ref } from 'vue';
-    import { useAuthStore } from '../../store/Auth-Store'
     import { useRouter } from 'vue-router';
     import { useUsersStore } from '../../store/User-Store'
     const dialog = ref(false);
@@ -16,22 +15,21 @@
     }
 
     async function submitForm() {
-        const authStore = useAuthStore();
 
         const loginSuccess = await store.LoginToPanelAdmin(email.value, password.value);
         
         if (loginSuccess) {
+            localStorage.setItem('isLoggedIn', 'true'); 
             const inpLock = document.getElementById("input-padlock") as HTMLInputElement;
             inpLock.checked = !inpLock.checked;
             inpLock.dispatchEvent(new Event("change"));
 
             setTimeout(() => {
-                const userData = { email: email.value };
-                authStore.login(userData);
                 router.push('/Admin-Panel');
             }, 1000); 
         }
     }
+
 </script>
 
 <template>

@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
 
-
 export interface Session {
     sessionId: number,
     hour: string,
@@ -13,7 +12,6 @@ export interface Session {
     date: Date,
     seats: []
 }
-
 
 export const useSessionsStore = defineStore('sessions', () => {
     const sessions = reactive<Session[]>([])

@@ -18,9 +18,6 @@ export const useUsersStore = defineStore('users', () => {
         try {
             const response = await fetch('http://localhost:8001/User')
             const data = await response.json();
-            // data.forEach((user : User) => { 
-            //     users.push(user);
-            // });
             users.splice(0, users.length, ...data);
         }catch (error) {
             console.log('Error displaying users: ', error);
@@ -118,20 +115,6 @@ export const useUsersStore = defineStore('users', () => {
             return false;
         }
     }
-
-
-
-
-    // if (response.ok) {
-    //     const data = await response.json();
-    //     console.log('Inicio de sesión exitoso:', data);
-    //     loginError.value = false;
-    // } else {
-    //     loginError.value = true;
-    // }
-    // };
-
-
 
     return { users, getAllUsers, getAdminUsers, addUserToDatabase, deleteUserToDatabase, updateUserToDatabase, LoginToPanelAdmin };
 })
