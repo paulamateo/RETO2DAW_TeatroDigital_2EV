@@ -1,6 +1,13 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
 
+export interface Seat {
+    seatId: number,
+    seatIdReserved: number,
+    isDisponible: boolean,
+    sessionId: number
+}
+
 export interface Purchase {
     purchaseId: number,
     datePurchase: Date,
@@ -10,14 +17,7 @@ export interface Purchase {
     totalPrice: number,
     title: string,
     sessionId: number,
-    reservedSeats: []
-}
-
-export interface Seat {
-    seatId: number,
-    seatIdReserved: number,
-    isDisponible: boolean,
-    sessionId: number
+    reservedSeats: Seat[]
 }
 
 export const usePurchasesStore = defineStore('purchases', () => {
@@ -35,19 +35,18 @@ export const usePurchasesStore = defineStore('purchases', () => {
         }
     }
 
-    const addPurchaseToDatabase = async (fecha: Date, comprador: string, telefono: string, precioTotal: number, email: string, titulo: string, sessionId: number, reservedSeats: Seat[]) => {
+    const addPurchaseToDatabase = async (fecha: Date, name: string, phone: string, email: string, totalPrice: number, title: string, sessionId: number) => {
         try {
             const purchase = {
                 purchaseId: 0,
                 datePurchase: fecha,
-                buyerName: comprador,
-                buyerPhone: telefono,
+                buyerName: name,
+                buyerPhone: phone,
                 buyerEmail: email,
-                totalPrice: precioTotal,
-                title: titulo,
-                sessionId: sessionId,
-                reservedSeats: reservedSeats
-            }
+                totalPrice: totalPrice,
+                title: title,
+                sessionId: sessionId
+            };
             const response = await fetch("http://localhost:8001/Purchase", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -65,3 +64,4 @@ export const usePurchasesStore = defineStore('purchases', () => {
 
     return { purchases, getAllPurchases, addPurchaseToDatabase };
 })
+

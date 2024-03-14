@@ -5,7 +5,7 @@
     import { useSeatsStore } from '../../store/Seat-Store'
     import { usePurchasesStore } from '../../store/Purchase-Store'
     import { useRoute } from 'vue-router';
-import type { Ref } from 'vue/dist/vue.js'
+    import type { Ref } from 'vue/dist/vue.js'
     const store = useSessionsStore();
     const storeShow = useShowByIdStore()
     const storeSeat = useSeatsStore();
@@ -49,6 +49,9 @@ import type { Ref } from 'vue/dist/vue.js'
     storeShow.getShowById(showId);
     const showData = storeShow.show;
 
+    const title = computed(() => show.value?.title || 'Undefined');
+
+
     const selectSession = (sessionId: number) => {
         selectedSession.value = sessionId;
         selectedSessionString = selectedSession.value.toString(); 
@@ -77,72 +80,6 @@ import type { Ref } from 'vue/dist/vue.js'
         totalPrice = parseFloat(totalPrice.toFixed(2));
     }
 
-
-    //COMPRA
-
-        // Suponiendo que esto se haga al final de la función `openDialog` si la compra es exitosa
-    // const addPurchase = ()=> {
-    //     const purchaseDetails = {
-    //         name: name.value,
-    //         email: email.value,
-    //         phone: phone.value,
-    //         date: new Date().toLocaleString(),
-    //         totalPrice: totalPrice,
-    //         selectedSeats: selectedSeats.map(seat => seat.seatId),
-    //         session: selectedSessionString,
-    //         showTitle: show.value?.title
-    //     };
-    //     console.log(purchaseDetails);
-    //     purchases.value.push(purchaseDetails);
-    // }
-
-
-    interface PurchaseDetail {
-            name: string;
-            email: string;
-            phone: string;
-            date: string;
-            totalPrice: number;
-            selectedSeats: SeatDetail[];
-            session: string;
-            showTitle: string | undefined;
-            }
-            interface SeatDetail {
-        seatId: number;
-        session: string;
-        }
-
-    const purchases: Ref<PurchaseDetail[]> = ref([]);
-
-    let allSelectedSeats: { seatId: number; session: string }[] = [];
-
-    const addPurchase = () => {
-        allSelectedSeats.push(...selectedSeats.map(seat => ({ ...seat })));
-
-        const detailedSelectedSeats = selectedSeats.map(seat => {
-            return {
-            seatId: seat.seatId,
-            session: seat.session
-            };
-        });
-
-        const purchaseDetails = {
-            name: name.value,
-            email: email.value,
-            phone: phone.value,
-            date: new Date().toLocaleString(),
-            totalPrice: totalPrice,
-            selectedSeats: detailedSelectedSeats,
-            session: selectedSessionString,
-            showTitle: show.value?.title
-        };
-
-        purchases.value.push(purchaseDetails);
-    };
-
-
-
-
     const addReservedSeatsToDatabase = async () => { 
         try {
             for (const seat of selectedSeats) {
@@ -163,7 +100,7 @@ import type { Ref } from 'vue/dist/vue.js'
                 } else {
                     console.log(`Seat ${seatId} successfully reserved for session ${session}`);
                     seatColors.value[seatId] = { background: '#e92e19', base: '#ba2414', legs: '#464646', arms: '#ba2414' }
-                    
+                    // selectedSeats = [];
                 }
             }
         }catch (error) {
@@ -171,10 +108,11 @@ import type { Ref } from 'vue/dist/vue.js'
         }
     }
 
-
-
     // const addPurchaseToDatabase = async () => {
     //     try {
+    //         const reservedSeatsFormatted = selectedSeats.map(seat => {
+    //             return { seatId: seat.seatId, session: seat.session };
+    //         });
     //         const purchase = {
     //             purchaseId: 0,
     //             datePurchase: date.value,
@@ -184,8 +122,18 @@ import type { Ref } from 'vue/dist/vue.js'
     //             totalPrice: totalPrice.valueOf,
     //             title: show.value?.title,
     //             sessionId: selectedSessionString,
-    //             reservedSeats: 
+    //             reservedSeats: reservedSeatsFormatted
     //         }   
+    //         const response = await fetch("http://localhost:8001/Purchase", {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify(purchase)
+    //         });
+    //         if (!response.ok) {
+    //             throw new Error(`Error: ${response.statusText}`);
+    //         } else {
+    //             console.log("TODO BIEN");
+    //         }
     //     }catch (error) {
     //         console.log('Error to create purchases: ', error);
     //     }
@@ -201,6 +149,37 @@ import type { Ref } from 'vue/dist/vue.js'
         totalPrice -= showData.price;
         totalPrice = parseFloat(totalPrice.toFixed(2));
     }
+
+    function obtenerSeatIds(): number[] {
+        return selectedSeats.map(seat => seat.seatId);
+    }
+
+    const openDialog = async () => {
+        validateEmail();
+        if (isValidEmail.value && email.value && phone.value && date.value && CVV.value && creditCard.value && name.value && titular.value) {
+            try {
+                await addReservedSeatsToDatabase();
+                storePurchase.addPurchaseToDatabase(CurrentDay, name.value, phone.value, email.value, totalPrice, title.value, parseInt(selectedSessionString));
+                const seatIds = obtenerSeatIds();
+                console.log(seatIds);
+                dialog.value = true;
+                
+                // setTimeout(() => {
+                //     watch(dialog, (newValue) => {
+                //         if (!newValue) {
+                //             location.reload();
+                //         }
+                //     });
+                // }, 2000)
+
+
+            }catch (error) {
+                console.error('Error al reservar los asientos: ', error);
+            }
+        }else {
+            alert('Revisa todos los campos.');
+        }
+    };
 
     function formatHour(hour: string): string {
         const date = new Date(`2000-01-01T${hour}`);
@@ -256,33 +235,6 @@ import type { Ref } from 'vue/dist/vue.js'
         creditCard.value = creditCardValue;
     }
 
-    const openDialog = async () => {
-        validateEmail();
-        if (isValidEmail.value && email.value && phone.value && date.value && CVV.value && creditCard.value && name.value && titular.value) {
-            try {
-                await addReservedSeatsToDatabase();
-                addPurchase();
-
-                
-                dialog.value = true;
-                
-                // setTimeout(() => {
-                //     watch(dialog, (newValue) => {
-                //         if (!newValue) {
-                //             location.reload();
-                //         }
-                //     });
-                // }, 2000)
-
-
-            }catch (error) {
-                console.error('Error al reservar los asientos: ', error);
-            }
-        }else {
-            alert('Revisa todos los campos.');
-        }
-    };
-
     const closeDialog = () => {
         dialog.value = false;
         email.value = '';
@@ -303,27 +255,6 @@ import type { Ref } from 'vue/dist/vue.js'
 <template>
     <div class="reserve-seats">
         <h2>RESERVAR ENTRADAS</h2>
-    
-        <div class="purchases-display">
-        <h3>Detalles de las Compras Realizadas</h3>
-        <div v-for="purchase in purchases" :key="purchase.date" class="purchase-details">
-            <p><strong>Nombre:</strong> {{ purchase.name }}</p>
-            <p><strong>Email:</strong> {{ purchase.email }}</p>
-            <p><strong>Teléfono:</strong> {{ purchase.phone }}</p>
-            <p><strong>Fecha:</strong> {{ purchase.date }}</p>
-            <p><strong>Total:</strong> {{ purchase.totalPrice }}€</p>
-            <p><strong>Sesión:</strong> {{ purchase.session }}</p>
-            <p><strong>Obra:</strong> {{ purchase.showTitle }}</p>
-        </div>
-        </div>
-        
-
-        <p>Asientos:</p>
-        <li v-for="(seat, index) in allSelectedSeats" :key="index">
-            Butaca ID: {{ seat.seatId }} | Sesión: {{ seat.session }}
-        </li>
-
-
         <div class="reserve-seats__content">
             <div class="seats-area">
                 <div class="seats-data">
@@ -390,12 +321,7 @@ import type { Ref } from 'vue/dist/vue.js'
             <div class="screen">
                 PANTALLA
             </div>
-        </div>
-
-        <!-- Este div podría ir después del diálogo de confirmación o donde prefieras mostrar los detalles -->
-
-
-            
+        </div>            
         <div class="payment-area">
             <div class="panel-payment">
                 <h3>TICKETS</h3>

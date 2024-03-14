@@ -1,3 +1,19 @@
+<script setup lang="ts">
+    import { format } from 'date-fns';
+    import { usePurchasesStore } from '../../store/Purchase-Store'
+    import { onMounted } from 'vue';
+    const store = usePurchasesStore();
+
+    const formatDate = (date: Date) => {
+        return format(new Date(date), 'dd/MM/yyyy');
+    };
+
+    onMounted(() => {
+        store.getAllPurchases();
+    });
+
+</script>
+
 <template>
     <table>
         <thead>
@@ -10,7 +26,7 @@
                         </svg>
                     </div>
                 </th>
-                <th class="table__header-content--visibility-phone">
+                <th class="table__header-content--visibility-date">
                     <div class="table__header-content">
                         <p>Fecha</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -18,7 +34,7 @@
                         </svg>
                     </div>
                 </th>
-                <th class="table__header-content--visibility-phone">
+                <th class="table__header-content--visibility-show">
                     <div class="table__header-content">
                         <p>Obra</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -26,7 +42,7 @@
                         </svg>
                     </div>
                 </th>
-                <th class="table__header-content--visibility-phone">
+                <th class="table__header-content--visibility-session">
                     <div class="table__header-content">
                         <p>Sesión</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -34,7 +50,7 @@
                         </svg>
                     </div>
                 </th>
-                <th class="table__header-content--visibility-phone">
+                <th class="table__header-content--visibility-seats">
                     <div class="table__header-content">
                         <p>Asientos</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -50,7 +66,7 @@
                         </svg>
                     </div>
                 </th>
-                <th class="table__header-content--visibility-lastname">
+                <th class="table__header-content--visibility-email">
                     <div class="table__header-content">
                         <p>Email</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -58,7 +74,7 @@
                         </svg>
                     </div>
                 </th>  
-                <th class="table__header-content--visibility-email">
+                <th class="table__header-content--visibility-phone">
                     <div class="table__header-content">
                         <p>Teléfono</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -66,7 +82,7 @@
                         </svg>
                     </div>
                 </th>
-                <th class="table__header-content--visibility-phone">
+                <th class="table__header-content--visibility-price">
                     <div class="table__header-content">
                         <p>Precio total</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
@@ -77,16 +93,16 @@
             </tr>
         </thead>
 
-        <tbody>
-            <th>1</th>
-            <th>12/04/2024</th>
-            <th>El Fantasma de la Ópera</th>
-            <th>3</th>
-            <th>15, 16</th>
-            <th><strong>Paula Mateo Bordetas</strong></th>
-            <th>paulamateob@gmail.com</th>
-            <th>123456789</th>
-            <th>20.99€</th>
+        <tbody id="row" v-for="purchase in store.purchases" :key="purchase.purchaseId" >
+            <th>{{ purchase.purchaseId }}</th>
+            <th>{{ formatDate(purchase.datePurchase) }}</th>
+            <th class="table__header-content--visibility-show">{{ purchase.title }}</th>
+            <th>{{ purchase.sessionId }}</th>
+            <th>{{ purchase.reservedSeats.map(seat => seat.seatIdReserved) }}</th>
+            <th class="table__header-content--visibility-name"><strong>{{ purchase.buyerName }}</strong></th>
+            <th class="table__header-content--visibility-email">{{ purchase.buyerEmail }}</th>
+            <th class="table__header-content--visibility-phone">{{ purchase.buyerPhone }}</th>
+            <th class="table__header-content--visibility-price">{{ purchase.totalPrice }}€</th>
         </tbody>
     </table>
 </template>
@@ -236,40 +252,33 @@
         margin: 0;
     }
 
-    @media (max-width: 1200px) {
-        .table__header-content--visibility-rol {
+    @media (max-width: 1130px) {
+        .table__header-content--visibility-price {
             display: none;
         }
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1060px) {
         .table__header-content--visibility-phone {
             display: none;
         }
     }
 
-    @media (max-width: 720px) {
+    @media (max-width: 900px) {
         .table__header-content--visibility-email {
             display: none;
         }
     }
 
-    @media (max-width: 550px) {
-        .table__header-content--visibility-lastname {
-            display: none;
-        }
-    }
-
-    @media (max-width: 450px) {
+    @media (max-width: 800px) {
         .table__header-content--visibility-name {
             display: none;
         }
     }
 
-    @media (min-width: 800px) {
-        .container-button {
-            display: flex;
-            justify-content: flex-end;
+    @media (max-width: 670px) {
+        .table__header-content--visibility-show {
+            display: none;
         }
     }
 </style>
