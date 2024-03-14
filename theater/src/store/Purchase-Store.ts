@@ -1,11 +1,10 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
 
-export interface Seat {
-    seatId: number,
-    seatIdReserved: number,
-    isDisponible: boolean,
-    sessionId: number
+export interface selectedSeat {
+    seatId: number;
+    seatIdReserved: number;
+    session: string;
 }
 
 export interface Purchase {
@@ -17,7 +16,7 @@ export interface Purchase {
     totalPrice: number,
     title: string,
     sessionId: number,
-    reservedSeats: Seat[]
+    reservedSeats: selectedSeat[]
 }
 
 export const usePurchasesStore = defineStore('purchases', () => {
@@ -35,7 +34,7 @@ export const usePurchasesStore = defineStore('purchases', () => {
         }
     }
 
-    const addPurchaseToDatabase = async (fecha: Date, name: string, phone: string, email: string, totalPrice: number, title: string, sessionId: number) => {
+    const addPurchaseToDatabase = async (fecha: Date, name: string, phone: string, email: string, totalPrice: number, title: string, sessionId: number, reservedSeats: selectedSeat[]) => {
         try {
             const purchase = {
                 purchaseId: 0,
@@ -45,7 +44,8 @@ export const usePurchasesStore = defineStore('purchases', () => {
                 buyerEmail: email,
                 totalPrice: totalPrice,
                 title: title,
-                sessionId: sessionId
+                sessionId: sessionId,
+                reservedSeats: reservedSeats
             };
             const response = await fetch("http://localhost:8001/Purchase", {
                 method: 'POST',

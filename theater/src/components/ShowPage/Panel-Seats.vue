@@ -28,6 +28,42 @@
     let CurrentDay = new Date();
     const seatColors = ref<{ [key: number]: SeatColors }>({});
     let selectedSeats: { seatId: number, session: string }[] = [];
+    import { jsPDF } from 'jspdf';
+    import 'jspdf-autotable';
+    import { format } from 'date-fns'
+
+    const formatDate = (date: Date) => {
+        return format(new Date(date), 'dd/MM/yyyy');
+    };
+    
+// Function to generate and download PDF
+const generatePDF = () => {
+    const doc = new jsPDF();
+    doc.text(20, 20, `Detalles de la compra:`);
+
+    // Define data for the table
+    doc.text(20, 30, `Nombre completo: ${name.value}`);
+    doc.text(20, 35, `Correo electrónico: ${email.value}`);
+    doc.text(20, 45, `Teléfono: ${phone.value}`);
+ 
+    // Set up the table parameters
+    const tableProps = {
+        startY: 60,
+        margin: { top: 60 },
+        head: [['Fecha', 'Obra', 'Sesión', 'Asientos reservados', 'Precio']],
+        body: [
+            [formatDate(CurrentDay), showData.title, selectedSessionString, selectedSeats, `${totalPrice}€`]
+        ]
+    };
+
+    // Add the table to the PDF
+    doc.autoTable(tableProps);
+
+    // Save the PDF
+    doc.save('Entradas_TeatroRisasYTragedias.pdf');
+};
+
+
 
     interface SeatColors {
         background: string;
@@ -108,36 +144,41 @@
         }
     }
 
-    // const addPurchaseToDatabase = async () => {
-    //     try {
-    //         const reservedSeatsFormatted = selectedSeats.map(seat => {
-    //             return { seatId: seat.seatId, session: seat.session };
-    //         });
-    //         const purchase = {
-    //             purchaseId: 0,
-    //             datePurchase: date.value,
-    //             buyerName: name.value,
-    //             buyerPhone: phone.value,
-    //             buyerEmail: email.value,
-    //             totalPrice: totalPrice.valueOf,
-    //             title: show.value?.title,
-    //             sessionId: selectedSessionString,
-    //             reservedSeats: reservedSeatsFormatted
-    //         }   
-    //         const response = await fetch("http://localhost:8001/Purchase", {
-    //             method: 'POST',
-    //             headers: { 'Content-Type': 'application/json' },
-    //             body: JSON.stringify(purchase)
-    //         });
-    //         if (!response.ok) {
-    //             throw new Error(`Error: ${response.statusText}`);
-    //         } else {
-    //             console.log("TODO BIEN");
-    //         }
-    //     }catch (error) {
-    //         console.log('Error to create purchases: ', error);
-    //     }
-    // }
+    const addPurchaseToDatabase = async () => {
+        try {
+            const updatedReservedSeats = selectedSeats.map(seat => ({
+                seatId: 0,
+                seatIdReserved: seat.seatId,
+                sessionId: selectedSession.value,
+                isDisponible: false 
+            }));
+            const purchase = {
+                purchaseId: 0,
+                datePurchase: CurrentDay,
+                buyerName: name.value,
+                buyerPhone: phone.value,
+                buyerEmail: email.value,
+                totalPrice: totalPrice,
+                title: title.value,
+                sessionId:  selectedSession.value,
+                reservedSeats: updatedReservedSeats
+            };
+            const response = await fetch("http://localhost:8001/Purchase", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(purchase),
+            });
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }else {
+                console.log('OPERATION SUCCESSFULLY COMPLETED');
+            }
+        }catch (error) {
+            console.log('Error to create purchase: ', error);
+        }
+    }
+
+
 
     const reservedSeatsCount = computed(() => {
         return storeSeat.seats.filter(seat => !seat.isDisponible).length;
@@ -150,31 +191,23 @@
         totalPrice = parseFloat(totalPrice.toFixed(2));
     }
 
-    function obtenerSeatIds(): number[] {
-        return selectedSeats.map(seat => seat.seatId);
-    }
-
     const openDialog = async () => {
         validateEmail();
         if (isValidEmail.value && email.value && phone.value && date.value && CVV.value && creditCard.value && name.value && titular.value) {
             try {
                 await addReservedSeatsToDatabase();
-                storePurchase.addPurchaseToDatabase(CurrentDay, name.value, phone.value, email.value, totalPrice, title.value, parseInt(selectedSessionString));
-                const seatIds = obtenerSeatIds();
-                console.log(seatIds);
+                await addPurchaseToDatabase();
+                generatePDF();
                 dialog.value = true;
-                
-                // setTimeout(() => {
-                //     watch(dialog, (newValue) => {
-                //         if (!newValue) {
-                //             location.reload();
-                //         }
-                //     });
-                // }, 2000)
-
-
+                setTimeout(() => {
+                    watch(dialog, (newValue) => {
+                        if (!newValue) {
+                            location.reload();
+                        }
+                    });
+                }, 2000)
             }catch (error) {
-                console.error('Error al reservar los asientos: ', error);
+                console.error('Error to reserve seats: ', error);
             }
         }else {
             alert('Revisa todos los campos.');

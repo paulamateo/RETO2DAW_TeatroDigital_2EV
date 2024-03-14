@@ -92,13 +92,13 @@
                 </th>
             </tr>
         </thead>
-
+ 
         <tbody id="row" v-for="purchase in store.purchases" :key="purchase.purchaseId" >
             <th>{{ purchase.purchaseId }}</th>
             <th>{{ formatDate(purchase.datePurchase) }}</th>
             <th class="table__header-content--visibility-show">{{ purchase.title }}</th>
             <th>{{ purchase.sessionId }}</th>
-            <th>{{ purchase.reservedSeats.map(seat => seat.seatIdReserved) }}</th>
+            <th>{{ purchase.reservedSeats.map(seat => seat.seatIdReserved).join(', ') }}</th>
             <th class="table__header-content--visibility-name"><strong>{{ purchase.buyerName }}</strong></th>
             <th class="table__header-content--visibility-email">{{ purchase.buyerEmail }}</th>
             <th class="table__header-content--visibility-phone">{{ purchase.buyerPhone }}</th>

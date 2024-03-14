@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import Calendar from '../components/Programming/CalendarApp.vue'
+</script>
+
 <template>
     <main>
         <div class="banner banner--programming">
