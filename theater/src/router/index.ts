@@ -5,7 +5,6 @@ import ProgrammingView from '../views/ProgrammingView.vue'
 import ShowView from '../views/ShowView.vue'
 import AdminPanelView from '../views/AdminPanelView.vue'
 
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -20,9 +19,10 @@ const router = createRouter({
       component: BillboardView
     },
     {
-      path: '/Shows/:id',
+      path: '/Shows/:showId',
       name: 'Show-details',
-      component: ShowView
+      component: ShowView,
+      props: true
     },
     {
       path: '/Programming',
@@ -34,7 +34,19 @@ const router = createRouter({
       name: 'Admin-Panel',
       component: AdminPanelView
     }
-  ]
+  ],
+  scrollBehavior() {
+    return { top: 0 };
+  }
 })
+
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  if (to.path.startsWith('/Admin-Panel') && !isLoggedIn) {
+      next('/');
+  } else {
+      next();
+  }
+});
 
 export default router

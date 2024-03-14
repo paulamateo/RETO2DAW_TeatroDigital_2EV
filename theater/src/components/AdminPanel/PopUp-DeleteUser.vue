@@ -1,46 +1,62 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     const dialog = ref(false);
+    import { useUsersStore } from '@/store/User-Store';
+    const store = useUsersStore();
+
+    const props = defineProps({
+        userId: {
+            type: String,
+            default: '0'
+        }
+    });
+
+    const deleteUser = async () => {
+        await store.deleteUserToDatabase(parseInt(props.userId));
+        dialog.value = false;
+    };   
+    
+    setTimeout(() => {
+        watch(dialog, (newValue) => {
+            if (!newValue) {
+                location.reload();
+            }
+        });
+    }, 8000)
 </script>
 
 <template>
-    <v-btn class="button-create-show">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+    <v-btn class="buttons-actions-panel__item buttons-actions-panel__item--update">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
         </svg>
-        <span>CREAR</span> 
     </v-btn>
 
-    <v-dialog v-model="dialog" persistent activator="parent" width="700px">
+    <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
-            <h2 class="popup-title">Crear usuario</h2>
-            <form>
-                <div class="panel-box">
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Nombre" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Apellidos" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Email" required>
-                    <input type="password" class="input-payment-panel" name="titular_input" placeholder="Contraseña" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Teléfono" required>
-                    <div>
-                        <select name="genre">
-                            <option value="" selected disabled hidden><span>ROL</span></option>
-                            <option value="1">Administrador</option>
-                            <option value="0">Usuario</option>
-                        </select>
-                    </div>
-                </div>
-            </form>
+            <h2 class="popup-title">¿Estás seguro/a de querer eliminar este usuario?</h2>
             <v-divider></v-divider>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                <v-btn color="primary" text="CREAR" variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
+                <v-btn text="CANCELAR" @click="dialog = false" class="button-form--actions"></v-btn>
+                <v-btn color="primary" text="ELIMINAR" variant="tonal" @click="deleteUser" class="button-form--actions"></v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
 
 <style scoped>
+    .v-btn--size-default {
+        min-width: 20px;
+    }
+
+    .buttons-actions-panel__item--update {
+        background-color: #D03A3A;
+        margin-right: 10px;
+        color: white;
+        width: 40px;
+    }
+
     input[type="date"].input-payment-panel, input[type="time"].input-payment-panel {
       color: #c3c3c3;
     }
@@ -95,6 +111,7 @@
         display: grid;
         grid-template-columns: 1fr;
     }
+
 
     .popup-title {
         padding: 0;
@@ -159,7 +176,7 @@
         }
 
         select {
-            width: calc(100% - 20px);
+            width: 150px;
         }
         .panel-box--1-col {
             grid-template-columns: 1fr;

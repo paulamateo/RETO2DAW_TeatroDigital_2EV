@@ -1,7 +1,43 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     const dialog = ref(false);
-    
+    import { useSessionsStore } from '@/store/Session-Store';
+    const store = useSessionsStore();
+    let hora = ref('');
+    let asientos = ref('');
+    let notas = ref('');
+    const showError = ref(false);
+
+    const props = defineProps({
+        sessionId: {
+            type: String,
+            default: '0'
+        }
+    });
+
+    const updateSession = async () => {
+        if (hora.value && asientos.value && notas.value) {
+            await store.updateSessionToDatabase(parseInt(props.sessionId), hora.value, parseInt(asientos.value), notas.value);
+            dialog.value = false;
+        }else {
+            showError.value = true;
+        }
+
+    };
+
+    watch([hora, asientos, notas], () => {
+        if (hora.value && asientos.value && notas.value) {
+            showError.value = false;
+        }
+    }, { immediate: true }); 
+
+    setTimeout(() => {
+        watch(dialog, (newValue) => {
+            if (!newValue) {
+                location.reload();
+            }
+        });
+    }, 8000)
 </script>
 
 <template>
@@ -11,52 +47,49 @@
         </svg>
     </v-btn>
 
-    <v-dialog v-model="dialog" persistent activator="parent" width="700px">
+    <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
-            <h2 class="popup-title">Actualizar usuario</h2>
-            <form>
-                <div class="panel-box panel-box--3-col">
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="ID del usuario" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Nombre" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Apellidos" required>
-                </div>
-                <div class="panel-box">
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Email" required>
-                    <input type="password" class="input-payment-panel" name="titular_input" placeholder="Contraseña" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Teléfono" required>
-                    <div>
-                        <select name="genre">
-                            <option value="" selected disabled hidden><span>ROL</span></option>
-                            <option value="1">Administrador</option>
-                            <option value="0">Usuario</option>
-                        </select>
+            <h2 class="popup-title">Actualizar sesión</h2>
+            <form @submit.prevent="updateSession">
+                <div class="form-container">
+                    <div class="panel-box">
+                        <input v-model="hora" type="time" class="input-payment-panel" name="titular_input" placeholder="Hora">
+                        <input v-model="asientos" type="number" class="input-payment-panel" name="titular_input" placeholder="Asientos">
                     </div>
+                    <div class="panel-box panel-box--1-col">
+                        <textarea v-model="notas" class="input-payment-panel input-payment-panel--textarea" placeholder="Notas"></textarea>
+                    </div>    
                 </div>
-            </form>
-            <v-divider></v-divider>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                <v-btn color="primary" text="ACTUALIZAR" variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
-            </v-card-actions>
+                <v-divider></v-divider>
+                <span class="error-message" v-if="showError">Por favor, completa todos los campos.</span>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" text="ACTUALIZAR"  variant="tonal" class="button-form--actions"></v-btn>
+                </v-card-actions> 
+            </form> 
         </v-card>
     </v-dialog>
 </template>
 
 <style scoped>
+    .error-message {
+        font-size: 10px;
+        color: red;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        font-family: 'Inter', sans-serif;
+    }
+
     .v-btn--size-default {
         min-width: 20px;
     }
 
     .buttons-actions-panel__item--update {
         background-color: #0DBF3F;
-        margin-right: 10px;
         color: white;
         width: 40px;
-    }
-
-    input[type="date"].input-payment-panel, input[type="time"].input-payment-panel {
-      color: #c3c3c3;
     }
 
     .panel-box__item label {
@@ -66,7 +99,7 @@
         font-size: 12px;
     }
 
-    form {
+    .form-container {
         margin-left: 20px;
     }
 
@@ -156,9 +189,7 @@
         color: #c3c3c3;
     }
 
-    select::placeholder {
-        color: #c3c3c3;
-    }
+
     .input-payment-panel--textarea {
         border-radius: 5px;
         height: 100px;
@@ -174,7 +205,7 @@
         }
 
         select {
-            width: calc(100% - 20px);
+            width: 150px;
         }
         .panel-box--1-col {
             grid-template-columns: 1fr;

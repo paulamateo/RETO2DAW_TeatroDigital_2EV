@@ -1,3 +1,7 @@
+<script setup lang="ts">
+    import Logotipe from '../Elements/LogoCanvas.vue'
+</script>
+
 <template>
     <footer class="footer">
         <div class="footer__content footer__content--display-flex">
@@ -29,6 +33,7 @@
                 </ul>
             </div>
             <div class="footer__copyright">
+                <Logotipe />
                 <p>2023 © Teatro Risas y Tragedias</p>
             </div>
         </div>

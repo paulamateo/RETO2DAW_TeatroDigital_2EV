@@ -1,32 +1,27 @@
 <script setup lang="ts">
-    import PopUp_CreateShow from '../components/PopUp-CreateShow.vue'
-    import PopUp_UpdateShow from '../components/PopUp-UpdateShow.vue'
-    // import { computed, reactive } from 'vue';
+    import { onMounted, onUnmounted } from 'vue'
+    import PopUp_CreateUser from './PopUp-CreateUser.vue'
+    import PopUp_UpdateUser from './PopUp-UpdateUser.vue'
+    import PopUp_DeleteUser from './PopUp-DeleteUser.vue'
+    import { useUsersStore } from '../../store/User-Store'
+    const store = useUsersStore();
 
-    // interface Show {
-    //     showId: number,
-    //     title: string,
-    //     author: string
-    // }
+    onMounted(() => {
+        store.getAllUsers();
+    });
 
-    // let shows = reactive(new Array<Show>)
-
-    // function getData() {
-    //     fetch('https://localhost:8001/shows')
-    //         .then(response => response.json())
-
-    // }
-
-
+    onUnmounted(() => {
+        store.users.splice(0);
+    });
 </script>
 
 <template>
     <div class="container-button">
         <div class="popup__access-to-admin">
-            <PopUp_CreateShow />
+            <PopUp_CreateUser />
         </div>
     </div>
-
+    
     <table>
         <thead>
             <tr>
@@ -38,49 +33,41 @@
                         </svg>
                     </div>
                 </th>
-                <th class="table-element--visibility-show">
+                <th class="table__header-content--visibility-name">
                     <div class="table__header-content">
-                        <p>Obra</p>
+                        <p>Nombre</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
                         </svg>
                     </div>
                 </th>
-                <th class="table-element--visibility-director">
+                <th class="table__header-content--visibility-lastname">
                     <div class="table__header-content">
-                        <p>Director</p>
+                        <p>Apellidos</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
+                        </svg>
+                    </div>
+                </th>  
+                <th class="table__header-content--visibility-email">
+                    <div class="table__header-content">
+                        <p>Email</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
                         </svg>
                     </div>
                 </th>
-                <th class="table-element--visibility-genre">
+                <th class="table__header-content--visibility-phone">
                     <div class="table__header-content">
-                        <p>Género</p>
+                        <p>Teléfono</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
                         </svg>
                     </div>
                 </th>
-                <th class="table-element--visibility-price">
+                <th class="table__header-content--visibility-rol">
                     <div class="table__header-content">
-                        <p>Precio</p>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
-                        </svg>
-                    </div>
-                </th>
-                <th class="table-element--visibility-date">
-                    <div class="table__header-content">
-                        <p>Fecha</p>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
-                        </svg>
-                    </div>
-                </th>
-                <th class="table-element--visibility table-element--visibility-duration">
-                    <div class="table__header-content">
-                        <p>Duración</p>
+                        <p>Rol</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
                         </svg>
@@ -91,92 +78,48 @@
         </thead>
 
         <tbody>
-            <tr id="row">
-                <th>1</th>
-                <th class="table-element--visibility table-element--visibility-show">
+            <tr id="row" v-for="user in store.users" :key="user.userId" class="container-item">
+                <th>{{ user.userId }}</th>
+                <th class="table__header-content--visibility-name">
                     <div class="table-row__showtitle">
-                        <img class="table-row__showtitle_img" src="../assets/images/posters/p_romeoandjuliet.jpeg"/>
+                        <img class="table-row__showtitle_img" src="../../assets/images/elements/user_default.jpg"/>
                         <div class="table-row__showtitle_text">
-                            <p><strong>Romeo y Julieta</strong></p>
-                            <p>William Shakespeare</p>
+                            <p><strong>{{ user.userName }}</strong></p>
                         </div>
                     </div>
                 </th>
-
-                <th class="table-element--visibility-director">Alfonso García</th>
-                <th class="table-element--visibility-genre">
+                <th class="table__header-content--visibility-lastname">{{ user.userLastname }}</th>
+                <th class="table__header-content--visibility-email">{{ user.email }}</th>
+                <th class="table__header-content--visibility-phone">{{ user.phoneNumber }}</th>
+                <th class="table__header-content--visibility-rol">
                     <div class="table-genre">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags" viewBox="0 0 16 16">
-                            <path d="M3 2v4.586l7 7L14.586 9l-7-7zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586z"/>
-                            <path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1m0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1z"/>
-                        </svg>
-                        <span>Musical</span>
+                        <div v-if="user.isAdmin" class="table-genre__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16"><path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/></svg>
+                            <span>Administrador</span>
+                        </div>
+                        <div v-else class="table-genre__icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/></svg>
+                            <span>Usuario</span>
+                        </div>
                     </div>
                 </th>
-
-                <th class="table-element--visibility-price">19,90€</th>
-
-                <th class="table-element--visibility-date">14/02/2024</th>
-
-                <th class="table-element--visibility-duration">1h 30min</th>  
-
                 <th class="buttons-actions-panel">
                     <div>
-                        <PopUp_UpdateShow/>
+                        <PopUp_UpdateUser :userId="user.userId.toString()"/>
                     </div>
-                    <v-btn class="buttons-actions-panel__item buttons-actions-panel__item--delete">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
-                        </svg>
-                    </v-btn>
+                    <div>
+                        <PopUp_DeleteUser :userId="user.userId.toString()"/>
+                    </div>
                 </th>
             </tr>
         </tbody>
-    </table>   
+    </table>
 </template>
 
 <style scoped>
-    @media (max-width: 1100px) {
-        .table-element--visibility-duration {
-            display: none;
-        }
-    }
-
-    @media (max-width: 980px) {
-        .table-element--visibility-date {
-            display: none;
-        }
-    }
-
-    @media (max-width: 780px) {
-        .table-element--visibility-date {
-            display: none;
-        }
-        .table-element--visibility-price {
-            display: none;
-        }
-    }
-
-    @media (max-width: 780px) {
-        .table-element--visibility-genre {
-            display: none;
-        }
-        .table-element--visibility-director {
-            display: none;
-        }
-    }
-
-    @media (max-width: 400px) {
-        .table-element--visibility-show {
-            display: none;
-        }
-    }
-
-    @media (min-width: 800px) {
-        .container-button {
-            display: flex;
-            justify-content: flex-end;
-        }
+    .table-genre__icon {
+        display: flex;
+        align-items: center;
     }
 
     .v-btn--size-default {
@@ -192,6 +135,19 @@
 
     .container-button {
         display: flex;
+    }
+
+    .button-create-element {
+        all: unset;
+        background-color: #000AFF;
+        color: white;
+        font-size: 12px;
+        cursor: pointer;
+        display: flex;
+        border-radius: 30px;
+        padding: 10px;
+        justify-content: center;
+        align-items: center;
     }
 
     .button-create-element__content {
@@ -227,14 +183,14 @@
     tr:last-child {
         border-bottom: none;
     }
-
+    
     table {
+        width: 100%;
         font-size: 12px;
         margin-top: 20px;
         border-collapse: collapse;
         font-family: 'Inter', sans-serif;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 100%;
     }
 
     thead {
@@ -300,7 +256,7 @@
     .table-row__showtitle {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: left;
     }
 
     .table-row__showtitle_img {
@@ -318,4 +274,40 @@
         margin: 0;
     }
 
-</style>
+    @media (max-width: 1200px) {
+        .table__header-content--visibility-rol {
+            display: none;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .table__header-content--visibility-phone {
+            display: none;
+        }
+    }
+
+    @media (max-width: 720px) {
+        .table__header-content--visibility-email {
+            display: none;
+        }
+    }
+
+    @media (max-width: 550px) {
+        .table__header-content--visibility-lastname {
+            display: none;
+        }
+    }
+
+    @media (max-width: 450px) {
+        .table__header-content--visibility-name {
+            display: none;
+        }
+    }
+
+    @media (min-width: 800px) {
+        .container-button {
+            display: flex;
+            justify-content: flex-end;
+        }
+    }
+</style>./AdminPanel/PopUp-CreateUser.vue./AdminPanel/PopUp-UpdateUser.vue./AdminPanel/PopUp-DeleteUser.vue../../store/User-Store

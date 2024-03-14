@@ -1,7 +1,51 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
     const dialog = ref(false);
-    
+    import { useUsersStore } from '@/store/User-Store';
+    const store = useUsersStore();
+
+    let nombre = ref('');
+    let apellidos = ref('');
+    let email = ref('');
+    let contrasena = ref('');
+    let telefono = ref('');
+    let rol = ref(null);
+    const showError = ref(false);
+
+    const props = defineProps({
+        userId: {
+            type: String,
+            default: '0'
+        }
+    });
+
+    function validateEmail(email: string) {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        return emailRegex.test(email);
+    }
+
+    const updateUser = async () => {
+        if (nombre.value && apellidos.value && email.value && contrasena.value && telefono.value && rol.value && validateEmail(email.value)) {
+            await store.updateUserToDatabase(parseInt(props.userId), nombre.value, apellidos.value, email.value, contrasena.value, telefono.value, rol.value === 'true' ? true : false);
+            dialog.value = false;
+        }else {
+            showError.value = true;
+        }
+    }
+
+    watch([nombre, apellidos, email, contrasena, telefono, rol], () => {
+        if (nombre.value && apellidos.value && email.value && contrasena.value && telefono.value && rol.value) {
+            showError.value = false;
+        }
+    }, { immediate: true }); 
+
+    setTimeout(() => {
+        watch(dialog, (newValue) => {
+            if (!newValue) {
+                location.reload();
+            }
+        });
+    }, 8000)
 </script>
 
 <template>
@@ -13,66 +57,46 @@
 
     <v-dialog v-model="dialog" persistent activator="parent" width="700px">
         <v-card>
-            <h2 class="popup-title">Actualizar obra</h2>
-            <form>
-                <div class="panel-box  panel-box--3-col">
-                    <input type="number" class="input-payment-panel" name="titular_input" placeholder="ID de la obra" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Título" required>
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Autor" required>
-                </div>
-                <div class="panel-box">
-                    <input type="text" class="input-payment-panel" name="titular_input" placeholder="Director" required>
+            <h2 class="popup-title">Actualizar usuario</h2>
+            <form @submit.prevent="updateUser">
+                <div class="form-container">
                     <div class="panel-box">
-                        <input type="number" class="input-payment-panel" name="titular_input" placeholder="Edad recomendada" required>
-                        <input type="text" class="input-payment-panel" name="titular_input" placeholder="Precio" required>
-                    </div> 
-                </div>
-                <div class="panel-box">
-                    <div class="panel-box">
-                        <input type="date" class="input-payment-panel" id="fecha" name="fecha">
-                        <input type="time" class="input-payment-panel" id="hora" name="hora">
-                    </div>
-                    <div class="panel-box">
-                        <input type="text" class="input-payment-panel" name="titular_input" placeholder="Duración" required>
-                        <div>
-                            <select name="genre">
-                                <option value="" selected disabled hidden><span>GÉNERO</span></option>
-                                <option value="1">Opción 1</option>
-                                <option value="2">Opción 2</option>
-                                <option value="3">Opción 3</option>
-                            </select>
-                        </div>
+                    <input type="text" v-model="nombre" class="input-payment-panel" name="titular_input" placeholder="Nombre">
+                    <input type="text" v-model="apellidos" class="input-payment-panel" name="titular_input" placeholder="Apellidos">
+                    <input @input="validateEmail(email)" type="text" v-model="email" class="input-payment-panel" name="titular_input" placeholder="Email">
+                    <input type="password" v-model="contrasena" class="input-payment-panel" name="titular_input" placeholder="Contraseña">
+                    <input type="text" v-model="telefono" class="input-payment-panel" name="titular_input" placeholder="Teléfono">
+                    <div>
+                        <select name="rol" v-model="rol">
+                            <option selected disabled hidden><span>ROL</span></option>
+                            <option value="true">Administrador</option>
+                            <option value="false">Usuario</option>
+                        </select>
                     </div>
                 </div>
-                <div class="panel-box panel-box--3-col">
-                    <div class="panel-box__item">
-                        <label for="poster">Poster</label>
-                        <input type="file" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
-                    </div>
-                    <div class="panel-box__item">
-                        <label for="scene">Escena</label>
-                        <input type="file" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
-                    </div>
-                    <div class="panel-box__item">
-                        <label for="banner">Banner</label>
-                        <input type="file" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
-                    </div>
                 </div>
-                <div class="panel-box panel-box--1-col">
-                    <textarea class="input-payment-panel input-payment-panel--textarea" placeholder="Reseña"></textarea>
-                </div>      
+                <v-divider></v-divider>
+                <span class="error-message" v-if="showError">Por favor, completa todos los campos y/o revísalos.</span>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" text="ACTUALIZAR" variant="tonal" class="button-form--actions"></v-btn>
+                </v-card-actions>
             </form>
-            <v-divider></v-divider>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                <v-btn color="primary" text="ACTUALIZAR" variant="tonal" @click="dialog = false" class="button-form--actions"></v-btn>
-            </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
 
 <style scoped>
+    .error-message {
+        font-size: 10px;
+        color: red;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        font-family: 'Inter', sans-serif;
+    }
+
     .v-btn--size-default {
         min-width: 20px;
     }
@@ -95,7 +119,7 @@
         font-size: 12px;
     }
 
-    form {
+    .form-container {
         margin-left: 20px;
     }
 
@@ -203,7 +227,7 @@
         }
 
         select {
-            width: 150px;
+            width: calc(100% - 20px);
         }
         .panel-box--1-col {
             grid-template-columns: 1fr;
