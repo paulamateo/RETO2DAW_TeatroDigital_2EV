@@ -8,8 +8,18 @@ export interface Seat {
     sessionId: number
 }
 
+export interface SeatColors {
+    background: string;
+    base: string;
+    legs: string;
+    arms: string;
+}
+
 export const useSeatsStore = defineStore('seats', () => {
     const seats = reactive<Seat[]>([]);
+    const selectedSeats = reactive([]);
+    const seatColors = reactive({});
+    const selectedSession = ref(null);
 
     const getAllSeats = async (sessionId: string) => {
         try {
