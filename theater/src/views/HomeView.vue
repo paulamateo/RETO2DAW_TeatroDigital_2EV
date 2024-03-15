@@ -13,11 +13,11 @@
     <main>
         <div class="hero-banner">
             <div class="hero-banner__content">
-                <h1>BIENVENIDO AL TEATRO RISAS Y TRAGEDIAS</h1>
+                <h1>{{ $t("Homepage.titleHeroBanner") }}</h1>
                 <hr class="hero-banner__line">
                 <div class="hero-banner__subtitles">
-                    <h4>DESCUBRE EL ARTE EN VIVO:</h4>
-                    <h4>DONDE LAS HISTORIAS COBRAN VIDA EN EL ESCENARIO</h4>
+                    <h4>{{ $t("Homepage.subtitle1HeroBanner") }}</h4>
+                    <h4>{{ $t("Homepage.subtitle2HeroBanner") }}</h4>
                 </div>
             </div>
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="chevronleft-icon" id="chevronleft-icon" viewBox="0 0 16 16">
@@ -27,21 +27,21 @@
 
         <div class="second-banner">
             <div class="second-banner__content">
-                <h2 class="subtitle">HABLAN LOS ESPECTADORES</h2>
+                <h2 class="subtitle">{{ $t("Homepage.titleReviewsBanner") }}</h2>
                 <div class="second-banner__review">
-                    <p>"Increíblemente conmovedora. La combinación de la música, la iluminación y las actuaciones hicieron que la historia cobrara vida de una manera única. Definitivamente una joya teatral."</p>
-                    <p>Luis M., sobre <strong>Bodas de Sangre</strong></p>
+                    <p>{{ $t("Homepage.review1") }}</p>
+                    <p>{{ $t("Homepage.review1author") }} <strong>{{ $t("Homepage.review1title") }}</strong></p>
                 </div>
                 <div class="second-banner__review">
-                    <p>"Hacía tiempo que no veía una obra tan bien ejecutada. La intensidad emocional, la calidad de las actuaciones y la atmósfera del teatro crearon una experiencia inolvidable. ¡Totalmente recomendado!"</p>
-                    <p>María G., sobre <strong>Macbeth</strong></p>
+                    <p>{{ $t("Homepage.review2") }}</p>
+                    <p>{{ $t("Homepage.review2author") }} <strong>{{ $t("Homepage.review2title") }}</strong></p>
                 </div>
                 <div class="second-banner__review">
-                    <p>"Una noche mágica. La química entre los actores era palpable, y la conexión con la audiencia fue excepcional. Nunca olvidaré la emoción que sentí al salir del teatro."</p>
-                    <p>Carlos J., sobre <strong>El Fantasma de la Ópera</strong></p>
+                    <p>{{ $t("Homepage.review3") }}</p>
+                    <p>{{ $t("Homepage.review3author") }} <strong>{{ $t("Homepage.review3title") }}</strong></p>
                 </div>
                 <RouterLink to="/Billboard">
-                    <button class="button grid-item__button--position" type="submit">VER OBRAS DISPONIBLES</button>
+                    <button class="button grid-item__button--position" type="submit">{{ $t("Homepage.buttonReviews") }}</button>
                 </RouterLink>
             </div>
         </div> 
@@ -80,6 +80,7 @@
         font-family: "GothamLight", sans-serif;
         letter-spacing: 0.15em;
         padding-bottom: 20px;
+        text-transform: uppercase;
     }
     .second-banner__review {
         margin: 10px 0 10px 0;
@@ -99,12 +100,14 @@
     }
     .hero-banner h4 {
         font-size: 80%;
+        text-transform: uppercase;
     }
     .hero-banner h1 {
         font-size: 200%;
         font-family: "GothamBook", sans-serif;
         font-weight: 400;
         padding: 0 40px 25px 40px;
+        text-transform: uppercase;
     }
     .hero-banner__subtitles {
         font-family: "GothamLight", sans-serif;

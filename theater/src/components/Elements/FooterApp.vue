@@ -22,19 +22,19 @@
                 </div>
                 <ul class="footer__menu footer__menu--inline-block">
                     <li class="footer__menu-link">
-                        <a href="#">POLÍTICAS</a>
+                        <a href="#">{{ $t("Footer.footerTab1") }}</a>
                     </li>
                     <li class="footer__menu-link">
-                        <a href="#">SOBRE NOSOTROS</a>
+                        <a href="#">{{ $t("Footer.footerTab2") }}</a>
                     </li>
                     <li class="footer__menu-link">
-                        <a href="#">CONTACTO</a>
+                        <a href="#">{{ $t("Footer.footerTab3") }}</a>
                     </li>
                 </ul>
             </div>
             <div class="footer__copyright">
                 <Logotipe />
-                <p>2023 © Teatro Risas y Tragedias</p>
+                <p>{{ $t("Footer.copyright") }}</p>
             </div>
         </div>
     </footer>
@@ -66,6 +66,7 @@
     .footer__menu-link a {
         text-decoration: none;
         color: inherit;
+        text-transform: uppercase;
     }
     .footer__icon {
         margin: 0 0 0 5px;

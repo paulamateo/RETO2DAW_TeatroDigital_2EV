@@ -5,7 +5,7 @@
 <template>
     <main>
         <div class="banner banner--tickets">
-            <h1>CARTELERA</h1>
+            <h1>{{ $t("Billboard.titleBanner") }}</h1>
         </div>        
         <Shows />
     </main>
@@ -87,6 +87,7 @@
     }
     .banner--tickets h1 {
         padding-top: 60px;
+        text-transform: uppercase;
     }
 
     @media (min-width: 760px) {

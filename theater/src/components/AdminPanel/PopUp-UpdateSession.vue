@@ -49,23 +49,23 @@
 
     <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
-            <h2 class="popup-title">Actualizar sesión</h2>
+            <h2 class="popup-title">{{ $t("UpdateSession.title") }}</h2>
             <form @submit.prevent="updateSession">
                 <div class="form-container">
                     <div class="panel-box">
-                        <input v-model="hora" type="time" class="input-payment-panel" name="titular_input" placeholder="Hora">
-                        <input v-model="asientos" type="number" class="input-payment-panel" name="titular_input" placeholder="Asientos">
+                        <input v-model="hora" type="time" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateSession.field2')">
+                        <input v-model="asientos" type="number" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateSession.field3')">
                     </div>
                     <div class="panel-box panel-box--1-col">
-                        <textarea v-model="notas" class="input-payment-panel input-payment-panel--textarea" placeholder="Notas"></textarea>
+                        <textarea v-model="notas" class="input-payment-panel input-payment-panel--textarea" :placeholder="$t('CreateSession.field4')"></textarea>
                     </div>    
                 </div>
                 <v-divider></v-divider>
-                <span class="error-message" v-if="showError">Por favor, completa todos los campos.</span>
+                <span class="error-message" v-if="showError">{{ $t("CreateUser.errorMessage") }}</span>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                    <v-btn type="submit" color="primary" text="ACTUALIZAR"  variant="tonal" class="button-form--actions"></v-btn>
+                    <v-btn :text="$t('UpdateSession.button1')" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" :text="$t('UpdateSession.button2')"  variant="tonal" class="button-form--actions"></v-btn>
                 </v-card-actions> 
             </form> 
         </v-card>

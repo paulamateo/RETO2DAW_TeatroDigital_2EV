@@ -48,21 +48,21 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
         </svg>
-        <span>CREAR</span> 
+        <span>{{ $t("ListShows.buttonCreate") }}</span> 
     </v-btn>
 
     <v-dialog v-model="dialog" persistent activator="parent" width="700px">
         <v-card>
-            <h2 class="popup-title">Crear obra</h2>
+            <h2 class="popup-title">{{ $t("CreateShow.title") }}</h2>
             <form @submit.prevent="addShow">
                 <div class="form-container">
                     <div class="panel-box">
-                        <input type="text" v-model="titulo" class="input-payment-panel" name="titular_input" placeholder="Título">
-                        <input type="text" v-model="autor" class="input-payment-panel" name="titular_input" placeholder="Autor">
+                        <input type="text" v-model="titulo" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateShow.placeholder.title')">
+                        <input type="text" v-model="autor" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateShow.placeholder.author')">
                         <input type="text" v-model="director" class="input-payment-panel" name="titular_input" placeholder="Director">
                         <div class="panel-box">
-                            <input type="number" v-model="edad" class="input-payment-panel" name="titular_input" placeholder="Edad recomendada">
-                            <input type="text" v-model="precio" class="input-payment-panel" name="titular_input" placeholder="Precio">
+                            <input type="number" v-model="edad" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateShow.placeholder.age')">
+                            <input type="text" v-model="precio" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateShow.placeholder.price')">
                         </div> 
                     </div>
                     <div class="panel-box panel-box--3-col">
@@ -70,36 +70,36 @@
                             <input type="date" v-model="fecha" class="input-payment-panel" id="fecha" name="fecha">
                         </div>
                         <div class="panel-box__item">
-                            <input type="text" v-model="duracion" class="input-payment-panel" name="titular_input" placeholder="Duración">
+                            <input type="text" v-model="duracion" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateShow.placeholder.length')">
                         </div>
                         <div class="panel-box__item">
-                            <input type="text" v-model="genero" class="input-payment-panel" name="titular_input" placeholder="Género">
+                            <input type="text" v-model="genero" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateShow.placeholder.genre')">
                         </div>
                     </div>
                     <div class="panel-box panel-box--3-col">
                         <div class="panel-box__item">
-                            <label for="poster">Poster</label>
+                            <label for="poster">{{ $t("CreateShow.poster") }}</label>
                             <input type="text" v-model="posterFile"  class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                         </div>
                         <div class="panel-box__item">
-                            <label for="scene">Escena</label>
+                            <label for="scene">{{ $t("CreateShow.scene") }}</label>
                             <input type="text"  v-model="sceneFile" class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                         </div>
                         <div class="panel-box__item">
-                            <label for="banner">Banner</label>
+                            <label for="banner">{{ $t("CreateShow.banner") }}</label>
                             <input type="text" v-model="bannerFile"  class="input-payment-panel" name="image" accept="image/jpg, image/png, image/jpeg">
                         </div>
                     </div>
                     <div class="panel-box panel-box--1-col">
-                        <textarea v-model="resena" class="input-payment-panel input-payment-panel--textarea" placeholder="Reseña"></textarea>
+                        <textarea v-model="resena" class="input-payment-panel input-payment-panel--textarea" :placeholder="$t('CreateShow.placeholder.overview')"></textarea>
                     </div>    
                 </div>
                 <v-divider></v-divider>
-                <span class="error-message" v-if="showError">Por favor, completa todos los campos.</span>
+                <span class="error-message" v-if="showError">{{ $t("CreateShow.errorMessage") }}</span>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                    <v-btn type="submit" color="primary" text="CREAR"  variant="tonal" class="button-form--actions"></v-btn>
+                    <v-btn :text="$t('CreateShow.button2')" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" :text="$t('CreateShow.button1')" variant="tonal" class="button-form--actions"></v-btn>
                 </v-card-actions> 
             </form> 
         </v-card>

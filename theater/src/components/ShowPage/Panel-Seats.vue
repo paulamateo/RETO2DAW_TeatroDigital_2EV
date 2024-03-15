@@ -314,38 +314,38 @@
 
 <template>
     <div class="reserve-seats">
-        <h2>RESERVAR ENTRADAS</h2>
+        <h2>{{ $t("Show.titleReserve") }}</h2>
         <div class="reserve-seats__content">
             <div class="seats-area">
                 <div class="seats-data">
-                    <p>Elige tus asientos y sesión:</p>
+                    <p>{{ $t("Show.subtitleReserve") }}</p>
                     <div class="key">
                         <div class="option-key">
                             <div class="square square--colour-selected"></div>
-                            <p>Seleccionado</p>
+                            <p>{{ $t("Show.seatOption1") }}</p>
                         </div>
                         <div class="option-key">
                             <div class="square square--colour-disponible"></div>
-                            <p>Disponible</p>
+                            <p>{{ $t("Show.seatOption2") }}</p>
                         </div>
                         <div class="option-key">
                             <div class="square square--colour-no-disponible"></div>
-                            <p>No disponible</p>
+                            <p>{{ $t("Show.seatOption3") }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="buttons-sessions">
                 <div v-for="session in store.sessions" :key="session.sessionId">    
                     <v-btn :class="{'btn-session-active': selectedSession === session.sessionId, 'btn-session': true}" @click="selectSession(session.sessionId)">
-                        <span>SESIÓN <strong>{{ formatHour(session.hour) }}h</strong></span>
+                        <span>{{ $t("Show.session") }} <strong>{{ formatHour(session.hour) }}h</strong></span>
                     </v-btn>                    
                 </div>
             </div>
             <div v-for="session in store.sessions" :key="session.sessionId" v-show="selectedSession === session.sessionId">
                 <div class="chips-seats">
-                    <v-chip :ripple="false"  class="hola" color="black">Total asientos: <strong>  {{ session.totalSeats }}</strong></v-chip>
-                    <v-chip :ripple="false"  class="ma-2 ma-2__size" color="green">Disponibles: <strong>  {{ session.totalSeats - reservedSeatsCount }}</strong></v-chip>
-                    <v-chip :ripple="false"  class="ma-2" color="red">Reservados: <strong>  {{ reservedSeatsCount }}</strong></v-chip>
+                    <v-chip :ripple="false"  class="hola" color="black">{{ $t("Show.infoTab1") }}: <strong>  {{ session.totalSeats }}</strong></v-chip>
+                    <v-chip :ripple="false"  class="ma-2 ma-2__size" color="green">{{ $t("Show.infoTab2") }}: <strong>  {{ session.totalSeats - reservedSeatsCount }}</strong></v-chip>
+                    <v-chip :ripple="false"  class="ma-2" color="red">{{ $t("Show.infoTab3") }}: <strong>  {{ reservedSeatsCount }}</strong></v-chip>
                 </div>
                 <div class="panel-seats" id="panel-seats">
                     <div class="panel-seats__item" id="area-seats">
@@ -378,9 +378,7 @@
                     </div>
                 </div>
             </div>
-            <div class="screen">
-                PANTALLA
-            </div>
+            <div class="screen">{{ $t("Show.screen") }}</div>
         </div>            
         <div class="payment-area">
             <div class="panel-payment">
@@ -389,16 +387,16 @@
                     <div v-if="selectedSeats.length > 0" class="selected-seat-info">
                         <div v-for="info in selectedSeats" :key="info.seatId" class="individual-ticket">
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" @click="deleteTicketSeat(info.seatId)" class="trash-icon" id="trash-icon" viewBox="0 0 16 16"><path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/></svg>
-                            <p><strong>Entrada para "{{ showData.title }}"</strong></p>
-                            <p>BUTACA {{ info.seatId }} || Sesión {{ formatHour(info.session) }}h</p>
+                            <p><strong>{{ $t("Show.ticketTitle") }} "{{ showData.title }}"</strong></p>
+                            <p>{{ $t("Show.seat") }} {{ info.seatId }} || {{ $t("Show.session") }} {{ formatHour(info.session) }}h</p>
                             <div class="individual-ticket__data">
-                                <p>Fila {{ calculateRow(info.seatId) }} | Columna {{ calculateColumn(info.seatId) }}</p>
+                                <p>{{ $t("Show.row") }} {{ calculateRow(info.seatId) }} | {{ $t("Show.column") }} {{ calculateColumn(info.seatId) }}</p>
                                 <p id="show__price"><strong>{{ showData.price }}€</strong></p>
                             </div>
                         </div>
                     </div>
                     <div v-else class="advertisement-tickets" id="ad">
-                       <p>¡No has seleccionado ninguna butaca!</p>
+                       <p>{{ $t("Show.noSeats") }}</p>
                     </div>
                 </div>
                 <hr>
@@ -409,26 +407,26 @@
             </div>
 
             <div class="panel-payment">
-                <h3>DATOS PERSONALES</h3>
+                <h3>{{ $t("Show.paymentTitle1") }}</h3>
                 <div class="panel-box">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/></svg>
-                    <input v-model="name" type="text" class="input-payment-panel" name="name-lastname_input" placeholder="Nombre y apellidos" required>
+                    <input v-model="name" type="text" class="input-payment-panel" name="name-lastname_input" :placeholder="$t('Show.placeholder.fullname')" required>
                 </div>
                 <div>
                     <div class="panel-box">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/></svg>
-                        <input @input="validateEmail()" v-model="email" type="text" class="input-payment-panel" id="input-email" name="email" placeholder="Correo electrónico">
-                        <span class="error-message" v-if="!isValidEmail">Correo electrónico no válido</span>
+                        <input @input="validateEmail()" v-model="email" type="text" class="input-payment-panel" id="input-email" name="email" :placeholder="$t('Show.placeholder.email')">
+                        <span class="error-message" v-if="!isValidEmail">{{ $t("AccessToPanelAdmin.errorMessage") }}</span>
                     </div>
                 </div>
                 <div>
                     <div class="panel-box">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/></svg>
-                        <input @input="validatePhone()" v-model="phone" type="text" class="input-payment-panel" id="input-phone"  name="phone" placeholder="Teléfono">
+                        <input @input="validatePhone()" v-model="phone" type="text" class="input-payment-panel" id="input-phone"  name="phone"  :placeholder="$t('Show.placeholder.phone')">
                     </div>
                     </div>
                     <br>
-                    <h3>PAGO</h3>
+                    <h3>{{ $t("Show.paymentTitle2") }}</h3>
                     <div class="panel-box">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/></svg>
                         <input v-model="titular" type="text" class="input-payment-panel" name="titular_input" placeholder="Titular" required>
@@ -450,7 +448,7 @@
                         </div> 
                     </div> 
                     <div class="container-button-pay">
-                        <v-btn class="btn-pay" @click="openDialog()">PAGAR</v-btn>
+                        <v-btn class="btn-pay" @click="openDialog()">{{ $t("Show.buttonPay") }}</v-btn>
                     </div>
 
                     <v-dialog v-model="dialog" persistent width="350px">
@@ -464,8 +462,8 @@
                                 <div class="tick-icon">
                                     <img src="../../assets/images/elements/tick.png"/>
                                 </div>
-                                <h3 class="popup-title">¡Gracias por tu compra!</h3>
-                                <p>Accede al documento descargado para revisar tu compra.</p>
+                                <h3 class="popup-title">{{ $t("Show.thanks") }}</h3>
+                                <p>{{ $t("Show.accessToDOC") }}</p>
                             </v-card-text>  
                         </v-card>
                     </v-dialog>
@@ -517,6 +515,7 @@
         text-align: center;
         font-size: 12px;
         margin-bottom: 20px;
+        text-transform: uppercase;
     }
 
     .container-button-pay {
@@ -582,7 +581,6 @@
         border-radius: 10px;
         display: flex;
         flex-direction: row;
-        /* flex-direction: column; */
         align-items: center;
         margin: 0 0 30px 0;
         justify-content: center;
@@ -731,6 +729,7 @@
         margin-top: 0;
         margin-bottom: 20px;
         text-align: center;
+        text-transform: uppercase;
     }
 
     .panel-box {
@@ -828,6 +827,7 @@
     }
     .reserve-seats h2 {
         text-align: center;
+        text-transform: uppercase;
     }
 
     .seats-data {

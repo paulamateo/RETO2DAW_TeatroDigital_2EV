@@ -34,12 +34,12 @@
 
     <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
-            <h2 class="popup-title">¿Estás seguro/a de querer eliminar esta obra?</h2>
+            <h2 class="popup-title">{{ $t("DeleteShow.title") }}</h2>
             <v-divider></v-divider>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn text="CANCELAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                <v-btn color="primary" text="ELIMINAR" variant="tonal" @click="deleteShow" class="button-form--actions"></v-btn>
+                <v-btn :text="$t('DeleteShow.buttonCancel')" @click="dialog = false" class="button-form--actions"></v-btn>
+                <v-btn @click="deleteShow"  color="primary" :text="$t('DeleteShow.buttonDelete')" variant="tonal" class="button-form--actions"></v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

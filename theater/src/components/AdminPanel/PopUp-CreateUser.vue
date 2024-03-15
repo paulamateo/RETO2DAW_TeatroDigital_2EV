@@ -53,35 +53,35 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
         </svg>
-        <span>CREAR</span> 
+        <span>{{ $t("ListShows.buttonCreate") }}</span> 
     </v-btn>
 
     <v-dialog v-model="dialog" persistent activator="parent" width="700px">
         <v-card>
-            <h2 class="popup-title">Crear usuario</h2>
+            <h2 class="popup-title">{{ $t("CreateUser.title") }}</h2>
             <form @submit.prevent="addUser">
                 <div class="form-container">
                     <div class="panel-box">
-                    <input type="text" v-model="nombre" class="input-payment-panel" name="titular_input" placeholder="Nombre">
-                    <input type="text" v-model="apellidos" class="input-payment-panel" name="titular_input" placeholder="Apellidos">
-                    <input @input="validateEmail(email)" type="text" v-model="email" class="input-payment-panel" name="titular_input" placeholder="Email">
-                    <input type="password" v-model="contrasena" class="input-payment-panel" name="titular_input" placeholder="Contraseña">
-                    <input @input="validatePhone()" type="text" v-model="telefono" class="input-payment-panel" name="titular_input" placeholder="Teléfono">
+                    <input type="text" v-model="nombre" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateUser.placeholder.name')">
+                    <input type="text" v-model="apellidos" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateUser.placeholder.lastname')">
+                    <input @input="validateEmail(email)" type="text" v-model="email" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateUser.placeholder.email')">
+                    <input type="password" v-model="contrasena" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateUser.placeholder.password')">
+                    <input @input="validatePhone()" type="text" v-model="telefono" class="input-payment-panel" name="titular_input" :placeholder="$t('CreateUser.placeholder.phone')">
                     <div>
                         <select name="rol" v-model="rol">
                             <option selected disabled hidden><span>ROL</span></option>
-                            <option value="true">Administrador</option>
-                            <option value="false">Usuario</option>
+                            <option value="true">{{ $t("CreateUser.rol2") }}</option>
+                            <option value="false">{{ $t("CreateUser.rol1") }}</option>
                         </select>
                     </div>
                 </div>
                 </div>
                 <v-divider></v-divider>
-                <span class="error-message" v-if="showError">Por favor, completa todos los campos y/o revísalos.</span>
+                <span class="error-message" v-if="showError">{{ $t("CreateUser.errorMessage") }}</span>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                    <v-btn type="submit" color="primary" text="CREAR" variant="tonal" class="button-form--actions"></v-btn>
+                    <v-btn :text="$t('CreateSession.button2')" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" :text="$t('CreateSession.button1')" variant="tonal" class="button-form--actions"></v-btn>
                 </v-card-actions>
             </form>
            
