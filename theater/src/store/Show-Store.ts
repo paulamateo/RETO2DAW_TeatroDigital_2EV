@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 import { reactive, computed, ref } from "vue";
 import { format } from "date-fns";
-const apiURL = process.env.VUE_APP_API_URL;
+
+
 
 export interface Show {
     showId: number,
@@ -21,27 +22,15 @@ export interface Show {
 
 export const useShowsStore = defineStore('shows', () => {
     const shows = reactive<Show[]>([])
-    const searchTerm = ref('');
 
     const getAllShows = async () => {
         try {
-            const response = await fetch(`${apiURL}/Show`)
+            const response = await fetch(`http://localhost:8001/Show`)
             const data = await response.json();
             shows.splice(0, shows.length, ...data);
             return data;
         }catch (error) {
             console.log('Error displaying shows: ', error);
-            return [];
-        }
-    }
-
-    const getShowByTitle = async (title: string) => {
-        try {   
-            const response = await fetch(`http://localhost:8001/Show/ByName/${title}`);
-            const data = await response.json();
-            return data;
-        }catch (error) {
-            console.log('Error displaying show by title: ', error);
             return [];
         }
     }
@@ -125,13 +114,10 @@ export const useShowsStore = defineStore('shows', () => {
         }
     }
     
-    const filteredShows = computed(() => {
-        return shows.filter((show) => show.title.toLowerCase().includes(searchTerm.value.toLowerCase()));
-    });
-
+  
     const searchShow = async (title: string) => {
         try {
-            const response = await fetch(`http://localhost:8001/Show/ByName/${title}`);
+            const response = await fetch(`http://localhost:8001/Show/search?title=${title}`);
             if (!response.ok) {
                 throw new Error('Show not found');
             }
@@ -142,7 +128,7 @@ export const useShowsStore = defineStore('shows', () => {
         }
     }
 
-    return { shows, getAllShows, filteredShows, searchTerm, getShowByTitle, addShowToDatabase, deleteShowToDatabase, updateShowToDatabase, searchShow };
+    return { shows, getAllShows, addShowToDatabase, deleteShowToDatabase, updateShowToDatabase, searchShow };
 })
 
 export const useShowByIdStore = defineStore('showById', () => {
