@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { reactive, computed, ref } from "vue";
 import { format } from "date-fns";
+const apiURL = process.env.VUE_APP_API_URL;
 
 export interface Show {
     showId: number,
@@ -24,7 +25,7 @@ export const useShowsStore = defineStore('shows', () => {
 
     const getAllShows = async () => {
         try {
-            const response = await fetch('http://localhost:8001/Show')
+            const response = await fetch(`${apiURL}/Show`)
             const data = await response.json();
             shows.splice(0, shows.length, ...data);
             return data;
