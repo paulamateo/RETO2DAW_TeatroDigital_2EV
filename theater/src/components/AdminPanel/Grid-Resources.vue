@@ -1,12 +1,12 @@
 <template>
-    <h3>Recursos iniciales</h3>
+    <h3>{{ $t("GridResources.title") }}</h3>
     <div class="initial-resources__grid">
         <a href="https://www.midjourney.com/home">
             <div class="initial-resources__item">
                 <img class="initial-resources__img" src="../../assets/images/elements/midjourney_interface.jpg"/>
                 <div class="initial-resources__details">
                     <span><strong>Midjourney</strong></span>
-                    <p>Generador de imágenes por IA</p>
+                    <p>{{ $t("GridResources.item1subtitle") }}</p>
                 </div>
             </div>
         </a>           
@@ -15,7 +15,7 @@
                 <img class="initial-resources__img" src="../../assets/images/elements/bing_interface.jpg"/>
                 <div class="initial-resources__details">
                     <span><strong>Bing Image Creator</strong></span>
-                    <p>Generador de imágenes por IA</p>
+                    <p>{{ $t("GridResources.item1subtitle") }}</p>
                 </div>
             </div>
         </a>
@@ -24,7 +24,7 @@
                 <img class="initial-resources__img" src="../../assets/images/elements/kraken_interface.png"/>
                 <div class="initial-resources__details">
                     <span><strong>Kraken.io</strong></span>
-                    <p>Optimizador de imágenes</p>
+                    <p>{{ $t("GridResources.item2subtitle") }}</p>
                 </div>
             </div>
         </a>
@@ -33,7 +33,7 @@
                 <img class="initial-resources__img" src="../../assets/images/elements/manager_interface.jpeg"/>
                 <div class="initial-resources__details">
                     <span><strong>Google Tag Manager</strong></span>
-                    <p>Gestión de etiquetas</p>
+                    <p>{{ $t("GridResources.item4subtitle") }}</p>
                 </div>
             </div>
         </a>
@@ -42,7 +42,7 @@
                 <img class="initial-resources__img" src="../../assets/images/elements/analytics_interface.png"/>
                 <div class="initial-resources__details">
                     <span><strong>Google Analytics</strong></span>
-                    <p>Analítica web</p>
+                    <p>{{ $t("GridResources.item3subtitle") }}</p>
                 </div>
             </div>
         </a>

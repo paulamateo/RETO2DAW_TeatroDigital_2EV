@@ -5,7 +5,7 @@
 <template>
     <main>
         <div class="banner banner--programming">
-            <h1>PROGRAMACIÓN</h1>
+            <h1>{{ $t("Programming.titleBanner") }}</h1>
         </div>
         <Calendar />
     </main>
@@ -17,6 +17,7 @@
     }
     .banner--programming h1 {
         padding-top: 70px;
+        text-transform: uppercase;
     }
 
     .weekday-panel {

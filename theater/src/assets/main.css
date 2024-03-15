@@ -28,6 +28,7 @@ body {
   border-radius: 30px;
   cursor: pointer;
   font-size: 14px;
+  text-transform: uppercase;
 }
 .button:hover {
   background-color: #b0802c;

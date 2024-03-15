@@ -26,9 +26,9 @@ watch(selectedGenre, async (genre) => {
 <template>
     <div class="select-genre__form">
         <form method="POST">
-            <label for="genre">Filtrar por</label>
+            <label for="genre">{{ $t("Billboard.filter") }}</label>
             <select v-model="selectedGenre" name="genre" id="genre">
-                <option value="" selected disabled hidden><span>GÉNERO</span></option>
+                <option value="" selected disabled hidden><span>{{ $t("Billboard.genre") }}</span></option>
                 <option v-for="genre in genres" :key="genre" :value="genre">{{ genre }}</option>
             </select>
         </form>
@@ -59,6 +59,7 @@ watch(selectedGenre, async (genre) => {
         background-size: 12px auto;
         appearance: none;
         border: 1px solid #353535;
+        text-transform: uppercase;
     }
 
     .select-genre__form {

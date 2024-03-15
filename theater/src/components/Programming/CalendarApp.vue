@@ -100,13 +100,13 @@
       <table>
         <thead>
           <tr>
-            <th>L</th>
-            <th>M</th>
-            <th>X</th>
-            <th>J</th>
-            <th>V</th>
-            <th>S</th>
-            <th>D</th>
+            <th>{{ $t("Programming.weekDay1") }}</th>
+            <th>{{ $t("Programming.weekDay2") }}</th>
+            <th>{{ $t("Programming.weekDay3") }}</th>
+            <th>{{ $t("Programming.weekDay4") }}</th>
+            <th>{{ $t("Programming.weekDay5") }}</th>
+            <th>{{ $t("Programming.weekDay6") }}</th>
+            <th>{{ $t("Programming.weekDay7") }}</th>
           </tr>
         </thead>
         <tbody>

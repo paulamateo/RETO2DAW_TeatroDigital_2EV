@@ -11,14 +11,14 @@
 <template>
     <section class="shows">
         <div class="shows__rectangle">
-            <h2>VIVE LA MAGIA MUSICAL</h2>
+            <h2>{{ $t("GridMusicals.titleMusicals") }}</h2>
         </div>
         <div class="shows__grid shows__grid--columns" id="shows-grid__musical-genre">
             <div v-for="musical in store.musicalShows" :key="musical.showId" >
                 <div class="grid-item" :style="{ backgroundImage: 'url(' + musical.scene + ')' }">
                     <h2>{{ musical.title }}</h2>
                     <RouterLink :to="{ path: '/Shows/' + musical.showId }">
-                        <button class="button button--index" type="submit" id="button">VER ENTRADAS</button>
+                        <button class="button button--index" type="submit" id="button">{{ $t("GridMusicals.buttonMusicals") }}</button>
                     </RouterLink>
                 </div>
             </div>
@@ -69,6 +69,7 @@
 .shows__rectangle h2 {
     font-family: "GothamLight", sans-serif;
     letter-spacing: 0.15em;
+    text-transform: uppercase;
 }
 
 

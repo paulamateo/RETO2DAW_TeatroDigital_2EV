@@ -39,38 +39,38 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
         </svg>
-        <span>CREAR</span> 
+        <span>{{ $t("ListShows.buttonCreate") }}</span> 
     </v-btn>
 
     <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
-            <h2 class="popup-title">Crear sesión</h2>
+            <h2 class="popup-title">{{ $t("CreateSession.title") }}</h2>
             <form @submit.prevent="addSession">
                 <div class="form-container">
                     <div class="panel-box panel-box--3-col">
                         <div class="panel-box__item">
-                            <label for="id">ID de la obra</label>
+                            <label for="id">{{ $t("CreateSession.field1") }}</label>
                             <input type="number" v-model="obraId" class="input-payment-panel" name="image">
                         </div>
                         <div class="panel-box__item">
-                            <label for="hour">Hora</label>
+                            <label for="hour">{{ $t("CreateSession.field2") }}</label>
                             <input type="time" v-model="hora" class="input-payment-panel" name="image">
                         </div>
                         <div class="panel-box__item">
-                            <label for="seats">Asientos disponibles</label>
+                            <label for="seats">{{ $t("CreateSession.field3") }}</label>
                             <input type="number" v-model="asientos" class="input-payment-panel" name="image">
                         </div>
                     </div>
                     <div class="panel-box panel-box--1-col">
-                        <textarea v-model="notas" class="input-payment-panel input-payment-panel--textarea" placeholder="Notas"></textarea>
+                        <textarea v-model="notas" class="input-payment-panel input-payment-panel--textarea" :placeholder="$t('CreateSession.field4')"></textarea>
                     </div>    
                 </div>
                 <v-divider></v-divider>
-                <span class="error-message" v-if="showError">Por favor, completa todos los campos.</span>
+                <span class="error-message" v-if="showError">{{ $t("CreateShow.errorMessage") }}</span>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn text="CERRAR" @click="dialog = false" class="button-form--actions"></v-btn>
-                    <v-btn type="submit" color="primary" text="CREAR"  variant="tonal" class="button-form--actions"></v-btn>
+                    <v-btn :text="$t('CreateSession.button2')" @click="dialog = false" class="button-form--actions"></v-btn>
+                    <v-btn type="submit" color="primary" :text="$t('CreateSession.button1')"  variant="tonal" class="button-form--actions"></v-btn>
                 </v-card-actions> 
             </form> 
         </v-card>

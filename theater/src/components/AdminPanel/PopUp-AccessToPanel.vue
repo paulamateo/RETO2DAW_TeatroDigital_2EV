@@ -37,7 +37,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
             <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/>
         </svg>
-        <span class="button-open-panel__text button-open-panel__text--visibility">ACCEDER</span> 
+        <span class="button-open-panel__text button-open-panel__text--visibility">{{ $t("Header.buttonGoPanel") }}</span> 
     </v-btn>
     <v-dialog v-model="dialog" persistent activator="parent" width="400px">
         <v-card>
@@ -53,18 +53,18 @@
                         <svg width="36" height="40" viewBox="0 0 36 40"><path class="lockb" d="M27 27C27 34.1797 21.1797 40 14 40C6.8203 40 1 34.1797 1 27C1 19.8203 6.8203 14 14 14C21.1797 14 27 19.8203 27 27ZM15.6298 26.5191C16.4544 25.9845 17 25.056 17 24C17 22.3431 15.6569 21 14 21C12.3431 21 11 22.3431 11 24C11 25.056 11.5456 25.9845 12.3702 26.5191L11 32H17L15.6298 26.5191Z"></path><path class="lock" d="M6 21V10C6 5.58172 9.58172 2 14 2V2C18.4183 2 22 5.58172 22 10V21"></path></svg>
                     </label>
                 </div>
-                <h2 class="popup-title">Acceder al panel de administrador</h2>
+                <h2 class="popup-title">{{ $t("AccessToPanelAdmin.title") }}</h2>
                 <form @submit.prevent="submitForm" novalidate>
                     <div class="panel-box">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/></svg>
-                        <input @input="validateEmail" v-model="email" type="text" class="input-payment-panel" name="titular_input" placeholder="Correo electrónico">
-                        <span class="error-message" v-if="!isValidEmail">Correo electrónico no válido</span>
+                        <input @input="validateEmail" v-model="email" type="text" class="input-payment-panel" name="titular_input" :placeholder="$t('AccessToPanelAdmin.placeholder.email')">
+                        <span class="error-message" v-if="!isValidEmail">{{ $t("AccessToPanelAdmin.errorMessage") }}</span>
                     </div>
                     <div class="panel-box">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon-panel"  viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2M5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1"/></svg>
-                        <input type="password" v-model="password" class="input-payment-panel" name="titular_input" placeholder="Contraseña">
+                        <input type="password" v-model="password" class="input-payment-panel" name="titular_input" :placeholder="$t('AccessToPanelAdmin.placeholder.password')">
                     </div>
-                    <v-btn type="submit" class="mb-4 button-login" size="large" block>Acceder</v-btn>
+                    <v-btn type="submit" class="mb-4 button-login" size="large" block>{{ $t("AccessToPanelAdmin.button") }}</v-btn>
                 </form>
             </v-card-text>
         </v-card>

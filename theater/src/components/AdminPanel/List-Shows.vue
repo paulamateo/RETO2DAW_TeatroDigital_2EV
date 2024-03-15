@@ -36,7 +36,7 @@
                 </th>
                 <th class="table-element--visibility-show">
                     <div class="table__header-content">
-                        <p>Obra</p>
+                        <p>{{ $t("ListShows.show") }}</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
                         </svg>
@@ -44,7 +44,7 @@
                 </th>
                 <th class="table-element--visibility-director">
                     <div class="table__header-content">
-                        <p>Director</p>
+                        <p>{{ $t("ListShows.director") }}</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
                         </svg>
@@ -52,7 +52,7 @@
                 </th>
                 <th class="table-element--visibility-genre">
                     <div class="table__header-content">
-                        <p>Género</p>
+                        <p>{{ $t("ListShows.genre") }}</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
                         </svg>
@@ -60,7 +60,7 @@
                 </th>
                 <th class="table-element--visibility-price">
                     <div class="table__header-content">
-                        <p>Precio</p>
+                        <p>{{ $t("ListShows.price") }}</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
                         </svg>
@@ -68,7 +68,7 @@
                 </th>
                 <th class="table-element--visibility-date">
                     <div class="table__header-content">
-                        <p>Fecha</p>
+                        <p>{{ $t("ListShows.date") }}</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
                         </svg>
@@ -76,7 +76,7 @@
                 </th>
                 <th class="table-element--visibility table-element--visibility-duration">
                     <div class="table__header-content">
-                        <p>Duración</p>
+                        <p>{{ $t("ListShows.length") }}</p>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4"/>
                         </svg>
