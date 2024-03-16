@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
+import { apiUrl } from '@/env';
 
 export interface selectedSeat {
     seatId: number;
@@ -24,7 +25,7 @@ export const usePurchasesStore = defineStore('purchases', () => {
 
     const getAllPurchases = async () => {
         try {
-            const response = await fetch('http://localhost:8001/Purchase')
+            const response = await fetch(`${apiUrl}/Purchase`)
             const data = await response.json();
             purchases.splice(0, purchases.length, ...data);
             return data;
@@ -34,34 +35,6 @@ export const usePurchasesStore = defineStore('purchases', () => {
         }
     }
 
-    const addPurchaseToDatabase = async (fecha: Date, name: string, phone: string, email: string, totalPrice: number, title: string, sessionId: number, reservedSeats: selectedSeat[]) => {
-        try {
-            const purchase = {
-                purchaseId: 0,
-                datePurchase: fecha,
-                buyerName: name,
-                buyerPhone: phone,
-                buyerEmail: email,
-                totalPrice: totalPrice,
-                title: title,
-                sessionId: sessionId,
-                reservedSeats: reservedSeats
-            };
-            const response = await fetch("http://localhost:8001/Purchase", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(purchase),
-            });
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }else {
-                console.log('OPERATION SUCCESSFULLY COMPLETED');
-            }
-        }catch (error) {
-            console.log('Error to create purchase: ', error);
-        }
-    }
-
-    return { purchases, getAllPurchases, addPurchaseToDatabase };
+    return { purchases, getAllPurchases };
 })
 

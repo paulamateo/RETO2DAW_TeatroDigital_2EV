@@ -33,12 +33,6 @@
         }
     }
 
-    watch([nombre, apellidos, email, contrasena, telefono, rol], () => {
-        if (nombre.value && apellidos.value && email.value && contrasena.value && telefono.value && rol.value) {
-            showError.value = false;
-        }
-    }, { immediate: true }); 
-
     setTimeout(() => {
         watch(dialog, (newValue) => {
             if (!newValue) {
@@ -46,6 +40,12 @@
             }
         });
     }, 8000)
+
+    watch([nombre, apellidos, email, contrasena, telefono, rol], () => {
+        if (nombre.value && apellidos.value && email.value && contrasena.value && telefono.value && rol.value) {
+            showError.value = false;
+        }
+    }, { immediate: true }); 
 </script>
 
 <template>

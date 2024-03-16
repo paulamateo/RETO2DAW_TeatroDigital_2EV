@@ -15,7 +15,6 @@
     }
 
     async function submitForm() {
-
         const loginSuccess = await store.LoginToPanelAdmin(email.value, password.value);
         
         if (loginSuccess) {
@@ -29,7 +28,6 @@
             }, 1000); 
         }
     }
-
 </script>
 
 <template>

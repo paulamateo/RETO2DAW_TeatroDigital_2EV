@@ -1,8 +1,7 @@
 import { defineStore } from "pinia";
-import { reactive, computed, ref } from "vue";
+import { reactive } from "vue";
 import { format } from "date-fns";
-
-
+import { apiUrl } from '@/env';
 
 export interface Show {
     showId: number,
@@ -25,7 +24,7 @@ export const useShowsStore = defineStore('shows', () => {
 
     const getAllShows = async () => {
         try {
-            const response = await fetch(`http://localhost:8001/Show`)
+            const response = await fetch(`${apiUrl}/Show`)
             const data = await response.json();
             shows.splice(0, shows.length, ...data);
             return data;
@@ -52,7 +51,7 @@ export const useShowsStore = defineStore('shows', () => {
                 scene: sceneFile,
                 overview: resena
             }
-            const response = await fetch("http://localhost:8001/Show", {
+            const response = await fetch(`${apiUrl}/Show`, {
                 method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(show),
@@ -69,7 +68,7 @@ export const useShowsStore = defineStore('shows', () => {
 
     const deleteShowToDatabase = async (showId: number) => {
         try {
-            const response = await fetch(`http://localhost:8001/Show/${showId}`, {
+            const response = await fetch(`${apiUrl}/Show/${showId}`, {
                 method: 'DELETE'
             });
             if (!response.ok) {
@@ -99,7 +98,7 @@ export const useShowsStore = defineStore('shows', () => {
                 scene: sceneFile,
                 overview: resena
             }
-            const response = await fetch(`http://localhost:8001/Show/${showId}`, {
+            const response = await fetch(`${apiUrl}/Show/${showId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(show),
@@ -114,10 +113,9 @@ export const useShowsStore = defineStore('shows', () => {
         }
     }
     
-  
     const searchShow = async (title: string) => {
         try {
-            const response = await fetch(`http://localhost:8001/Show/search?title=${title}`);
+            const response = await fetch(`${apiUrl}/Show/search?title=${title}`);
             if (!response.ok) {
                 throw new Error('Show not found');
             }
@@ -152,7 +150,7 @@ export const useShowByIdStore = defineStore('showById', () => {
 
     const getShowById = async (showId: string) => {
         try {
-            const response = await fetch(`http://localhost:8001/Show/${showId}`);
+            const response = await fetch(`${apiUrl}/Show/${showId}`);
             const data = await response.json();
             Object.assign(state.show, { ...data, date: formatDate(data.date) });
         } catch (error) {

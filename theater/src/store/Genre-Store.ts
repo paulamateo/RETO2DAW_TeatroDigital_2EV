@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
+import { apiUrl } from '@/env';
 
 export interface Show {
     showId: number,
@@ -23,7 +24,7 @@ export const useShowsByGenreStore = defineStore('musicalShows', () => {
 
     const getAllShowsMusical = async () => {
         try {
-            const response = await fetch('http://localhost:8001/Genre/musical')
+            const response = await fetch(`${apiUrl}/Genre/musical`)
             const data = await response.json();
             musicalShows.splice(0, musicalShows.length, ...data);
         }catch (error) {
@@ -33,7 +34,7 @@ export const useShowsByGenreStore = defineStore('musicalShows', () => {
 
     const getAllGenres = async () => {
         try {
-            const response = await fetch('http://localhost:8001/Genre')
+            const response = await fetch(`${apiUrl}/Genre`)
             const genres = await response.json()
             return genres;
         }catch (error) {
@@ -43,7 +44,7 @@ export const useShowsByGenreStore = defineStore('musicalShows', () => {
 
     const getAllShowsByGenre = async(genre: string) => {
         try {
-            const response = await fetch(`http://localhost:8001/Genre/${genre}`);
+            const response = await fetch(`${apiUrl}/Genre/${genre}`);
             const data = await response.json();
             shows.splice(0, shows.length, ...data);
             return data;

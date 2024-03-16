@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
+import { apiUrl } from '@/env';
 
 export interface Session {
     sessionId: number,
@@ -18,7 +19,7 @@ export const useSessionsStore = defineStore('sessions', () => {
 
     const getAllSessions = async () => {
         try {
-            const response = await fetch(`http://localhost:8001/Session`)
+            const response = await fetch(`${apiUrl}/Session`)
             const data = await response.json();
             sessions.splice(0, sessions.length, ...data);
         }catch (error) {
@@ -28,7 +29,7 @@ export const useSessionsStore = defineStore('sessions', () => {
 
     const getAllSessionsbyShow = async (showId: string) => {
         try {
-            const response = await fetch(`http://localhost:8001/Show/${showId}/Session`)
+            const response = await fetch(`${apiUrl}/Show/${showId}/Session`)
             const data = await response.json();
             sessions.splice(0, sessions.length, ...data);
         }catch (error) {
@@ -45,7 +46,7 @@ export const useSessionsStore = defineStore('sessions', () => {
                 totalSeats: asientos,
                 notes: notas
             }
-            const response = await fetch("http://localhost:8001/Session", {
+            const response = await fetch(`${apiUrl}/Session`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(session),
@@ -62,7 +63,7 @@ export const useSessionsStore = defineStore('sessions', () => {
 
     const deleteSessionToDatabase = async (sessionId: number) => {
         try {
-            const response = await fetch(`http://localhost:8001/Session/${sessionId}`, {
+            const response = await fetch(`${apiUrl}/Session/${sessionId}`, {
                 method: 'DELETE'
             });
             if (!response.ok) {
@@ -83,7 +84,7 @@ export const useSessionsStore = defineStore('sessions', () => {
                 totalSeats: asientos,
                 notes: notas
             }
-            const response = await fetch(`http://localhost:8001/Session/${sessionId}`, {
+            const response = await fetch(`${apiUrl}/Session/${sessionId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(session),

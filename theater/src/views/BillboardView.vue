@@ -12,25 +12,28 @@
 </template>
 
 <style scoped>
-    select {
-        font-family: "Inter", sans-serif;
-        width: 110px;
-        border-radius: 20px;
-        padding: 10px;
-        outline: none;
-        font-weight: 700;
-        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6"><polygon points="0,0 12,0 6,6" fill="black"/></svg>') no-repeat right 12px center;
-        background-size: 12px auto;
-        appearance: none;
+    .banner--tickets {
+        background-image: url(../assets/images/elements/banner_billboard.jpg);
+    }
+    .banner--tickets h1 {
+        padding-top: 60px;
+        text-transform: uppercase;
     }
 
-    .select-genre__form {
-        margin: 60px 70px 20px 70px;
-        display: flex;
-        justify-content: right;
+    @media (min-width: 760px) {
+        .container {
+            display: grid;
+            grid-template-columns: repeat(2, calc(50% - 10px));
+        }
+        .container-item {
+            margin-bottom: 0;
+        }
     }
-    .select-genre__form label {
-        margin-right: 10px;
+
+    @media (min-width: 990px) {
+        .container {
+            grid-template-columns: repeat(4, calc(24% - 10px));
+        }
     }
 
     .container {
@@ -80,29 +83,5 @@
         font-size: 12px;
         margin: 15px 0 0 10px;
         text-transform: uppercase;
-    }
-
-    .banner--tickets {
-        background-image: url(../assets/images/elements/banner_billboard.jpg);
-    }
-    .banner--tickets h1 {
-        padding-top: 60px;
-        text-transform: uppercase;
-    }
-
-    @media (min-width: 760px) {
-        .container {
-            display: grid;
-            grid-template-columns: repeat(2, calc(50% - 10px));
-        }
-        .container-item {
-            margin-bottom: 0;
-        }
-    }
-
-    @media (min-width: 990px) {
-        .container {
-            grid-template-columns: repeat(4, calc(24% - 10px));
-        }
     }
 </style>../components/Billboard/ShowsApp.vue

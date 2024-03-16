@@ -4,7 +4,6 @@ import { useShowsStore } from '../../store/Show-Store';
 import { useShowsByGenreStore, type Show } from '../../store/Genre-Store';
 const store = useShowsStore();
 const storeGenre = useShowsByGenreStore();
-
 const genres = ref<string[]>([]);
 const filteredShows = ref<Show[]>([]);
 const selectedGenre = ref<string>('');

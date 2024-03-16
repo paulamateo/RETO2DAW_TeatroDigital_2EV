@@ -15,7 +15,7 @@
         await store.deleteSessionToDatabase(parseInt(props.sessionId));
         dialog.value = false;
     }; 
-    
+
     setTimeout(() => {
         watch(dialog, (newValue) => {
             if (!newValue) {

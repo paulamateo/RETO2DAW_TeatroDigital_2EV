@@ -14,7 +14,7 @@
     const deleteUser = async () => {
         await store.deleteUserToDatabase(parseInt(props.userId));
         dialog.value = false;
-    };   
+    };  
     
     setTimeout(() => {
         watch(dialog, (newValue) => {

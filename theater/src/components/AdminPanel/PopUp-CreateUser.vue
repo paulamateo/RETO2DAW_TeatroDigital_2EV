@@ -33,12 +33,6 @@
         }
     }
 
-    watch([nombre, apellidos, email, contrasena, telefono, rol], () => {
-        if (nombre.value && apellidos.value && email.value && contrasena.value && telefono.value && rol.value) {
-            showError.value = false;
-        }
-    }, { immediate: true }); 
-
     setTimeout(() => {
         watch(dialog, (newValue) => {
             if (!newValue) {
@@ -46,6 +40,12 @@
             }
         });
     }, 8000)
+
+    watch([nombre, apellidos, email, contrasena, telefono, rol], () => {
+        if (nombre.value && apellidos.value && email.value && contrasena.value && telefono.value && rol.value) {
+            showError.value = false;
+        }
+    }, { immediate: true }); 
 </script>
 
 <template>
@@ -84,7 +84,6 @@
                     <v-btn type="submit" color="primary" :text="$t('CreateSession.button1')" variant="tonal" class="button-form--actions"></v-btn>
                 </v-card-actions>
             </form>
-           
         </v-card>
     </v-dialog>
 </template>

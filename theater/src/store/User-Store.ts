@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
+import { apiUrl } from '@/env';
 
 export interface User {
     userId: number,
@@ -16,7 +17,7 @@ export const useUsersStore = defineStore('users', () => {
 
     const getAllUsers = async () => {
         try {
-            const response = await fetch('http://localhost:8001/User')
+            const response = await fetch(`${apiUrl}/User`)
             const data = await response.json();
             users.splice(0, users.length, ...data);
         }catch (error) {
@@ -39,7 +40,7 @@ export const useUsersStore = defineStore('users', () => {
                 phoneNumber: telefono,
                 isAdmin: rol 
             }
-            const response = await fetch("http://localhost:8001/User", {
+            const response = await fetch(`${apiUrl}/User`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(user),
@@ -56,7 +57,7 @@ export const useUsersStore = defineStore('users', () => {
 
     const deleteUserToDatabase = async (userId: number) => {
         try {
-            const response = await fetch(`http://localhost:8001/User/${userId}`, {
+            const response = await fetch(`${apiUrl}/User/${userId}`, {
                 method: 'DELETE'
             });
             if (!response.ok) {
@@ -80,7 +81,7 @@ export const useUsersStore = defineStore('users', () => {
                 phoneNumber: telefono,
                 isAdmin: rol 
             }
-            const response = await fetch(`http://localhost:8001/User/${userId}`, {
+            const response = await fetch(`${apiUrl}/User/${userId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(user),
@@ -97,7 +98,7 @@ export const useUsersStore = defineStore('users', () => {
 
     const LoginToPanelAdmin = async (email: string, password: string) => {
         try {
-            const response = await fetch('http://localhost:8001/Auth/Login', {
+            const response = await fetch(`${apiUrl}/Auth/Login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

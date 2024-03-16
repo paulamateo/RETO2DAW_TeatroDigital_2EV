@@ -22,14 +22,7 @@
         }else {
             showError.value = true;
         }
-
     };
-
-    watch([hora, asientos, notas], () => {
-        if (hora.value && asientos.value && notas.value) {
-            showError.value = false;
-        }
-    }, { immediate: true }); 
 
     setTimeout(() => {
         watch(dialog, (newValue) => {
@@ -38,6 +31,12 @@
             }
         });
     }, 8000)
+
+    watch([hora, asientos, notas], () => {
+        if (hora.value && asientos.value && notas.value) {
+            showError.value = false;
+        }
+    }, { immediate: true }); 
 </script>
 
 <template>

@@ -34,12 +34,6 @@
         }
     }
 
-    watch([titulo, autor, director, edad, precio, genero, posterFile, sceneFile, bannerFile, resena, duracion, fecha], () => {
-        if (titulo.value && autor.value && director.value && edad.value && precio.value && genero.value && posterFile.value && sceneFile.value && bannerFile.value && resena.value && duracion.value && fecha.value) {
-            showError.value = false;
-        }
-    }, { immediate: true }); 
-
     setTimeout(() => {
         watch(dialog, (newValue) => {
             if (!newValue) {
@@ -47,6 +41,12 @@
             }
         });
     }, 8000)
+
+    watch([titulo, autor, director, edad, precio, genero, posterFile, sceneFile, bannerFile, resena, duracion, fecha], () => {
+        if (titulo.value && autor.value && director.value && edad.value && precio.value && genero.value && posterFile.value && sceneFile.value && bannerFile.value && resena.value && duracion.value && fecha.value) {
+            showError.value = false;
+        }
+    }, { immediate: true }); 
 </script>
 
 <template>

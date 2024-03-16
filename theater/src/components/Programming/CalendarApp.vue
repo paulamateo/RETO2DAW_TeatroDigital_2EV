@@ -1,86 +1,85 @@
 <script setup lang="ts">
-    import { ref, computed, onMounted } from 'vue';
-    import { format } from 'date-fns';
-    import { useShowsStore } from '../../store/Show-Store';
-    import { es } from 'date-fns/locale';
+    import { ref, computed, onMounted } from 'vue'
+    import { format } from 'date-fns'
+    import { useShowsStore } from '@/store/Show-Store';
+    import { es } from 'date-fns/locale'
+    const store = useShowsStore();
 
     const currentDate = ref(new Date());
     const currentMonth = computed(() => currentDate.value.getMonth());
-    const currentYear = computed(() => currentDate.value.getFullYear());
+    const currentYear = computed (() => currentDate.value.getFullYear( ));
 
     const getDaysInMonth = (year: number, month: number) => {
-      return new Date(year, month + 1, 0).getDate();
-    };
+        return new Date (year, month +1 ,0).getDate( );
+    }
 
     const getFirstDayOfMonth = (year: number, month: number) => {
-      const firstDay = new Date(year, month, 1).getDay();
-      return firstDay === 0 ? 6 : firstDay - 1;
-    };
+        const firstDay = new Date(year, month, 1).getDay();
+        return firstDay === 0 ? 6 : firstDay - 1;
+    }
 
     const weeks = computed(() => {
-      const days: Array<{ day: number; isCurrentMonth: boolean; date: string }> = [];
-      const daysInMonth = getDaysInMonth(currentYear.value, currentMonth.value);
-      const firstDayOfMonth = getFirstDayOfMonth(currentYear.value, currentMonth.value);
+        const days: Array<{ day: number; isCurrentMonth: boolean; date: string }> = [];
+        const daysInMonth = getDaysInMonth(currentYear.value, currentMonth.value);
+        const firstDayOfMonth = getFirstDayOfMonth(currentYear.value, currentMonth.value);
 
-      for (let i = firstDayOfMonth; i > 0; i--) {
-        const day = new Date(currentYear.value, currentMonth.value, -i + 1);
-        days.push({
-          day: day.getDate(),
-          isCurrentMonth: false,
-          date: format(day, 'yyyy-MM-dd')
-        });
-      }
+        for (let i = firstDayOfMonth; i >  0; i--) {
+            const day = new Date(currentYear.value, currentMonth.value, -i + 1);
+            days.push({
+                day: day.getDate(),
+                isCurrentMonth: false,
+                date: format(day, 'yyyy-MM-dd')
+            });
+        }
 
-      for (let i = 1; i <= daysInMonth; i++) {
-        const day = new Date(currentYear.value, currentMonth.value, i);
-        days.push({
-          day: i,
-          isCurrentMonth: true,
-          date: format(day, 'yyyy-MM-dd')
-        });
-      }
+        for (let i = 1; i <= daysInMonth; i++) {
+            const day = new Date(currentYear.value, currentMonth.value, i);
+            days.push({
+                day: i,
+                isCurrentMonth: true,
+                date: format(day, 'yyyy-MM-dd')
+            });
+        }
 
-      const extraDaysToAdd = (7 - days.length % 7) % 7;
-      for (let i = 1; i <= extraDaysToAdd; i++) {
-        const day = new Date(currentYear.value, currentMonth.value + 1, i);
-        days.push({
-          day: day.getDate(),
-          isCurrentMonth: false,
-          date: format(day, 'yyyy-MM-dd')
-        });
-      }
+        const extraDaysToAdd = (7 - days.length % 7) % 7;
 
-      return Array.from({ length: days.length / 7 }, (_, i) => days.slice(i * 7, i * 7 + 7));
+        for (let i = 1; i <= extraDaysToAdd; i++) {
+            const day = new Date(currentYear.value, currentMonth.value + 1, i);
+            days.push({
+                day: day.getDate(),
+                isCurrentMonth: false,
+                date: format(day, 'yyyy-MM-dd')
+            });
+        }
+
+        return Array.from({ length: days.length / 7 }, (_, i) => days.slice(i * 7, i * 7 + 7));
     });
 
     const formattedMonth = computed(() => {
-      return format(currentDate.value, 'MMMM yyyy', { locale: es });
+        return format(currentDate.value, 'MMMM yyyy', { locale: es });
     });
 
-
     const goToPreviousMonth = () => {
-      currentDate.value = new Date(currentYear.value, currentMonth.value - 1, 1);
-    };
+        currentDate.value = new Date(currentYear.value, currentMonth.value - 1, 1);
+    }
 
     const goToNextMonth = () => {
-      currentDate.value = new Date(currentYear.value, currentMonth.value + 1, 1);
-    };
-
-    const store = useShowsStore();
+        currentDate.value = new Date(currentYear.value, currentMonth.value + 1, 1);
+    }
 
     onMounted(async () => {
-      await store.getAllShows();
+        await store.getAllShows();
     });
 
     const showsForDay = (date: string) => {
-      return store.shows.filter(show => {
-        return format(new Date(show.date), 'yyyy-MM-dd') === date;
-      });
+        return store.shows.filter(show => {
+            return format(new Date(show.date), 'yyyy-MM-dd') === date;
+        });
     };
 </script>
 
 <template>
-  <div class="container-calendar-events">
+      <div class="container-calendar-events">
     <div class="calendar-container" id="calendar-container">
       <div class="month-header">
         <h3>{{ formattedMonth }}</h3>
@@ -228,8 +227,6 @@
     padding: 15px;
     text-align: center;
     border: 1px solid #cfcfcf;
-    /* width: 14.28%; */
-    /* min-width: 100px; */
   }
 
   th {

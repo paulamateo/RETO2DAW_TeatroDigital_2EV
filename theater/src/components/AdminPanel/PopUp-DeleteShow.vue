@@ -14,7 +14,7 @@
     const deleteShow = async () => {
         await store.deleteShowToDatabase(parseInt(props.showId));
         dialog.value = false;
-    };    
+    };  
 
     setTimeout(() => {
         watch(dialog, (newValue) => {

@@ -45,9 +45,7 @@
         background-color: #0b0b0b;
         color: white;
     }
-    /* .footer__socialmedia {
-        margin: 12px 0 0 0;
-    } */
+
     .footer__content {
         margin: 0 20px;
         padding: 25px;
